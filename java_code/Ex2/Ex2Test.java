@@ -2,13 +2,27 @@ package Exe.Ex2;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 /**
- * This JUnit class represents a very simpel (and partual) unit testing for Ex2 - It should be improved and generalized significantly!
+ * This JUnit class represents a very simple (and partial) unit testing for Ex2 - It should be improved and generalized significantly!
  * @author boazben-moshe
  *
  */
 
 class Ex2Test {
-	static double[] po1={2,0,3, -1,0}, po2 = {0.1,0,1, 0.1,3};
+	static double[] po1={2, 0, 3, -1,0}, po2 = {0.1, 0, 1, 0.1, 3};
+
+	@Test
+	void testEquals() {
+		boolean eq1 = Ex2.equals(po1, new double[] {2, 0, 3, -1, 0});
+		boolean eq2 = Ex2.equals(po1, new double[] {2, 0, 3, -1});
+		boolean eq3 = Ex2.equals(po1, new double[] {2.0005, -0.0003, 3, -0.9999});
+		boolean neq1 = Ex2.equals(po1, po2);
+		boolean neq2 = Ex2.equals(po1, new double[] {2, 0, 3, -1, 0, 5})
+		assertEquals(eq1, true)
+		assertEquals(eq2, true)
+		assertEquals(eq3, true)
+		assertEquals(neq1, false)
+		assertEquals(neq2, false)
+	}
 
 	@Test
 	void testF() {

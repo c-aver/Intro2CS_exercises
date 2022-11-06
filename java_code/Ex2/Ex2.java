@@ -31,11 +31,25 @@ public class Ex2 {
 	 * @return true iff p1 represents the same polynom as p2.
 	 */
 	public static boolean equals(double[] p1, double[] p2) {
-		boolean ans = true;
-		// *** add your code here ***
+		int shorter[] = p1, longer[] = p2;		// assume p1 is the shorter of the polynomials
+		if (p1.length > p2.length) {			// if assumption is incorrect
+			shorter = p2;				// set the arrays accordingly
+			longer = p1;				// "
+		}
+
+		for (int i = 0; i < shorter.length; ++i) {	// iterate for the length of the shorter polynomial to compare coefficients
+			if (shorter[i] != longer[i])	{		// make sure coefficients aren't different. TODO: allow differences up to EPS
+				return false;						// coefficients are diferrent, so the polynomials are not equal
+			}
+		}											// now we know that all coeffcients are the same up to the shorter polynomial, we need to make sure the longer one only has leading 0s
 		
-		// **************************
-		return ans;
+		for (int i = shorter.length; i < longer.length; ++i) {	// iterate on the coefficients of the longer polynomial which are not in the shorter
+			if (longer[i] != 0.0) {								// make sure the coefficient is 0. TODO: allow up to EPS
+				return false;									// longer polynomial has a non-0 cofficient which is not in shorter polynomal, so they are different
+			}
+		}
+
+		return true;											// if we made it so far, the polynomials are equal
 	}
 	/**
 	 * Computes the f(x) value of the polynom at x.

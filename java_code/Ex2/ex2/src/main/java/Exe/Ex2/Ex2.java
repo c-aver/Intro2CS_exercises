@@ -31,7 +31,7 @@ public class Ex2 {
 	 * @return true iff p1 represents the same polynom as p2.
 	 */
 	public static boolean equals(double[] p1, double[] p2) {
-		int shorter[] = p1, longer[] = p2;		// assume p1 is the shorter of the polynomials
+		double shorter[] = p1, longer[] = p2;		// assume p1 is the shorter of the polynomials
 		if (p1.length > p2.length) {			// if assumption is incorrect
 			shorter = p2;				// set the arrays accordingly
 			longer = p1;				// "

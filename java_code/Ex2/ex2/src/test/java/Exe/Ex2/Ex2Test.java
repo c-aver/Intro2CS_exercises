@@ -35,9 +35,11 @@ public class Ex2Test {
 	}
 
 	@Test
-	public void testRoot() {
+	public void testRoots() {
 		double x12 = Ex2.root(po1, 0, 10, Ex2.EPS);
+		double x12_rec = Ex2.root_rec(po1, 0, 10, Ex2.EPS);
 		assertEquals(3.1958, x12, Ex2.EPS);
+		assertEquals(3.1958, x12_rec, Ex2.EPS);
 	}
 	
 	@Test

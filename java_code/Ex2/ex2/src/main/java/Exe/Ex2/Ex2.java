@@ -110,16 +110,15 @@ public class Ex2 {
 	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
 	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
 	 */
-	public static double root(double[] p, double x1, double x2, double eps) {	// TODO: this function does not pass the test
-		assert x1 < x2 : "Cannot find root in negative range";
+	public static double root(double[] p, double x1, double x2, double eps) {
+		assert x1 < x2 : "Cannot find root in negative range"; // TODO: assert that there is solution
 		double x = (x1+x2)/2;							// the first x we will check is the middle of the range,
 														// from there we will close in on the true answer
 
+		double[] p_ = derivative(p);					// calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
 		while (Math.abs(f(p, x)) > eps) {				// iterate as long as our answer is not close enough to 0
-			// double f_x1 = f(p, x1);	// TODO: needed?
-			// double f_x2 = f(p, x2);
 			
-			if (f(p, x) * f(derivative(p), x) > 0)		// if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher
+			if (f(p, x) * f(p_, x) >= 0)		// if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher
 				x2 = x;									// we move the range (x1-x2) to (x1-x), effectively cutting the right side half, since the 0 is on our left
 			else										// if the function times the derivative is negative, we are either on a rising function with the 0 being higher or a falling function with the 0 being lower
 				x1 = x;									// we move the range (x1-x2) to (x-x2), effectively cutting the left side half, since the 0 is on our right
@@ -217,12 +216,13 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] derivative (double[] po) {
-		for (int i = 0; i < po.length - 1; ++i) {	// iterate on the coefficients up to the second to last one
-			po[i] = (i + 1) * po[i + 1];			// each one is the next coefficient multiplied by its place
+		assert po.length > 0: "Cannot find derivative of polynomial with no terms";
+		double[] ans = new double[po.length - 1]; 	// initalize an answer polynomial 1 degree lower than input
+		for (int i = 0; i < ans.length; ++i) {		// iterate on the coefficients up to the second to last one
+			ans[i] = (i + 1) * po[i + 1];			// each one is the next coefficient multiplied by its place
 		}
-		po = Arrays.copyOf(po, po.length - 1);			// cut the last element, since the derivative is one lower in degree
 
-		return po;
+		return ans;
 	}
 	///////////////////// Private /////////////////////
 }

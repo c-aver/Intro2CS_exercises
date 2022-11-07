@@ -165,9 +165,7 @@ public class Ex2 {
 			double box_area = box_height * dx;							// calculate the area of the box, its height times its width (which is dx)
 			ans += box_area;											// add the area to the total answer
 			x1 = x2;													// move the left of the range to the right, to be expanded on the next iteration
-		}	
-
-		// assert false : "Not implemented";   // TODO: implement
+		}
 		return ans;
 	}
 	/**

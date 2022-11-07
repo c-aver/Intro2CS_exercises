@@ -38,13 +38,13 @@ public class Ex2 {
 		}
 
 		for (int i = 0; i < shorter.length; ++i) {	// iterate for the length of the shorter polynomial to compare coefficients
-			if (shorter[i] != longer[i])	{		// make sure coefficients aren't different. TODO: allow differences up to EPS
+			if (Math.abs(shorter[i] - longer[i]) > EPS)	{		// make sure coefficients aren't different
 				return false;						// coefficients are diferrent, so the polynomials are not equal
 			}
 		}											// now we know that all coeffcients are the same up to the shorter polynomial, we need to make sure the longer one only has leading 0s
 		
 		for (int i = shorter.length; i < longer.length; ++i) {	// iterate on the coefficients of the longer polynomial which are not in the shorter
-			if (longer[i] != 0.0) {								// make sure the coefficient is 0. TODO: allow up to EPS
+			if (longer[i] > EPS) {								// make sure the coefficient is 0
 				return false;									// longer polynomial has a non-0 cofficient which is not in shorter polynomal, so they are different
 			}
 		}
@@ -59,9 +59,10 @@ public class Ex2 {
 	 */
 	public static double f(double[] poly, double x) {
 		double ans = 0;
-		// *** add your code here ***
 		
-		// **************************
+		for (int i = 0; i < poly.length; ++i)
+			ans += poly[i] * (Math.pow(x, i));
+
 		return ans;
 	}
 	/** 

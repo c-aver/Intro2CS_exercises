@@ -76,4 +76,13 @@ public class Ex2Test {
 		double eqp = Ex2.sameValue(po1, po2, 0.5, 2, Ex2.EPS);
 		assertEquals(0.981738, eqp, Ex2.EPS);					// expected value calculated by WoflramAlpha
 	}
+	@Test
+	public void testString() {
+		String spo1 = Ex2.poly(po1);
+		String spo2 = Ex2.poly(po2);
+		boolean po1eq = Ex2.equals(po1, Ex2.getPolynomFromString(spo1));
+		boolean po2eq = Ex2.equals(po2, Ex2.getPolynomFromString(spo2));
+		assertEquals(true, po1eq);
+		assertEquals(true, po2eq);
+	}
 }

@@ -8,7 +8,7 @@ import org.junit.Test;
  */
 
 public class Ex2Test {
-	static double[] po1={2, 0, 3, -1,0}, po2 = {0.1, 0, 1, 0.1, 3};
+	static double[] po1={2, 0, 3, -1, 0}, po2 = {0.1, 0, 1, 0.1, 3};
 
 	@Test
 	public void testEquals() {
@@ -43,9 +43,12 @@ public class Ex2Test {
 	@Test
 	public void testAdd() {
 		double[] p12 = Ex2.add(po1, po2);
+		System.out.println(Ex2.poly(p12));
 		double[] minus1 = {-1};
 		double[] pp2 = Ex2.mul(po2, minus1);
+		System.out.println(Ex2.poly(pp2));
 		double[] p1 = Ex2.add(p12, pp2);
+		System.out.println(Ex2.poly(p1));
 		assertEquals(Ex2.poly(po1), Ex2.poly(p1));
 	}
 
@@ -53,7 +56,7 @@ public class Ex2Test {
 	public void testMulDoubleArrayDoubleArray() {
 		double[] p12 = Ex2.add(po1, po2);
 		double dd = Ex2.f(p12, 5);
-		assertEquals(dd, 1864.6, Ex2.EPS);
+		assertEquals(1864.6, dd, Ex2.EPS);
 	}
 	@Test
 	public void testDerivativeArrayDoubleArray() {

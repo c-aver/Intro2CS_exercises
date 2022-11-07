@@ -14,9 +14,9 @@ public class Ex2 {
 	/**
 	 * This function computes a polynomial representation from a set of 2D points on the polynom.
 	 * Note: this fuction only works for a set of points containing three points, else returns null.
-	 * @param xx
-	 * @param yy
-	 * @return an array of doubles representing the coefficients of the polynom.
+	 * @param xx an array of x values of points
+	 * @param yy an array of y values of points
+	 * @return an array of doubles representing the coefficients of the polynomial which goes through the points
 	 */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
@@ -54,8 +54,8 @@ public class Ex2 {
 	}
 	/**
 	 * Computes the f(x) value of the polynom at x.
-	 * @param poly
-	 * @param x
+	 * @param poly the polynomial to be evaluated
+	 * @param x the value at which to evaluate
 	 * @return f(x) - the polynom value at x.
 	 */
 	public static double f(double[] poly, double x) {
@@ -73,8 +73,15 @@ public class Ex2 {
 	 * @return String representing the polynom: 
 	 */
 	public static String poly(double[] poly) {
-		String ans = "";
-		assert false : "Not implemented";
+		String ans = "";							// initialize an empty string for the answer
+
+		for (int i = poly.length - 1; i >= 0; --i) {				// iterate on the coefficients
+			if (poly[i] >= 0.0 && i != poly.length - 1) ans += "+";	// if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term
+			ans += poly[i];											// add the coefficient to the result string
+			if (i == 1) ans += "x ";									// if we are on the x term, add only the letter x to the result string
+			else if (i > 1)											// if we are on a higher power
+				ans += "x^" + i + " ";								// add x raised to the power of the current degree
+		}
 		return ans;
 	}
 	/**
@@ -103,7 +110,7 @@ public class Ex2 {
 	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
 	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
 	 */
-	public static double root(double[] p, double x1, double x2, double eps) {
+	public static double root(double[] p, double x1, double x2, double eps) {	// TODO: this function does not pass the test
 		assert x1 < x2 : "Cannot find root in negative range";
 		double x = (x1+x2)/2;							// the first x we will check is the middle of the range,
 														// from there we will close in on the true answer
@@ -144,7 +151,7 @@ public class Ex2 {
 	 * @param p2 - second polynom
 	 * @param x1 - minimal value of the range
 	 * @param x2 - maximal value of the range
-	 * @param numberOfBoxes - a natural number representing the number of boxes between xq and x2.
+	 * @param numberOfBoxes - a natural number representing the number of boxes between x1 and x2.
 	 * @return the approximated area between the two polynoms within the [x1,x2] range.
 	 */
 	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
@@ -186,7 +193,7 @@ public class Ex2 {
 		for (int i = shorter.length; i < longer.length; ++i) {	// iterate on the coefficients of the longer polynomial which are not in the shorter
 			ans[i] = longer[i];									// set the answer coefficient as the coefficient of the longer polynomial (the short one is done so it has 0)
 		}
-		return p1;
+		return ans;				// return the computed answer
 	}
 	/**
 	 * This function computes the polynom which is the multiplication of two polynoms (p1,p2)
@@ -195,8 +202,14 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] mul(double[] p1, double[] p2) {
-		assert false : "Not implemented";
-		return p1;
+
+		double[] ans = new double[p1.length + p2.length - 1];	// initialize the answer with the degree being the sum of the two degrees (note that the size of the array is 1 higher than the degree), this is because the rank of the answer (the power of the biggest x) is the ranks of the multiplicants added (since x^n*x^m=x^(m+n))
+
+		for (int i = 0; i < p1.length; ++i)					// iterate on both polynomial, since we need to multiply each coefficient from the first by each coefficient from the second
+			for (int j = 0; j < p2.length; ++j)				// "
+				ans[i + j] += p1[i] * p2[j];				// a*x^n * b*x^m = a*b^(m+n)
+
+		return ans;
 	}
 	/**
 	 * This function computes the derivative polynom.

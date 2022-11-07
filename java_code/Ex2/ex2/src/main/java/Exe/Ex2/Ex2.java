@@ -1,5 +1,6 @@
 package Exe.Ex2;
 
+import java.util.*;
 /** 
  * This class represents a set of functions on a polynom - represented as array of doubles.
  * @author boaz.benmoshe
@@ -75,7 +76,9 @@ public class Ex2 {
 		String ans = "";							// initialize an empty string for the answer
 
 		for (int i = poly.length - 1; i >= 0; --i) {				// iterate on the coefficients
-			if (poly[i] >= 0.0 && i != poly.length - 1) ans += "+";	// if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term
+			if (poly[i] == 0.0)										// if the coefficient is 0
+				continue;											// we just skip the term
+			if (poly[i] > 0.0 && i != poly.length - 1) ans += "+";	// if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term
 			ans += poly[i];											// add the coefficient to the result string
 			if (i == 1) ans += "x ";								// if we are on the x term, add only the letter x to the result string
 			else if (i > 1)											// if we are on a higher power
@@ -195,12 +198,49 @@ public class Ex2 {
 	 * getPolynomFromString(poly(p)) should return an array equals to p.
 	 * 
 	 * @param p - a String representing polynom.
-	 * @return
+	 * @return	the parsed polynomial as an array of doubles
 	 */
+	// string to parse: "0.0x^4 -1.0x^3 +3.0x^2 +0.0x +2.0"
+	// after splitting: {"0.0x^4" ,"-1.0x^3", "+3.0x^2", "+0.0x", "+2.0" }
 	public static double[] getPolynomFromString(String p) {
-		assert false : "Not implemented";   // TODO: implement
-		return ZERO;
+		String[] terms = p.split(" ");				// we split the string by " " to isolate the terms
+		int polyDegree = getDegreeFromTerm(terms[0]);			// the degree of the polynomial is the degree of the first term (by definition the first term is the largest degree)
+		
+		double[] ans = new double[polyDegree + 1];				// initialize the answer array, note that array sizes are one larger than the degree of the polynomial
+
+		for (String term : terms) {								// iterate on the terms, we will parse each one seperately, I don't like foreach either but it's really convinient here
+			int degree = getDegreeFromTerm(term);				// parse the degree from the term string
+			double coefficient = getCoefficientFromTerm(term);	// parse the coefficient from the term
+			ans[degree] = coefficient;							// set the appropriate place in the answer to be the coefficient
+		}
+		
+		return ans;
 	}
+	/**
+	 * This function takes a term of a polynomial as a string and returns its degree (the power to which x is raised)
+	 * 
+	 * @param term - a String representing a term of a polynomial
+	 * @return the degree of the term
+	 */
+	private static int getDegreeFromTerm(String term) {
+		String[] split_term = term.split("x");		// split the term into the garbage at the end ("x^n") and the actual coefficient
+		if (split_term.length < 2)							// this is the case where there was no garbage to begin with
+			return 0;										// this means the power is 0, such as in "+2.0"
+		if (split_term[1].length() == 0)					// this is the case where there was nothing after the "x", such as in "+2.0x"
+			return 1;										// so the degree is 1 (x=x^1)
+		return Integer.parseInt(split_term[1].substring(1));	// in all other cases, the degree can be found by parsing the garbage except for the first character (which is '^'), so we return it
+	}
+	/**
+	 * This function takes a term of a polynomial as a string and returns its coefficient (the power to which x is raised)
+	 * 
+	 * @param term - a String representing a term of a polynomial
+	 * @return the coefficient of the term
+	 */
+	private static double getCoefficientFromTerm(String term) {
+		String[] split_term = term.split("x");		// split the term into the garbage at the end ("x^n") and the actual coefficient
+		return Double.parseDouble(split_term[0]);				// the coefficient can be found by parsing the garbage except for the first character (which is '^'), so we return it
+	}
+
 	/**
 	 * This function computes the polynom which is the sum of two polynoms (p1,p2)
 	 * @param p1

@@ -171,7 +171,21 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] add(double[] p1, double[] p2) {
-		assert false : "Not implemented";
+		double shorter[] = p1, longer[] = p2;		// assume p1 is the shorter of the polynomials
+		if (p1.length > p2.length) {				// if assumption is incorrect
+			shorter = p2;							// set the arrays accordingly
+			longer = p1;							// "
+		}
+
+		double[] ans = new double[longer.length];	// initialize answer as long as the longer of the polynomials (note: guaranteed to bin initialized with 0.0 by language spec)
+
+		for (int i = 0; i < shorter.length; ++i)	// iterate on coefficient up to the shorter array (the part where both arrays have values)
+			ans[i] = shorter[i] + longer[i];		// set the answer's coefficient to the sum of the coefficients of the two polynomials
+
+
+		for (int i = shorter.length; i < longer.length; ++i) {	// iterate on the coefficients of the longer polynomial which are not in the shorter
+			ans[i] = longer[i];									// set the answer coefficient as the coefficient of the longer polynomial (the short one is done so it has 0)
+		}
 		return p1;
 	}
 	/**

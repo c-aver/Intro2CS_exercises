@@ -117,7 +117,7 @@ public class Ex2 {
 		double[] p_ = derivative(p);					// calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
 		while (Math.abs(f(p, x)) > eps) {				// iterate as long as our answer is not close enough to 0
 			
-			if (f(p, x) * f(p_, x) >= 0)		// if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher
+			if (f(p, x) * f(p_, x) >= 0)				// if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher
 				x2 = x;									// we move the range (x1-x2) to (x1-x), effectively cutting the right side half, since the 0 is on our left
 			else										// if the function times the derivative is negative, we are either on a rising function with the 0 being higher or a falling function with the 0 being lower
 				x1 = x;									// we move the range (x1-x2) to (x-x2), effectively cutting the left side half, since the 0 is on our right
@@ -137,9 +137,17 @@ public class Ex2 {
 	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
 	 */
 	public static double root_rec(double[] p, double x1, double x2, double eps) {
-		double x12 = (x1+x2)/2;
-		assert false : "Not implemented";   // TODO: implement
-		return x12;
+		assert x1 < x2 : "Cannot find root in negative range"; // TODO: assert that there is solution
+		double x = (x1+x2)/2;				// get the middle of the range (could be any other point in the range)
+		if (Math.abs(f(p, x)) < eps)		// if its value under p is within the accepted range
+			return x;						// return it as the answer
+
+		double[] p_ = derivative(p);		// calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
+
+		if (f(p, x) * f(p_, x) >= 0)		// if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher,
+			return root_rec(p, x1, x, eps);	// this means the root is on the left side half (x1, x) of the range, so we look for it there
+											// if we didn't return on the last line, the root is on the right side of the range
+		return root_rec(p, x, x2, eps);		//	look for the root on the right side of the range (x, x2)
 	}
 	/**
 	 * Given two polynoms (p1,p2), a range [x1,x2] and an integer representing the number of "boxes". 

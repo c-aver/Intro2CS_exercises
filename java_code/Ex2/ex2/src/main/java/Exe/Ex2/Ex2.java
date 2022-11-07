@@ -18,10 +18,9 @@ public class Ex2 {
 	 */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
+		assert false : "Not implemented";
 		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
-			// *** add your code here ***
-			
-			// **************************
+		
 		}
 		return ans;
 	}
@@ -58,12 +57,12 @@ public class Ex2 {
 	 * @return f(x) - the polynom value at x.
 	 */
 	public static double f(double[] poly, double x) {
-		double ans = 0;
+		double ans = 0;							// initialize answer as 0
 		
-		for (int i = 0; i < poly.length; ++i)
-			ans += poly[i] * (Math.pow(x, i));
+		for (int i = 0; i < poly.length; ++i)	// iterate on parts of the polynomial
+			ans += poly[i] * (Math.pow(x, i));	// add to the answer the coefficients multiplied by the current power of x
 
-		return ans;
+		return ans;								// return the computed answer
 	}
 	/** 
 	 * Computes a String representing the polynom.
@@ -73,9 +72,7 @@ public class Ex2 {
 	 */
 	public static String poly(double[] poly) {
 		String ans = "";
-		// *** add your code here ***
-		
-		// **************************
+		assert false : "Not implemented";
 		return ans;
 	}
 	/**
@@ -90,9 +87,7 @@ public class Ex2 {
 	 */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
 		double x12 = (x1+x2)/2;
-		// *** add your code here ***
-		
-		// **************************
+		assert false : "Not implemented";
 		return x12;
 	}
 	/**
@@ -107,11 +102,23 @@ public class Ex2 {
 	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
 	 */
 	public static double root(double[] p, double x1, double x2, double eps) {
-		double x12 = (x1+x2)/2;
-		// *** add your code here ***
-		
-		// **************************
-		return x12;
+		assert x1 < x2 : "Cannot find root in negative range";
+		double x = (x1+x2)/2;							// the first x we will check is the middle of the range,
+														// from there we will close in on the true answer
+
+		while (Math.abs(f(p, x)) > eps) {				// iterate as long as our answer is not close enough to 0
+			// double f_x1 = f(p, x1);	// TODO: needed?
+			// double f_x2 = f(p, x2);
+			
+			if (f(p, x) * f(derivative(p), x) > 0)		// if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher
+				x2 = x;									// we move the range (x1-x2) to (x1-x), effectively cutting the right side half, since the 0 is on our left
+			else										// if the function times the derivative is negative, we are either on a rising function with the 0 being higher or a falling function with the 0 being lower
+				x1 = x;									// we move the range (x1-x2) to (x-x2), effectively cutting the left side half, since the 0 is on our right
+			x = (x1+x2)/2;								// recompute the middle of the range
+		}
+
+		assert false : "Not implemented";
+		return x;										// since we exited the loop f(p,x) is sufficiently close to 0
 	}
 	/** Given a polynom (p), a range [x1,x2] and an epsilon eps. 
 	 * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
@@ -125,10 +132,8 @@ public class Ex2 {
 	 */
 	public static double root_rec(double[] p, double x1, double x2, double eps) {
 		double x12 = (x1+x2)/2;
-		// *** add your code here ***
-		
+		assert false : "Not implemented";
 		return x12;
-		// **************************
 	}
 	/**
 	 * Given two polynoms (p1,p2), a range [x1,x2] and an integer representing the number of "boxes". 
@@ -143,9 +148,7 @@ public class Ex2 {
 	 */
 	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
 		double ans = 0;
-		// *** add your code here ***
-		
-		// **************************
+		assert false : "Not implemented";
 		return ans;
 	}
 	/**
@@ -157,9 +160,8 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] getPolynomFromString(String p) {
-		// *** add your code here ***
+		assert false : "Not implemented";
 		return ZERO;
-		// **************************
 	}
 	/**
 	 * This function computes the polynom which is the sum of two polynoms (p1,p2)
@@ -168,9 +170,8 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] add(double[] p1, double[] p2) {
-		// *** add your code here ***
+		assert false : "Not implemented";
 		return p1;
-		// **************************
 	}
 	/**
 	 * This function computes the polynom which is the multiplication of two polynoms (p1,p2)
@@ -179,9 +180,8 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] mul(double[] p1, double[] p2) {
-		// *** add your code here ***
+		assert false : "Not implemented";
 		return p1;
-		// **************************
 	}
 	/**
 	 * This function computes the derivative polynom.
@@ -189,9 +189,8 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] derivative (double[] po) {
-		// *** add your code here ***
+		assert false : "Not implemented";
 		return po;
-		// **************************
 	}
 	///////////////////// Private /////////////////////
 }

@@ -77,7 +77,7 @@ public class Ex2 {
 		for (int i = poly.length - 1; i >= 0; --i) {				// iterate on the coefficients
 			if (poly[i] >= 0.0 && i != poly.length - 1) ans += "+";	// if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term
 			ans += poly[i];											// add the coefficient to the result string
-			if (i == 1) ans += "x ";									// if we are on the x term, add only the letter x to the result string
+			if (i == 1) ans += "x ";								// if we are on the x term, add only the letter x to the result string
 			else if (i > 1)											// if we are on a higher power
 				ans += "x^" + i + " ";								// add x raised to the power of the current degree
 		}
@@ -94,7 +94,7 @@ public class Ex2 {
 	 * @return an x value (x1<=x<=x2) for which |p1(x) -p2(x)| < eps.
 	 */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
-		assert (f(p1, x1) - f(p2, x1))*(f(p1, x2) - f(p2, x2)) <= 0 : "The higher polynomial must be different at each endpoint";
+		assert (f(p1, x1) - f(p2, x1))*(f(p1, x2) - f(p2, x2)) <= 0 : "The higher polynomial must be different at each endpoint";		// NOTE: this assertion guarantees an answer, but can also fail when there is an answer, this will happen if the polynomials cross an even number of times within the range
 
 		double x = (x1+x2)/2;							// find the midpoint of the range as a starting point
 		

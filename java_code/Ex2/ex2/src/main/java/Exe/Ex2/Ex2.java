@@ -19,7 +19,7 @@ public class Ex2 {
 	 */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
-		assert false : "Not implemented";
+		assert false : "Not implemented";   // TODO: implement
 		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
 		
 		}
@@ -95,7 +95,7 @@ public class Ex2 {
 	 */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
 		double x12 = (x1+x2)/2;
-		assert false : "Not implemented";
+		assert false : "Not implemented";   // TODO: implement
 		return x12;
 	}
 	/**
@@ -138,7 +138,7 @@ public class Ex2 {
 	 */
 	public static double root_rec(double[] p, double x1, double x2, double eps) {
 		double x12 = (x1+x2)/2;
-		assert false : "Not implemented";
+		assert false : "Not implemented";   // TODO: implement
 		return x12;
 	}
 	/**
@@ -153,8 +153,21 @@ public class Ex2 {
 	 * @return the approximated area between the two polynoms within the [x1,x2] range.
 	 */
 	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
+		assert x1 < x2 : "Cannot calculate area in negative range";
+		double dx = (x2 - x1) / numberOfBoxes;							// the interval on which we need to calculate the box area
+
 		double ans = 0;
-		assert false : "Not implemented";
+
+		for (int i = 0; i < numberOfBoxes; ++i) {
+			x2 = x1 + dx;												// set the end of the range (of our current box) to dx (the width of the box) after x1 (the start of the box)
+			double x = (x1 + x2) / 2;									// set the value to be computed as the middle of the range
+			double box_height = Math.abs(f(p1, x) - f(p2, x));			// calculate the height of the box between the two functions, which is just the difference of their height
+			double box_area = box_height * dx;							// calculate the area of the box, its height times its width (which is dx)
+			ans += box_area;											// add the area to the total answer
+			x1 = x2;													// move the left of the range to the right, to be expanded on the next iteration
+		}	
+
+		// assert false : "Not implemented";   // TODO: implement
 		return ans;
 	}
 	/**
@@ -166,7 +179,7 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] getPolynomFromString(String p) {
-		assert false : "Not implemented";
+		assert false : "Not implemented";   // TODO: implement
 		return ZERO;
 	}
 	/**

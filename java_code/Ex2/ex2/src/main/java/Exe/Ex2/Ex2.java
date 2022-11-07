@@ -94,9 +94,22 @@ public class Ex2 {
 	 * @return an x value (x1<=x<=x2) for which |p1(x) -p2(x)| < eps.
 	 */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
-		double x12 = (x1+x2)/2;
-		assert false : "Not implemented";   // TODO: implement
-		return x12;
+		assert (f(p1, x1) - f(p2, x1))*(f(p1, x2) - f(p2, x2)) <= 0 : "The higher polynomial must be different at each endpoint";
+
+		double x = (x1+x2)/2;							// find the midpoint of the range as a starting point
+		
+		double higherAtx1 = (f(p1, x1) - f(p2, x1));	// this value is positive if p1 is higher at x1 and negative if p2 is higher at x1
+
+		while (Math.abs(f(p1, x) - f(p2, x)) > EPS) {
+			x = (x1+x2)/2; 								// recalculate midpoint
+			double higherAtx = f(p1, x) - f(p2, x);		// check which polynomial is higher at x using the same method as the check at x1, this will be useful for knowing which side the equality is on
+			if (higherAtx * higherAtx1 <= 0)			// if the multiplication is negative, differnet polynomial are higher at x1 and at x, which means the turning point is closer to x1
+				x2 = x;									// and so we cut our range to (x1, x)
+			else										// in the other case, the same polynomial is higher at x1 as at x1, so the turning point is closer to x2
+				x1 = x;									// so we cut our range to (x, x2)
+		}
+
+		return x;
 	}
 	/**
 	 * Given a polynom (p), a range [x1,x2] and an epsilon eps. 

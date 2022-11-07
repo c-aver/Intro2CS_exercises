@@ -43,12 +43,9 @@ public class Ex2Test {
 	@Test
 	public void testAdd() {
 		double[] p12 = Ex2.add(po1, po2);
-		System.out.println(Ex2.poly(p12));
 		double[] minus1 = {-1};
 		double[] pp2 = Ex2.mul(po2, minus1);
-		System.out.println(Ex2.poly(pp2));
 		double[] p1 = Ex2.add(p12, pp2);
-		System.out.println(Ex2.poly(p1));
 		assertEquals(Ex2.poly(po1), Ex2.poly(p1));
 	}
 

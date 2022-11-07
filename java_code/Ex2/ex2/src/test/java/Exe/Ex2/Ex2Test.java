@@ -71,4 +71,9 @@ public class Ex2Test {
 		double a1 = Ex2.area(po1, po2, 0.0, 10.0, 1000000);
 		assertEquals(62067.72029, a1, Ex2.EPS);		// expected value calculated by Symbolab
 	}
+	@Test
+	public void testSameValue() {
+		double eqp = Ex2.sameValue(po1, po2, 0.5, 2, Ex2.EPS);
+		assertEquals(0.981738, eqp, Ex2.EPS);					// expected value calculated by WoflramAlpha
+	}
 }

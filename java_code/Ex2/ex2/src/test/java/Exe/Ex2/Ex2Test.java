@@ -37,7 +37,7 @@ public class Ex2Test {
 	@Test
 	public void testRoot() {
 		double x12 = Ex2.root(po1, 0, 10, Ex2.EPS);
-		assertEquals(x12, 3.1958, Ex2.EPS);
+		assertEquals(3.1958, x12, Ex2.EPS);
 	}
 	
 	@Test
@@ -60,8 +60,8 @@ public class Ex2Test {
 		double[] p = {1,2,3}; // 3X^2+2x+1
 		double[] dp1 = {2,6}; // 6x+2
 		double[] dp2 = Ex2.derivative(p);
-		assertEquals(dp1[0], dp2[0],Ex2.EPS);
-		assertEquals(dp1[1], dp2[1],Ex2.EPS);
+		assertEquals(dp1[0], dp2[0], Ex2.EPS);
+		assertEquals(dp1[1], dp2[1], Ex2.EPS);
 		assertEquals(dp1.length, dp2.length);
 	}
 }

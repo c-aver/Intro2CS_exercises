@@ -1,4 +1,6 @@
 package Exe.Ex2;
+
+import java.util.Arrays;
 /** 
  * This class represents a set of functions on a polynom - represented as array of doubles.
  * @author boaz.benmoshe
@@ -117,7 +119,6 @@ public class Ex2 {
 			x = (x1+x2)/2;								// recompute the middle of the range
 		}
 
-		assert false : "Not implemented";
 		return x;										// since we exited the loop f(p,x) is sufficiently close to 0
 	}
 	/** Given a polynom (p), a range [x1,x2] and an epsilon eps. 
@@ -189,7 +190,11 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] derivative (double[] po) {
-		assert false : "Not implemented";
+		for (int i = 0; i < po.length - 1; ++i) {	// iterate on the coefficients up to the second to last one
+			po[i] = (i + 1) * po[i + 1];			// each one is the next coefficient multiplied by its place
+		}
+		po = Arrays.copyOf(po, po.length - 1);			// cut the last element, since the derivative is one lower in degree
+
 		return po;
 	}
 	///////////////////// Private /////////////////////

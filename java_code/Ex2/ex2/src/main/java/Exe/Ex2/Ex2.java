@@ -17,12 +17,20 @@ public class Ex2 {
 	 * @param yy an array of y values of points
 	 * @return an array of doubles representing the coefficients of the polynomial which goes through the points
 	 */
-	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
-		double [] ans = null;
+	public static double[] polynomFromPoints(double[] xx, double[] yy) {
 		assert false : "Not implemented";   // TODO: implement
 		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
-		
+			
 		}
+		double [] ans = null;
+		// this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
+		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
+		// so we will solve it with linear algebra
+		double[][] coeffcients = {{xx[0]*xx[0], xx[0], 1}, {xx[1]*xx[1], xx[1], 1}, {xx[2]*xx[2], xx[2], 1}};	// the coefficient matrix for the equation system
+		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constant
+		// TODO: find inverse of coefficients matrix
+		// TODO: multiply inverse of coefficient matrix by constant vector
+		
 		return ans;
 	}
 	/** Two polynoms are equal if and only if the have the same coefficients - up to an epsilon (aka EPS) value.

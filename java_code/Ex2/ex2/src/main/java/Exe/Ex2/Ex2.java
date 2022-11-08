@@ -82,7 +82,7 @@ public class Ex2 {
 	public static double[][] invert(double[][] mat) {
 		double[][] ans = new double[3][3];
 		double[][] cofacs = cofactorMatrix(mat);				// first compute the cofactor matrix
-		// TODO: transpose the cofactor matrix
+		double[][] cofacs_T = transpose(cofacs);				// then tranpose the cofactor matrix
 		// TODO: compute the determinant of the transposed matrix
 
 		return ans;

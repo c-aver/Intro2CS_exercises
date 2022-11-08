@@ -1,6 +1,5 @@
 package Exe.Ex2;
 
-import java.util.*;
 /** 
  * This class represents a set of functions on a polynom - represented as array of doubles.
  * @author boaz.benmoshe
@@ -82,7 +81,9 @@ public class Ex2 {
 			ans += poly[i];											// add the coefficient to the result string
 			if (i == 1) ans += "x ";								// if we are on the x term, add only the letter x to the result string
 			else if (i > 1)											// if we are on a higher power
-				ans += "x^" + i + " ";								// add x raised to the power of the current degree
+				ans += "x^" + i;									// add x raised to the power of the current degree
+			if (i > 0)												// if we are not on the last term (int the order of the string)
+				ans += " ";											// we add a space to seperate from the next term
 		}
 		return ans;
 	}

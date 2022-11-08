@@ -109,4 +109,19 @@ public class Ex2Test {
 		double[][] inv_mat = Ex2.invert(mat);
 		assertArrayEquals(new double[][] {{5.625, -2.375, -2.5}, {4.75, -2.25, -2.0}, {-3.375, 1.625, 1.5}}, inv_mat);
 	}
+	@Test
+	public void testMatMul() {
+		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+		double[] vec = {5.5, -2.0, 7.0};
+		double[] mul = Ex2.vec_mul(mat, vec);
+		assertArrayEquals(new double[] {46.5, 51.5, 53.5}, mul, Ex2.EPS);
+	}
+	@Test
+	public void testPolynomFromPoints() {
+		double[] xx = {22.3, -52.2, 14.3};
+		double[] yy = {41.2, 21.2, -32.0};
+		double[] poly = Ex2.polynomFromPoints(xx, yy);
+		boolean eq = Ex2.equals(poly, new double[] {-120.25499, 4.261812, 0.133557});	// correct representation was calculated by WolframAlpha as 0.133557046979866x^2 +4.26181208053691x -120.254993288591
+		assertEquals(true, eq);
+	}
 }

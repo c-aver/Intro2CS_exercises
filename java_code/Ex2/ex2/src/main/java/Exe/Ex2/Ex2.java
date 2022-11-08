@@ -20,20 +20,31 @@ public class Ex2 {
 	 * @return an array of doubles representing the coefficients of the polynomial which goes through the points
 	 */
 	public static double[] polynomFromPoints(double[] xx, double[] yy) {
-		assert false : "Not implemented";   // TODO: implement
-		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
-			
-		}
 		double [] ans = null;
 		// this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
 		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
 		// so we will solve it with linear algebra
-		double[][] coefficients = {{xx[0]*xx[0], xx[0], 1}, {xx[1]*xx[1], xx[1], 1}, {xx[2]*xx[2], xx[2], 1}};	// the coefficient matrix for the equation system
+		double[][] coefficients = {{1, xx[0], xx[0]*xx[0]}, {1, xx[1], xx[1]*xx[1]}, {1, xx[2], xx[2]*xx[2]}};	// the coefficient matrix for the equation system, in the order as defined by our polynomial representation
 		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constants
-		// TODO: find inverse of coefficients matrix
-		// TODO: multiply inverse of coefficient matrix by constant vector
-		
+		double[][] coeff_inv = invert(coefficients);			// compute the inverse of the coefficient matrix to by multiplied by 
+		ans = vec_mul(coeff_inv, constants);					// the answer is the multiplication of the inverted coefficient matrix by the constant matrix, if you want to know why take Linear Algebra 1
 		return ans;
+	}
+	/**
+	 * This function multiplies a matrix by a vector
+	 * Note that the params must be double[n][n] mat and double[n] vec, I will not check if you don't abide by the rules
+	 * @param mat the matrix to be multiplied
+	 * @param vec the vector to multiply in
+	 * @return the vector answer of the multiplication
+	 */
+	public static double[] vec_mul(double[][] mat, double[] vec) {
+		double[] ans = new double[vec.length];			// intialize the result as a vector of size n
+		for (int i = 0; i < ans.length; ++i)			// iterate on the cells of the answer vector
+			for (int j = 0; j < ans.length; j++) {		// iterate on the columns of mat
+				ans[i] += vec[j] * mat[i][j];			// sum up the vector multiplication of vec and mat[i]
+			}
+
+		return ans;		// return the computed vector
 	}
 	/**
 	 * This function computes a the cofactor matrix for a 3x3 matrix.

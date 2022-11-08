@@ -83,23 +83,23 @@ public class Ex2 {
 		double[][] ans = new double[3][3];
 		double[][] cofacs = cofactorMatrix(mat);				// first compute the cofactor matrix
 		double[][] cofacs_T = transpose(cofacs);				// then tranpose the cofactor matrix
-		// TODO: compute the determinant of the transposed matrix
+		double det = det(mat, cofacs);
 		assert false : "Not fully implemented";
 		return ans;
 	}
 	/**
 	 * This functions computes the determinant of a 3x3 matrix
+	 * This function uses the methed described in https://en.wikipedia.org/wiki/Determinant
 	 * @param mat the matrix for which to compute the determinant
 	 * @param cofacs the cofactor matrix, if null will be computed from mat
 	 * @return the determinant of the matrix
 	 */
 	public static double det(double[][] mat, double[][] cofacs) {
-		double ans = 0.0;
-		if (cofacs == null) cofacs = cofactorMatrix(mat);
-		for (int i = 0; i < mat.length; ++i) {
-			ans += mat[i][0] * cofacs[i][0];
-		}
-		return ans;
+		double ans = 0.0;									// initialize answer as 0
+		if (cofacs == null) cofacs = cofactorMatrix(mat);	// if cofacs were not passed, compute them
+		for (int i = 0; i < mat.length; ++i) 				// iterate on cells of the first row
+			ans += mat[i][0] * cofacs[i][0];				// add the cell times the cofactor to the answer
+		return ans;											// return the computed answer
 	}
 
 	/** Two polynoms are equal if and only if the have the same coefficients - up to an epsilon (aka EPS) value.

@@ -103,4 +103,10 @@ public class Ex2Test {
 		double det = Ex2.det(mat, null);
 		assertEquals(-8.0, det, Ex2.EPS);
 	}
+	@Test
+	public void testInvert() {
+		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+		double[][] inv_mat = Ex2.invert(mat);
+		assertArrayEquals(new double[][] {{5.625, -2.375, -2.5}, {4.75, -2.25, -2.0}, {-3.375, 1.625, 1.5}}, inv_mat);
+	}
 }

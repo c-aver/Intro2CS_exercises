@@ -13,7 +13,7 @@ public class Ex2_GUI {
 		StdDraw.clear();
 		
 		double[] po1 = {2,1,-0.7, -0.02,0.02};
-		double eps = 0.02;
+		double eps = 0.01;
 		double[] po2 = {-3, 0.61, 0.2};
 		double[] xx= new double[3];
 		double[] yy= new double[3];
@@ -23,7 +23,7 @@ public class Ex2_GUI {
 		double x2 = Ex2.sameValue(po1,po2, 0,5,Ex2.EPS);
 		double area1 = 0;
 		StdDraw.setPenColor(StdDraw.YELLOW);
-		int numberOfBoxes = 13;
+		int numberOfBoxes = 100;
 		double delta = (x2-x1)/numberOfBoxes;
 		for(double x = x1;x<x2;x+=delta) {
 			double y1 = Ex2.f(po1, x);

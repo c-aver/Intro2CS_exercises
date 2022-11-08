@@ -29,7 +29,7 @@ public class Ex2 {
 		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
 		// so we will solve it with linear algebra
 		double[][] coefficients = {{xx[0]*xx[0], xx[0], 1}, {xx[1]*xx[1], xx[1], 1}, {xx[2]*xx[2], xx[2], 1}};	// the coefficient matrix for the equation system
-		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constant
+		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constants
 		// TODO: find inverse of coefficients matrix
 		// TODO: multiply inverse of coefficient matrix by constant vector
 		
@@ -84,7 +84,21 @@ public class Ex2 {
 		double[][] cofacs = cofactorMatrix(mat);				// first compute the cofactor matrix
 		double[][] cofacs_T = transpose(cofacs);				// then tranpose the cofactor matrix
 		// TODO: compute the determinant of the transposed matrix
-
+		assert false : "Not fully implemented";
+		return ans;
+	}
+	/**
+	 * This functions computes the determinant of a 3x3 matrix
+	 * @param mat the matrix for which to compute the determinant
+	 * @param cofacs the cofactor matrix, if null will be computed from mat
+	 * @return the determinant of the matrix
+	 */
+	public static double det(double[][] mat, double[][] cofacs) {
+		double ans = 0.0;
+		if (cofacs == null) cofacs = cofactorMatrix(mat);
+		for (int i = 0; i < mat.length; ++i) {
+			ans += mat[i][0] * cofacs[i][0];
+		}
 		return ans;
 	}
 

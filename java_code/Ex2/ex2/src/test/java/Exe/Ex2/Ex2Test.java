@@ -97,4 +97,10 @@ public class Ex2Test {
 		double [][] transposed = Ex2.transpose(mat);
 		assertArrayEquals(new double[][] {{1.0, 3.0, -1.0}, {4.0, 0.0, 9.0}, {7.0, 5.0, 11.0}}, transposed);
 	}
+	@Test
+	public void testDeterminant() {
+		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+		double det = Ex2.det(mat, null);
+		assertEquals(-8.0, det, Ex2.EPS);
+	}
 }

@@ -91,4 +91,10 @@ public class Ex2Test {
 		double [][] cofacs = Ex2.cofactorMatrix(mat);
 		assertArrayEquals(new double[][] {{-45.0, -38.0, 27.0}, {19.0, 18.0, -13.0}, {20.0, 16.0, -12.0}}, cofacs);
 	}
+	@Test
+	public void testTranspose() {
+		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+		double [][] transposed = Ex2.transpose(mat);
+		assertArrayEquals(new double[][] {{1.0, 3.0, -1.0}, {4.0, 0.0, 9.0}, {7.0, 5.0, 11.0}}, transposed);
+	}
 }

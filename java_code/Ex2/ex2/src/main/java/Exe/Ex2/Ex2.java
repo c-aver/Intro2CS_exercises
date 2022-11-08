@@ -60,6 +60,33 @@ public class Ex2 {
 
 		return ans;			// after computing all cofactors we can return the answer
 	}
+	/**
+	 * This functions transposes a 3x3 matrix
+	 * @param mat the matrix to transposed
+	 * @return the transposed matrix
+	 */
+	public static double[][] transpose(double[][] mat) {
+		double [][] ans = new double[3][3];			// initialize the answer matrix
+		for (int i = 0; i < 3; ++i)					// iterate on cells of answer matrix
+			for (int j = 0; j < 3; ++j)				// "
+				ans[i][j] = mat[j][i];				// set the cell to be the transposed cell from the original
+		return ans;									// return the tranposed matrix
+	}
+	/**
+ 	*  This function find the inverse of a 3x3 matrix
+	* We will do this using the method described in https://en.wikipedia.org/wiki/Invertible_matrix#Inversion_of_3_%C3%97_3_matrices
+ 	* @param mat the matrix to be inverted
+ 	* @return	the inverse
+ 	*/
+
+	public static double[][] invert(double[][] mat) {
+		double[][] ans = new double[3][3];
+		double[][] cofacs = cofactorMatrix(mat);				// first compute the cofactor matrix
+		// TODO: transpose the cofactor matrix
+		// TODO: compute the determinant of the transposed matrix
+
+		return ans;
+	}
 
 	/** Two polynoms are equal if and only if the have the same coefficients - up to an epsilon (aka EPS) value.
 	 * @param p1 first polynom

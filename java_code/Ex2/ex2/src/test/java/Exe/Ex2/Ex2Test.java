@@ -85,4 +85,10 @@ public class Ex2Test {
 		assertEquals(true, po1eq);
 		assertEquals(true, po2eq);
 	}
+	@Test
+	public void testCofactor() {
+		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+		double [][] cofacs = Ex2.cofactorMatrix(mat);
+		assertArrayEquals(new double[][] {{-45.0, -38.0, 27.0}, {19.0, 18.0, -13.0}, {20.0, 16.0, -12.0}}, cofacs);
+	}
 }

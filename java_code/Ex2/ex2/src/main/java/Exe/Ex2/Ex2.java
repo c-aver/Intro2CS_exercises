@@ -1,5 +1,7 @@
 package Exe.Ex2;
 
+import java.util.*;
+
 /** 
  * This class represents a set of functions on a polynom - represented as array of doubles.
  * @author boaz.benmoshe
@@ -26,13 +28,39 @@ public class Ex2 {
 		// this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
 		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
 		// so we will solve it with linear algebra
-		double[][] coeffcients = {{xx[0]*xx[0], xx[0], 1}, {xx[1]*xx[1], xx[1], 1}, {xx[2]*xx[2], xx[2], 1}};	// the coefficient matrix for the equation system
+		double[][] coefficients = {{xx[0]*xx[0], xx[0], 1}, {xx[1]*xx[1], xx[1], 1}, {xx[2]*xx[2], xx[2], 1}};	// the coefficient matrix for the equation system
 		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constant
 		// TODO: find inverse of coefficients matrix
 		// TODO: multiply inverse of coefficient matrix by constant vector
 		
 		return ans;
 	}
+	/**
+	 * This function computes a the cofactor matrix for a 3x3 matrix.
+	 * This uses the method decscribed in https://en.wikipedia.org/wiki/Minor_(linear_algebra)#First_minors
+	 * @param mat the matrix for which to find the cofactors
+	 * @return the cofactor matrix for mat
+	 */
+	public static double[][] cofactorMatrix(double[][] mat) {
+		double[][] ans = new double[3][3];									// initialize the answer matrix
+		for (int i = 0; i < 3; ++i)											// we will iterate on each number in the matrix to set it in the ans
+			for (int j = 0; j < 3; ++j) {									// "
+				int sign = ((i + j) % 2 == 0 ? 1 : -1 );						// this is the sign that the minor needs to be multiplied in, depending on the parity of i + j
+				double[][] submatrix = new double[2][2];					// this is the submatrix needed to compute the minor
+				ArrayList<Integer> indexes_i = new ArrayList<Integer>(Arrays.asList(0, 1, 2));	// this is the list of possible i indexes for the submatrix, we start with 0, 1, 2
+				ArrayList<Integer> indexes_j = new ArrayList<Integer>(Arrays.asList(0, 1, 2));	// this is the list of possible j indexes for the submatrix, we start with 0, 1, 2
+				indexes_i.remove((Object) i);			// we remove the currect i as an option for i indexes, (cast to Object to not hit the wrong overloaded function)
+				indexes_j.remove((Object) j);			// we remove the currect j as an option for j indexes, (cast to Object to not hit the wrong overloaded function)
+				for (int k = 0; k < 2; ++k)												// iterate on the submatrix cells
+					for (int l = 0; l < 2; ++l)											// "
+						submatrix[k][l] = mat[indexes_i.get(k)][indexes_j.get(l)];		// set the submatrix cell in accordance with allowed indexes (i.e. the indexes with the current i and j)
+				double m_i_j = submatrix[0][0] * submatrix[1][1] - submatrix[0][1] * submatrix[1][0];	// this is the minor for cell i, j, computed as the determinant of the submatrix
+				ans[i][j] = m_i_j * sign;									// the cofactor is the minor multiplied by the sign
+			}
+
+		return ans;			// after computing all cofactors we can return the answer
+	}
+
 	/** Two polynoms are equal if and only if the have the same coefficients - up to an epsilon (aka EPS) value.
 	 * @param p1 first polynom
 	 * @param p2 second polynom

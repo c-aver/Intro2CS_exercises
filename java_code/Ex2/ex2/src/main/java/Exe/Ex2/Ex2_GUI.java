@@ -58,7 +58,7 @@ public class Ex2_GUI {
 			yy[x-1] = Ex2.f(po2,x);
 		}
 		StdDraw.setPenColor(StdDraw.RED);
-		double[] pp = Ex2.PolynomFromPoints(xx, yy);
+		double[] pp = Ex2.polynomFromPoints(xx, yy);
 		double y10 = Ex2.f(pp, x0);
 		for(double x = min+eps; x<max;x+=eps) {
 			double y1 = Ex2.f(pp, x);

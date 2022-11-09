@@ -4,7 +4,7 @@ import java.util.*;
 
 /** 
  * This class represents a set of functions on a polynom - represented as array of doubles.
- * @author boaz.benmoshe
+ * @author c-aver
  *
  */
 public class Ex2 {

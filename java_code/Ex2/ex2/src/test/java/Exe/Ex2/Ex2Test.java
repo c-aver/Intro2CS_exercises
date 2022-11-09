@@ -3,7 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 /**
  * This JUnit class represents a very simple (and partial) unit testing for Ex2 - It should be improved and generalized significantly!
- * @author boazben-moshe
+ * @author c-aver
  *
  */
 

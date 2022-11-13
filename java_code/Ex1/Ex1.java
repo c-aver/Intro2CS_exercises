@@ -1,3 +1,6 @@
+// Written by Chaim Averbach
+// ID: 207486473
+
 /*
  * I don't understand why you asked for the first exercise to be included here, but here it is:
 GPCD(a, b)
@@ -20,7 +23,7 @@ GPCD(a, b)
 
 */
 
-// package exe1;
+package exe1;
 
 import java.util.Scanner;
 

@@ -8,7 +8,7 @@ import java.util.*;
  *
  */
 public class Ex2 {
-	/** Epsilon value for numerical computation, it servs as a "close enough" threshold. */
+	/** Epsilon value for numerical computation, it serves as a "close enough" threshold. */
 	public static final double EPS = 0.001; // the epsilon to be used for the root approximation.
 	/** The zero polynom is represented as an array with a single (0) entry. */
 	public static final double[] ZERO = {0};
@@ -21,28 +21,31 @@ public class Ex2 {
 	 */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
+		if (xx == null || xx.length != 3 || yy == null || yy.length != 3)
+			return null;
 		// this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
 		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
 		// so we will solve it with linear algebra
-		double[][] coefficients = {{1, xx[0], xx[0]*xx[0]}, {1, xx[1], xx[1]*xx[1]}, {1, xx[2], xx[2]*xx[2]}};	// the coefficient matrix for the equation system, in the order as defined by our polynomial representation
-		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constants
-		double[][] coeff_inv = invert(coefficients);			// compute the inverse of the coefficient matrix to by multiplied by 
+		double[][] coefficients = {{1, xx[0], xx[0]*xx[0]}, {1, xx[1], xx[1]*xx[1]}, {1, xx[2], xx[2]*xx[2]}};	// the coefficient matrix for the equation system, which is actually the variables of the polynomial's points, in the order as defined by our polynomial representation
+		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constants, the answer to the linear equations
+		double[][] coeff_inv = invert(coefficients);			// compute the inverse of the coefficient matrix to be multiplied by 
 		ans = vec_mul(coeff_inv, constants);					// the answer is the multiplication of the inverted coefficient matrix by the constant matrix, if you want to know why take Linear Algebra 1
-		return ans;
+		return ans;												// return the computed answer
 	}
 	/**
 	 * This function multiplies a matrix by a vector
-	 * Note that the params must be double[n][n] mat and double[n] vec, I will not check if you don't abide by the rules
+	 * Note that the params must be double[n][n] mat and double[n] vec
 	 * @param mat the matrix to be multiplied
 	 * @param vec the vector to multiply in
 	 * @return the vector answer of the multiplication
 	 */
 	public static double[] vec_mul(double[][] mat, double[] vec) {
-		double[] ans = new double[vec.length];			// intialize the result as a vector of size n
-		for (int i = 0; i < ans.length; ++i)			// iterate on the cells of the answer vector
-			for (int j = 0; j < ans.length; j++) {		// iterate on the columns of mat
+		int n = vec.length;
+		assert mat.length == n && mat[0].length == n : "Cannot multiply vector and matrix of different sizes";	// assert that user abides by function limitations
+		double[] ans = new double[n];					// intialize the result as a vector of size n
+		for (int i = 0; i < n; ++i)						// iterate on the cells of the answer vector
+			for (int j = 0; j < n; j++) 				// iterate on the columns of mat
 				ans[i] += vec[j] * mat[i][j];			// sum up the vector multiplication of vec and mat[i]
-			}
 
 		return ans;		// return the computed vector
 	}
@@ -53,10 +56,11 @@ public class Ex2 {
 	 * @return the cofactor matrix for mat
 	 */
 	public static double[][] cofactorMatrix(double[][] mat) {
+		assert mat.length == 3 && mat[0].length == 3 : "Cofactor computation is only implemented for 3x3 matrix";	// TODO: generalize this function for nxn matrix
 		double[][] ans = new double[3][3];									// initialize the answer matrix
 		for (int i = 0; i < 3; ++i)											// we will iterate on each number in the matrix to set it in the ans
 			for (int j = 0; j < 3; ++j) {									// "
-				int sign = ((i + j) % 2 == 0 ? 1 : -1 );						// this is the sign that the minor needs to be multiplied in, depending on the parity of i + j
+				int sign = ((i + j) % 2 == 0 ? 1 : -1 );					// this is the sign that the minor needs to be multiplied in, depending on the parity of i + j
 				double[][] submatrix = new double[2][2];					// this is the submatrix needed to compute the minor
 				ArrayList<Integer> indexes_i = new ArrayList<Integer>(Arrays.asList(0, 1, 2));	// this is the list of possible i indexes for the submatrix, we start with 0, 1, 2
 				ArrayList<Integer> indexes_j = new ArrayList<Integer>(Arrays.asList(0, 1, 2));	// this is the list of possible j indexes for the submatrix, we start with 0, 1, 2
@@ -77,9 +81,11 @@ public class Ex2 {
 	 * @return the transposed matrix
 	 */
 	public static double[][] transpose(double[][] mat) {
-		double [][] ans = new double[3][3];			// initialize the answer matrix
-		for (int i = 0; i < 3; ++i)					// iterate on cells of answer matrix
-			for (int j = 0; j < 3; ++j)				// "
+		int n = mat.length;							// find size of matrix
+		assert mat[0].length == n : "Cannot transpose non-square matrix";
+		double [][] ans = new double[n][n];			// initialize the answer matrix
+		for (int i = 0; i < n; ++i)					// iterate on cells of answer matrix
+			for (int j = 0; j < n; ++j)				// "
 				ans[i][j] = mat[j][i];				// set the cell to be the transposed cell from the original
 		return ans;									// return the tranposed matrix
 	}
@@ -91,14 +97,15 @@ public class Ex2 {
  	*/
 
 	public static double[][] invert(double[][] mat) {
-		double[][] ans = new double[3][3];
+		assert mat.length == 3 & mat[0].length == 3 : "Invert function is only implemented for 3x3 matrix";	// TODO: generalize function for nxn matrix
+		double[][] ans = new double[3][3];						// initialize result matrix
 		double[][] cofacs = cofactorMatrix(mat);				// first compute the cofactor matrix
 		double[][] cofacs_T = transpose(cofacs);				// then tranpose the cofactor matrix
 		double det_ops = 1.0 / det(mat, cofacs);				// compute the inverse of the determinant of the matrix
 		for (int i = 0; i < 3; ++i)								// iterate on the cells of the answer
 			for (int j = 0; j < 3; j++)							// "
 				ans[i][j] = det_ops * cofacs_T[i][j];			// set the answer as the transposed cofactor multiplied by the opposite of the determinant
-		return ans;
+		return ans;												// return the computed result
 	}
 	/**
 	 * This functions computes the determinant of a 3x3 matrix
@@ -128,13 +135,13 @@ public class Ex2 {
 		}
 
 		for (int i = 0; i < shorter.length; ++i) {	// iterate for the length of the shorter polynomial to compare coefficients
-			if (Math.abs(shorter[i] - longer[i]) > EPS)	{		// make sure coefficients aren't different
+			if (Math.abs(shorter[i] - longer[i]) > EPS)	{		// make sure coefficients aren't too different
 				return false;						// coefficients are diferrent, so the polynomials are not equal
 			}
 		}											// now we know that all coeffcients are the same up to the shorter polynomial, we need to make sure the longer one only has leading 0s
 		
 		for (int i = shorter.length; i < longer.length; ++i) {	// iterate on the coefficients of the longer polynomial which are not in the shorter
-			if (longer[i] > EPS) {								// make sure the coefficient is 0
+			if (longer[i] > EPS) {								// make sure the coefficient is near enough to 0
 				return false;									// longer polynomial has a non-0 cofficient which is not in shorter polynomal, so they are different
 			}
 		}
@@ -163,7 +170,8 @@ public class Ex2 {
 	 */
 	public static String poly(double[] poly) {
 		String ans = "";							// initialize an empty string for the answer
-
+		if (poly.length == 1 && poly[0] == 0.0)		// check special case of zero polynomial
+			return "0";								// in this case we want a "0" string
 		for (int i = poly.length - 1; i >= 0; --i) {				// iterate on the coefficients
 			if (poly[i] == 0.0)										// if the coefficient is 0
 				continue;											// we just skip the term
@@ -271,7 +279,7 @@ public class Ex2 {
 		assert x1 < x2 : "Cannot calculate area in negative range";
 		double dx = (x2 - x1) / numberOfBoxes;							// the interval on which we need to calculate the box area
 
-		double ans = 0;
+		double ans = 0;													// initialize anwer as zero
 
 		for (int i = 0; i < numberOfBoxes; ++i) {
 			x2 = x1 + dx;												// set the end of the range (of our current box) to dx (the width of the box) after x1 (the start of the box)
@@ -333,10 +341,10 @@ public class Ex2 {
 	}
 
 	/**
-	 * This function computes the polynom which is the sum of two polynoms (p1,p2)
-	 * @param p1
-	 * @param p2
-	 * @return
+	 * This function computes the polynomial which is the sum of two polynomials (p1,p2)
+	 * @param p1 first addend
+	 * @param p2 second addend
+	 * @return the polynomial sum of the two addends, as polynomials
 	 */
 	public static double[] add(double[] p1, double[] p2) {
 		double shorter[] = p1, longer[] = p2;		// assume p1 is the shorter of the polynomials
@@ -345,7 +353,7 @@ public class Ex2 {
 			longer = p1;							// "
 		}
 
-		double[] ans = new double[longer.length];	// initialize answer as long as the longer of the polynomials (note: guaranteed to bin initialized with 0.0 by language spec)
+		double[] ans = new double[longer.length];	// initialize answer as long as the longer of the polynomials (note: guaranteed to be initialized with 0.0 by language spec)
 
 		for (int i = 0; i < shorter.length; ++i)	// iterate on coefficient up to the shorter array (the part where both arrays have values)
 			ans[i] = shorter[i] + longer[i];		// set the answer's coefficient to the sum of the coefficients of the two polynomials
@@ -358,9 +366,9 @@ public class Ex2 {
 	}
 	/**
 	 * This function computes the polynom which is the multiplication of two polynoms (p1,p2)
-	 * @param p1
-	 * @param p2
-	 * @return
+	 * @param p1 first multiplier
+	 * @param p2 second multiplier
+	 * @return the polynomial multiplication of the two parameters
 	 */
 	public static double[] mul(double[] p1, double[] p2) {
 
@@ -374,17 +382,17 @@ public class Ex2 {
 	}
 	/**
 	 * This function computes the derivative polynom.
-	 * @param po
-	 * @return
+	 * @param po some polynomial
+	 * @return the polynomial representaion of the derivative of po
 	 */
 	public static double[] derivative (double[] po) {
 		assert po.length > 0: "Cannot find derivative of polynomial with no terms";
 		double[] ans = new double[po.length - 1]; 	// initalize an answer polynomial 1 degree lower than input
-		for (int i = 0; i < ans.length; ++i) {		// iterate on the coefficients up to the second to last one
-			ans[i] = (i + 1) * po[i + 1];			// each one is the next coefficient multiplied by its place
+		for (int i = 1; i < ans.length + 1; ++i) {	// iterate on the coefficients starting from the second one (first one is the constant which is cancelled by the derivative)
+			ans[i - 1] = i * po[i];					// the previous coefficient is the current one multiplied by its place
 		}
 
-		return ans;
+		return ans;	//return the computed polynomial
 	}
 	///////////////////// Private /////////////////////
 }

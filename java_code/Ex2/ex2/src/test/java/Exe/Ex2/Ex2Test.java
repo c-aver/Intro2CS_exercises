@@ -78,10 +78,13 @@ public class Ex2Test {
 	}
 	@Test
 	public void testString() {
+		String spo0 = Ex2.poly(Ex2.ZERO);
 		String spo1 = Ex2.poly(po1);
 		String spo2 = Ex2.poly(po2);
+		boolean po0eq = Ex2.equals(Ex2.ZERO, Ex2.getPolynomFromString(spo0));
 		boolean po1eq = Ex2.equals(po1, Ex2.getPolynomFromString(spo1));
 		boolean po2eq = Ex2.equals(po2, Ex2.getPolynomFromString(spo2));
+		assertEquals(true, po0eq);
 		assertEquals(true, po1eq);
 		assertEquals(true, po2eq);
 	}

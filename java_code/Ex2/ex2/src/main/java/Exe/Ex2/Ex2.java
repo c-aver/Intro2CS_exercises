@@ -225,7 +225,8 @@ public class Ex2 {
 	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
 	 */
 	public static double root(double[] p, double x1, double x2, double eps) {
-		assert x1 < x2 : "Cannot find root in negative range"; // TODO: assert that there is solution
+		assert x1 < x2 : "Cannot find root in negative range";
+		// this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages, it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
 		double x = (x1+x2)/2;							// the first x we will check is the middle of the range,
 														// from there we will close in on the true answer
 
@@ -252,7 +253,8 @@ public class Ex2 {
 	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
 	 */
 	public static double root_rec(double[] p, double x1, double x2, double eps) {
-		assert x1 < x2 : "Cannot find root in negative range"; // TODO: assert that there is solution
+		assert x1 < x2 : "Cannot find root in negative range";
+		// this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages, it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
 		double x = (x1+x2)/2;				// get the middle of the range (could be any other point in the range)
 		if (Math.abs(f(p, x)) < eps)		// if its value under p is within the accepted range
 			return x;						// return it as the answer

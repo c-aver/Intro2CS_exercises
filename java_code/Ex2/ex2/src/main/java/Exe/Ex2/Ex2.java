@@ -19,7 +19,7 @@ public class Ex2 {
 	 * @param yy an array of y values of points
 	 * @return an array of doubles representing the coefficients of the polynomial which goes through the points
 	 */
-	public static double[] polynomFromPoints(double[] xx, double[] yy) {
+	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
 		// this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
 		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,

@@ -139,7 +139,15 @@ public class Ex2Test {
 		double[] xx = {22.3, -52.2, 14.3};
 		double[] yy = {41.2, 21.2, -32.0};
 		double[] poly = Ex2.PolynomFromPoints(xx, yy);
-		boolean eq = Ex2.equals(poly, new double[] {-120.25499, 4.261812, 0.133557});	// correct representation was calculated by WolframAlpha as 0.133557046979866x^2 +4.26181208053691x -120.254993288591
+		boolean eq = Ex2.equals(poly, new double[] {-120.25499, 4.261812, 0.133557});
+		assertEquals(true, eq);
+	}
+	@Test
+	public void testPolynomFromPointsN() {
+		double[] xx = {22.3, -52.2, 14.3, 12.7};
+		double[] yy = {41.2, 21.2, -32.0, -8.0};
+		double[] poly = Ex2.PolynomFromPoints(xx, yy);
+		boolean eq = Ex2.equals(poly, new double[] {490.716, -54.1568, 0.706134, 0.0367037});
 		assertEquals(true, eq);
 	}
 }

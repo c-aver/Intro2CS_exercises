@@ -21,13 +21,22 @@ public class Ex2 {
 	 */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
-		if (xx == null || xx.length != 3 || yy == null || yy.length != 3)
+		if (xx == null || yy == null)
 			return null;
+		int n = xx.length;
+		assert yy.length == n : "Unequal number of x and y values was given";
 		// this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
 		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
 		// so we will solve it with linear algebra
-		double[][] coefficients = {{1, xx[0], xx[0]*xx[0]}, {1, xx[1], xx[1]*xx[1]}, {1, xx[2], xx[2]*xx[2]}};	// the coefficient matrix for the equation system, which is actually the variables of the polynomial's points, in the order as defined by our polynomial representation
-		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constants, the answer to the linear equations
+		double[][] coefficients = new double[n][n];
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < n; ++j)
+				coefficients[i][j] = Math.pow(xx[i], j);
+		}
+		double[] constants = new double[n];
+		for (int i = 0; i < n; ++i) {
+			constants[i] = yy[i];
+		}
 		double[][] coeff_inv = invert(coefficients);			// compute the inverse of the coefficient matrix to be multiplied by 
 		ans = vec_mul(coeff_inv, constants);					// the answer is the multiplication of the inverted coefficient matrix by the constant matrix, if you want to know why take Linear Algebra 1
 		return ans;												// return the computed answer

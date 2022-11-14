@@ -68,7 +68,7 @@ public class Ex2Test {
 	}
 	@Test
 	public void testAreaBetweenPolys() {
-		double a1 = Ex2.area(po1, po2, 0.0, 10.0, 1000000);
+		double a1 = Ex2.area(po1, po2, 0.0, 10.0, 10000);
 		assertEquals(62067.72029, a1, Ex2.EPS);		// expected value calculated by Symbolab
 	}
 	@Test

@@ -56,13 +56,13 @@ public class Ex2 {
 	 * @return the cofactor matrix for mat
 	 */
 	public static double[][] cofactorMatrix(double[][] mat) {
-		assert mat.length == 3 && mat[0].length == 3 : "Cofactor computation is only implemented for 3x3 matrix";	// TODO: generalize this function for nxn matrix
-		int n = mat.length;
+		int n = mat.length;													// get matrix size
+		assert mat[0].length == n : "Cannot create cofactor matrix for non-square matrix";
 		double[][] ans = new double[n][n];									// initialize the answer matrix
 		for (int i = 0; i < n; ++i)											// we will iterate on each number in the matrix to set it in the ans
 			for (int j = 0; j < n; ++j) {									// "
 				int sign = ((i + j) % 2 == 0 ? 1 : -1 );					// this is the sign that the minor needs to be multiplied in, depending on the parity of i + j
-				double[][] submatrix = new double[n - 1][n - 1];					// this is the submatrix needed to compute the minor
+				double[][] submatrix = new double[n - 1][n - 1];			// this is the submatrix needed to compute the minor, one smaller in each dimension from the original
 				ArrayList<Integer> indexes_i = new ArrayList<Integer>();	// this is the list of possible i indexes for the submatrix, we start with 0, 1, 2
 				ArrayList<Integer> indexes_j = new ArrayList<Integer>();	// this is the list of possible j indexes for the submatrix, we start with 0, 1, 2
 				for (int k = 0; k < n; k++) {
@@ -74,7 +74,7 @@ public class Ex2 {
 				for (int k = 0; k < n - 1; ++k)												// iterate on the submatrix cells
 					for (int l = 0; l < n - 1; ++l)											// "
 						submatrix[k][l] = mat[indexes_i.get(k)][indexes_j.get(l)];		// set the submatrix cell in accordance with allowed indexes (i.e. the indexes with the current i and j)
-				double m_i_j = submatrix[0][0] * submatrix[1][1] - submatrix[0][1] * submatrix[1][0];	// this is the minor for cell i, j, computed as the determinant of the submatrix
+				double m_i_j = det(submatrix, null);	// this is the minor for cell i, j, computed as the determinant of the submatrix
 				ans[i][j] = m_i_j * sign;									// the cofactor is the minor multiplied by the sign
 			}
 
@@ -120,6 +120,8 @@ public class Ex2 {
 	 * @return the determinant of the matrix
 	 */
 	public static double det(double[][] mat, double[][] cofacs) {
+		if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)	// the base case of a 2x2 matrix in which the determinant is a simple computation
+			return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];			// the 2x2 determinant formula
 		double ans = 0.0;									// initialize answer as 0
 		if (cofacs == null) cofacs = cofactorMatrix(mat);	// if cofacs were not passed, compute them
 		for (int i = 0; i < mat.length; ++i) 				// iterate on cells of the first row

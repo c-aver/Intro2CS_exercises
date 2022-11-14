@@ -77,7 +77,7 @@ public class Ex2 {
 				for (int k = 0; k < n; k++) {
 					indexes_i.add(k);
 					indexes_j.add(k);
-				}
+				}										// TODO: you know there is an easier way to do this shit
 				indexes_i.remove((Object) i);			// we remove the currect i as an option for i indexes, (cast to Object to not hit the wrong overloaded function)
 				indexes_j.remove((Object) j);			// we remove the currect j as an option for j indexes, (cast to Object to not hit the wrong overloaded function)
 				for (int k = 0; k < n - 1; ++k)												// iterate on the submatrix cells

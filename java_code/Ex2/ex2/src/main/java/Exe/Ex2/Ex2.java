@@ -17,17 +17,17 @@ public class Ex2 {
 	 * Note: this fuction only works for a set of points containing three points, else returns null.
 	 * @param xx an array of x values of points
 	 * @param yy an array of y values of points
-	 * @return an array of doubles representing the coefficients of the polynomial which goes through the points
+	 * @return an array of doubles representing the coefficients of the 2nd degree polynomial which goes through the points
 	 */
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans = null;
 		if (xx == null || xx.length != 3 || yy == null || yy.length != 3)
-			return null;
+			return null;	// this function only works on 3 points, so IAW exercise requirements we return null if the parameters are not valid
 		// this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
 		// a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
 		// so we will solve it with linear algebra
 		double[][] coefficients = {{1, xx[0], xx[0]*xx[0]}, {1, xx[1], xx[1]*xx[1]}, {1, xx[2], xx[2]*xx[2]}};	// the coefficient matrix for the equation system, which is actually the variables of the polynomial's points, in the order as defined by our polynomial representation
-		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constants, the answer to the linear equations
+		double[] constants = {yy[0], yy[1], yy[2]};				// the vector of constants, the answer to the linear equations, which are the required values of the xs when put into the polynomial
 		double[][] coeff_inv = invert(coefficients);			// compute the inverse of the coefficient matrix to be multiplied by 
 		ans = vec_mul(coeff_inv, constants);					// the answer is the multiplication of the inverted coefficient matrix by the constant matrix, if you want to know why take Linear Algebra 1
 		return ans;												// return the computed answer
@@ -68,8 +68,8 @@ public class Ex2 {
 				indexes_j.remove((Object) j);			// we remove the currect j as an option for j indexes, (cast to Object to not hit the wrong overloaded function)
 				for (int k = 0; k < 2; ++k)												// iterate on the submatrix cells
 					for (int l = 0; l < 2; ++l)											// "
-						submatrix[k][l] = mat[indexes_i.get(k)][indexes_j.get(l)];		// set the submatrix cell in accordance with allowed indexes (i.e. the indexes with the current i and j)
-				double m_i_j = submatrix[0][0] * submatrix[1][1] - submatrix[0][1] * submatrix[1][0];	// this is the minor for cell i, j, computed as the determinant of the submatrix
+						submatrix[k][l] = mat[indexes_i.get(k)][indexes_j.get(l)];		// set the submatrix cell in accordance with allowed indexes (i.e. the indexes without the current i and j)
+				double m_i_j = submatrix[0][0] * submatrix[1][1] - submatrix[0][1] * submatrix[1][0];	// this is the minor for cell i, j, computed as the determinant of the submatrix by the 2x2 determinant formula
 				ans[i][j] = m_i_j * sign;									// the cofactor is the minor multiplied by the sign
 			}
 
@@ -169,21 +169,22 @@ public class Ex2 {
 	 * @return String representing the polynom: 
 	 */
 	public static String poly(double[] poly) {
+		assert poly.length > 0 : "Cannot convert empty polynomial to string";
 		String ans = "";							// initialize an empty string for the answer
-		if (poly.length == 1 && poly[0] == 0.0)		// check special case of zero polynomial
+		if (poly.length == 1 && poly[0] == 0.0)						// check special case of zero polynomial
 			return "0";								// in this case we want a "0" string
-		for (int i = poly.length - 1; i >= 0; --i) {				// iterate on the coefficients
+		for (int i = poly.length - 1; i >= 0; --i) {				// iterate on the coefficients in reverse (which is the direction in which we represent them in the string)
 			if (poly[i] == 0.0)										// if the coefficient is 0
 				continue;											// we just skip the term
-			if (poly[i] > 0.0 && i != poly.length - 1) ans += "+";	// if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term
+			if (poly[i] > 0.0 && i != poly.length - 1) ans += "+";	// if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term ("+0.2x" just looks weird)
 			ans += poly[i];											// add the coefficient to the result string
-			if (i == 1) ans += "x ";								// if we are on the x term, add only the letter x to the result string
+			if (i == 1) ans += "x";									// if we are on the x term, add only the letter x to the result string
 			else if (i > 1)											// if we are on a higher power
 				ans += "x^" + i;									// add x raised to the power of the current degree
-			if (i > 0)												// if we are not on the last term (int the order of the string)
+			if (i > 0)												// if we are not on the last term (in the order of the string)
 				ans += " ";											// we add a space to seperate from the next term
 		}
-		return ans;
+		return ans;		// return the resulting string
 	}
 	/**
 	 * Given two polynoms (p1,p2), a range [x1,x2] and an epsilon eps. This function computes an x value (x1<=x<=x2)
@@ -281,17 +282,17 @@ public class Ex2 {
 		assert x1 < x2 : "Cannot calculate area in negative range";
 		double dx = (x2 - x1) / numberOfBoxes;							// the interval on which we need to calculate the box area
 
-		double ans = 0;													// initialize anwer as zero
+		double ans = 0;													// initialize answer as zero
 
 		for (int i = 0; i < numberOfBoxes; ++i) {
 			x2 = x1 + dx;												// set the end of the range (of our current box) to dx (the width of the box) after x1 (the start of the box)
 			double x = (x1 + x2) / 2;									// set the value to be computed as the middle of the range
-			double box_height = Math.abs(f(p1, x) - f(p2, x));			// calculate the height of the box between the two functions, which is just the difference of their height
+			double box_height = Math.abs(f(p1, x) - f(p2, x));			// calculate the height of the box between the two functions, which is just the difference of their heights
 			double box_area = box_height * dx;							// calculate the area of the box, its height times its width (which is dx)
 			ans += box_area;											// add the area to the total answer
 			x1 = x2;													// move the left of the range to the right, to be expanded on the next iteration
 		}
-		return ans;
+		return ans;		// return the computed answer
 	}
 	/**
 	 * This function computes the array representation of a polynom from a String
@@ -304,18 +305,18 @@ public class Ex2 {
 	// string to parse: "0.0x^4 -1.0x^3 +3.0x^2 +0.0x +2.0"
 	// after splitting: {"0.0x^4" ,"-1.0x^3", "+3.0x^2", "+0.0x", "+2.0" }
 	public static double[] getPolynomFromString(String p) {
-		String[] terms = p.split(" ");				// we split the string by " " to isolate the terms
-		int polyDegree = getDegreeFromTerm(terms[0]);			// the degree of the polynomial is the degree of the first term (by definition the first term is the largest degree)
+		String[] terms = p.split(" ");							// we split the string by " " to isolate the terms
+		int polyDegree = getDegreeFromTerm(terms[0]);			// the degree of the polynomial is the degree of the first term (by definition the first term is the largest power)
 		
 		double[] ans = new double[polyDegree + 1];				// initialize the answer array, note that array sizes are one larger than the degree of the polynomial
 
-		for (String term : terms) {								// iterate on the terms, we will parse each one seperately, I don't like foreach either but it's really convinient here
+		for (String term : terms) {								// iterate on the terms, we will parse each one seperately, I don't like foreach either but it's really convenient here
 			int degree = getDegreeFromTerm(term);				// parse the degree from the term string
 			double coefficient = getCoefficientFromTerm(term);	// parse the coefficient from the term
 			ans[degree] = coefficient;							// set the appropriate place in the answer to be the coefficient
 		}
 		
-		return ans;
+		return ans;		// return the result polynomial
 	}
 	/**
 	 * This function takes a term of a polynomial as a string and returns its degree (the power to which x is raised)
@@ -324,11 +325,11 @@ public class Ex2 {
 	 * @return the degree of the term
 	 */
 	private static int getDegreeFromTerm(String term) {
-		String[] split_term = term.split("x");		// split the term into the garbage at the end ("x^n") and the actual coefficient
-		if (split_term.length < 2)							// this is the case where there was no garbage to begin with
-			return 0;										// this means the power is 0, such as in "+2.0"
-		if (split_term[1].length() == 0)					// this is the case where there was nothing after the "x", such as in "+2.0x"
-			return 1;										// so the degree is 1 (x=x^1)
+		String[] split_term = term.split("x");					// split the term into the garbage at the end ("^n") and the actual coefficient
+		if (split_term.length < 2)								// this is the case where there was no garbage to begin with
+			return 0;											// this means the power is 0, such as in "+2.0"
+		if (split_term[1].length() == 0)						// this is the case where there was nothing after the "x", such as in "+2.0x"
+			return 1;											// so the degree is 1 (x=x^1)
 		return Integer.parseInt(split_term[1].substring(1));	// in all other cases, the degree can be found by parsing the garbage except for the first character (which is '^'), so we return it
 	}
 	/**
@@ -338,8 +339,8 @@ public class Ex2 {
 	 * @return the coefficient of the term
 	 */
 	private static double getCoefficientFromTerm(String term) {
-		String[] split_term = term.split("x");		// split the term into the garbage at the end ("x^n") and the actual coefficient
-		return Double.parseDouble(split_term[0]);				// the coefficient can be found by parsing the garbage except for the first character (which is '^'), so we return it
+		String[] split_term = term.split("x");		// split the term into the garbage at the end ("^n") and the actual coefficient
+		return Double.parseDouble(split_term[0]);	// the coefficient can be found by parsing everything before the "x"
 	}
 
 	/**
@@ -349,13 +350,14 @@ public class Ex2 {
 	 * @return the polynomial sum of the two addends, as polynomials
 	 */
 	public static double[] add(double[] p1, double[] p2) {
+		assert p1.length > 0 && p2.length > 0 : "Cannot add empty polynomials";	// no, I will not allow an empty polynomial to count as ZERO
 		double shorter[] = p1, longer[] = p2;		// assume p1 is the shorter of the polynomials
 		if (p1.length > p2.length) {				// if assumption is incorrect
 			shorter = p2;							// set the arrays accordingly
 			longer = p1;							// "
 		}
 
-		double[] ans = new double[longer.length];	// initialize answer as long as the longer of the polynomials (note: guaranteed to be initialized with 0.0 by language spec)
+		double[] ans = new double[longer.length];	// initialize answer to be as long as the longer of the polynomials
 
 		for (int i = 0; i < shorter.length; ++i)	// iterate on coefficient up to the shorter array (the part where both arrays have values)
 			ans[i] = shorter[i] + longer[i];		// set the answer's coefficient to the sum of the coefficients of the two polynomials
@@ -373,14 +375,14 @@ public class Ex2 {
 	 * @return the polynomial multiplication of the two parameters
 	 */
 	public static double[] mul(double[] p1, double[] p2) {
-
+		assert p1.length > 0 && p2.length > 0 : "Cannot multiply empty polynomials";
 		double[] ans = new double[p1.length + p2.length - 1];	// initialize the answer with the degree being the sum of the two degrees (note that the size of the array is 1 higher than the degree), this is because the rank of the answer (the power of the biggest x) is the ranks of the multiplicants added (since x^n*x^m=x^(m+n))
-
+			// the array is guarantedd to be 0.0-initialized by language spec
 		for (int i = 0; i < p1.length; ++i)					// iterate on both polynomial, since we need to multiply each coefficient from the first by each coefficient from the second
 			for (int j = 0; j < p2.length; ++j)				// "
 				ans[i + j] += p1[i] * p2[j];				// a*x^n * b*x^m = a*b^(m+n)
 
-		return ans;
+		return ans;				// return the computed answer
 	}
 	/**
 	 * This function computes the derivative polynom.

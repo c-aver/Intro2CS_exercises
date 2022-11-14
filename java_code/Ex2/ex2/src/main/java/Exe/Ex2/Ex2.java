@@ -57,17 +57,22 @@ public class Ex2 {
 	 */
 	public static double[][] cofactorMatrix(double[][] mat) {
 		assert mat.length == 3 && mat[0].length == 3 : "Cofactor computation is only implemented for 3x3 matrix";	// TODO: generalize this function for nxn matrix
-		double[][] ans = new double[3][3];									// initialize the answer matrix
-		for (int i = 0; i < 3; ++i)											// we will iterate on each number in the matrix to set it in the ans
-			for (int j = 0; j < 3; ++j) {									// "
+		int n = mat.length;
+		double[][] ans = new double[n][n];									// initialize the answer matrix
+		for (int i = 0; i < n; ++i)											// we will iterate on each number in the matrix to set it in the ans
+			for (int j = 0; j < n; ++j) {									// "
 				int sign = ((i + j) % 2 == 0 ? 1 : -1 );					// this is the sign that the minor needs to be multiplied in, depending on the parity of i + j
-				double[][] submatrix = new double[2][2];					// this is the submatrix needed to compute the minor
-				ArrayList<Integer> indexes_i = new ArrayList<Integer>(Arrays.asList(0, 1, 2));	// this is the list of possible i indexes for the submatrix, we start with 0, 1, 2
-				ArrayList<Integer> indexes_j = new ArrayList<Integer>(Arrays.asList(0, 1, 2));	// this is the list of possible j indexes for the submatrix, we start with 0, 1, 2
+				double[][] submatrix = new double[n - 1][n - 1];					// this is the submatrix needed to compute the minor
+				ArrayList<Integer> indexes_i = new ArrayList<Integer>();	// this is the list of possible i indexes for the submatrix, we start with 0, 1, 2
+				ArrayList<Integer> indexes_j = new ArrayList<Integer>();	// this is the list of possible j indexes for the submatrix, we start with 0, 1, 2
+				for (int k = 0; k < n; k++) {
+					indexes_i.add(k);
+					indexes_j.add(k);
+				}
 				indexes_i.remove((Object) i);			// we remove the currect i as an option for i indexes, (cast to Object to not hit the wrong overloaded function)
 				indexes_j.remove((Object) j);			// we remove the currect j as an option for j indexes, (cast to Object to not hit the wrong overloaded function)
-				for (int k = 0; k < 2; ++k)												// iterate on the submatrix cells
-					for (int l = 0; l < 2; ++l)											// "
+				for (int k = 0; k < n - 1; ++k)												// iterate on the submatrix cells
+					for (int l = 0; l < n - 1; ++l)											// "
 						submatrix[k][l] = mat[indexes_i.get(k)][indexes_j.get(l)];		// set the submatrix cell in accordance with allowed indexes (i.e. the indexes with the current i and j)
 				double m_i_j = submatrix[0][0] * submatrix[1][1] - submatrix[0][1] * submatrix[1][0];	// this is the minor for cell i, j, computed as the determinant of the submatrix
 				ans[i][j] = m_i_j * sign;									// the cofactor is the minor multiplied by the sign

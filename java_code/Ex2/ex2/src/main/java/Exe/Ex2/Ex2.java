@@ -377,7 +377,7 @@ public class Ex2 {
 	public static double[] mul(double[] p1, double[] p2) {
 		assert p1.length > 0 && p2.length > 0 : "Cannot multiply empty polynomials";
 		double[] ans = new double[p1.length + p2.length - 1];	// initialize the answer with the degree being the sum of the two degrees (note that the size of the array is 1 higher than the degree), this is because the rank of the answer (the power of the biggest x) is the ranks of the multiplicants added (since x^n*x^m=x^(m+n))
-			// the array is guarantedd to be 0.0-initialized by language spec
+			// the array is guaranteed to be 0.0-initialized by language spec
 		for (int i = 0; i < p1.length; ++i)					// iterate on both polynomial, since we need to multiply each coefficient from the first by each coefficient from the second
 			for (int j = 0; j < p2.length; ++j)				// "
 				ans[i + j] += p1[i] * p2[j];				// a*x^n * b*x^m = a*b^(m+n)

@@ -102,13 +102,14 @@ public class Ex2 {
  	*/
 
 	public static double[][] invert(double[][] mat) {
-		assert mat.length == 3 & mat[0].length == 3 : "Invert function is only implemented for 3x3 matrix";	// TODO: generalize function for nxn matrix
-		double[][] ans = new double[3][3];						// initialize result matrix
+		int n = mat.length;							// find size of matrix
+		assert mat[0].length == n : "Cannot invert non-square matrix";
+		double[][] ans = new double[n][n];						// initialize result matrix
 		double[][] cofacs = cofactorMatrix(mat);				// first compute the cofactor matrix
 		double[][] cofacs_T = transpose(cofacs);				// then tranpose the cofactor matrix
 		double det_ops = 1.0 / det(mat, cofacs);				// compute the inverse of the determinant of the matrix
-		for (int i = 0; i < 3; ++i)								// iterate on the cells of the answer
-			for (int j = 0; j < 3; j++)							// "
+		for (int i = 0; i < n; ++i)								// iterate on the cells of the answer
+			for (int j = 0; j < n; j++)							// "
 				ans[i][j] = det_ops * cofacs_T[i][j];			// set the answer as the transposed cofactor multiplied by the opposite of the determinant
 		return ans;												// return the computed result
 	}

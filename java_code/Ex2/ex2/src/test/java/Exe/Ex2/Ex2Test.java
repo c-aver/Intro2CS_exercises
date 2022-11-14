@@ -119,6 +119,15 @@ public class Ex2Test {
 		assertArrayEquals(new double[][] {{5.625, -2.375, -2.5}, {4.75, -2.25, -2.0}, {-3.375, 1.625, 1.5}}, inv_mat);
 	}
 	@Test
+	public void testInvertnxn() {
+		double[][] mat = {{1, 4, 7, 2}, {3, 0, 5, -3}, {-1, 9, 11, 4}, {4, 2, -7, 4}};
+		double[][] inv_mat = Ex2.invert(mat);
+		double[][] expected = new double[][] {{0.1683748, 0.114202049, -0.0966325, 0.0980966}, {-0.625183, 0.20204978, 0.367496, 0.0966325}, {0.28989751, -0.04685212, -0.11420204978, -0.06588579795}, {0.65153733, -0.297218155, -0.286868253294, -0.011713030746}};
+		for (int i = 0; i < inv_mat.length; ++i) {
+			assertArrayEquals(expected[i], inv_mat[i], Ex2.EPS);
+		}
+	}
+	@Test
 	public void testMatMul() {
 		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
 		double[] vec = {5.5, -2.0, 7.0};

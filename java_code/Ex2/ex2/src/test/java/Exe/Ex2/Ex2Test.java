@@ -19,7 +19,7 @@ public class Ex2Test {
   public void testEquals() {
     boolean eq1 = Ex2.equals(po1, new double[] {2, 0, 3, -1, 0});
     boolean eq2 = Ex2.equals(po1, new double[] {2, 0, 3, -1});
-    boolean eq3 = Ex2.equals(po1, new double[] {2.0005, -0.0003, 3, -0.9999});
+    boolean eq3 = Ex2.equals(po1, new double[] {2 + Ex2.EPS/2, 0 - Ex2.EPS/2, 3, -1 - Ex2.EPS/2});
     boolean neq1 = Ex2.equals(po1, po2);
     boolean neq2 = Ex2.equals(po1, new double[] {2, 0, 3, -1, 0, 5});
     assertEquals(true, eq1);

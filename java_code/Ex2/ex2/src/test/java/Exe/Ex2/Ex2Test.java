@@ -74,7 +74,7 @@ public class Ex2Test {
   @Test
   public void testAreaBetweenPolys() {
     double a1 = Ex2.area(po1, po2, 0.0, 10.0, 100000);
-    assertEquals(62067.72029, a1, Ex2.EPS);        // expected value calculated by Symbolab, I don't have a precise enough result to assert with greater precision
+    assertEquals(62067.72029, a1, Ex2.EPS);        // expected value calculated by Symbolab
   }
   @Test
   public void testSameValue() {

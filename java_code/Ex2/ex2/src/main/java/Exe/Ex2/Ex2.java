@@ -3,7 +3,8 @@ package Exe.Ex2;
 /** 
  * This class represents a set of functions on a polynom - represented as array of doubles.
  * @author c-aver
- *
+ * Name: Chaim Averbach
+ * ID: 207486473
  */
 public class Ex2 {
   /** Epsilon value for numerical computation, it serves as a "close enough" threshold. */

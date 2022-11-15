@@ -8,7 +8,7 @@ package Exe.Ex2;
  */
 public class Ex2 {
   /** Epsilon value for numerical computation, it serves as a "close enough" threshold. */
-  public static final double EPS = 0.0001; // the epsilon to be used for the root approximation.
+  public static final double EPS = 0.001; // the epsilon to be used for the root approximation.
   /** The zero polynom is represented as an array with a single (0) entry. */
   public static final double[] ZERO = {0};
   /**

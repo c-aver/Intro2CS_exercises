@@ -1,7 +1,5 @@
 package Exe.Ex2;
 
-import java.util.ArrayList;
-
 /** 
  * This class represents a set of functions on a polynom - represented as array of doubles.
  * @author c-aver
@@ -59,7 +57,7 @@ public class Ex2 {
     return ans;    // return the computed vector
   }
   /**
-   * This function computes a the cofactor matrix for a 3x3 matrix.
+   * This function computes a the cofactor matrix for a nxn matrix.
    * This uses the method decscribed in https://en.wikipedia.org/wiki/Minor_(linear_algebra)#First_minors
    * @param mat the matrix for which to find the cofactors
    * @return the cofactor matrix for mat
@@ -82,7 +80,7 @@ public class Ex2 {
     return ans;                                                         // after computing all cofactors we can return the answer
   }
   /**
-   * This functions transposes a 3x3 matrix
+   * This functions transposes a nxn matrix
    * @param mat the matrix to transposed
    * @return the transposed matrix
    */
@@ -96,8 +94,8 @@ public class Ex2 {
     return ans;                          // return the tranposed matrix
   }
   /**
-   *  This function find the inverse of a 3x3 matrix
-  * We will do this using the method described in https://en.wikipedia.org/wiki/Invertible_matrix#Inversion_of_3_%C3%97_3_matrices
+   *  This function find the inverse of a nxn matrix
+  * We will do this using the method described in https://en.wikipedia.org/wiki/Invertible_matrix#Analytic_solution
    * @param mat the matrix to be inverted
    * @return  the inverse
    */
@@ -115,7 +113,7 @@ public class Ex2 {
     return ans;                               // return the computed result
   }
   /**
-   * This functions computes the determinant of a 3x3 matrix
+   * This functions computes the determinant of a nxn matrix
    * This function uses the methed described in https://en.wikipedia.org/wiki/Determinant
    * @param mat the matrix for which to compute the determinant
    * @param cofacs the cofactor matrix, if null will be computed from mat

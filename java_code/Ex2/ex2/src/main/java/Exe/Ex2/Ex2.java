@@ -72,17 +72,9 @@ public class Ex2 {
       for (int j = 0; j < n; ++j) {                                     // "
         int sign = ((i + j) % 2 == 0 ? 1 : -1 );                        // this is the sign that the minor needs to be multiplied in, depending on the parity of i + j
         double[][] submatrix = new double[n - 1][n - 1];                // this is the submatrix needed to compute the minor, one smaller in each dimension from the original
-        ArrayList<Integer> indexes_i = new ArrayList<Integer>();        // this is the list of possible i indexes for the submatrix, we start with 0, 1, 2
-        ArrayList<Integer> indexes_j = new ArrayList<Integer>();        // this is the list of possible j indexes for the submatrix, we start with 0, 1, 2
-        for (int k = 0; k < n; k++) {
-          indexes_i.add(k);
-          indexes_j.add(k);
-        }                                                               // TODO: you know there is an easier way to do this shit
-        indexes_i.remove((Object) i);                                   // we remove the currect i as an option for i indexes, (cast to Object to not hit the wrong overloaded function)
-        indexes_j.remove((Object) j);                                   // we remove the currect j as an option for j indexes, (cast to Object to not hit the wrong overloaded function)
         for (int k = 0; k < n - 1; ++k)                                 // iterate on the submatrix cells
           for (int l = 0; l < n - 1; ++l)                               // "
-            submatrix[k][l] = mat[indexes_i.get(k)][indexes_j.get(l)];  // set the submatrix cell in accordance with allowed indexes (i.e. the indexes with the current i and j)
+            submatrix[k][l] = mat[(k >= i ? k + 1 : k)][(l >= j ? l + 1 : l)];  // set the submatrix cell by matrix cell, if we are to the right or below the excluded cell add 1 to the index from which we are taking the value
         double m_i_j = det(submatrix, null);                    // this is the minor for cell i, j, computed as the determinant of the submatrix
         ans[i][j] = m_i_j * sign;                                       // the cofactor is the minor multiplied by the sign
       }

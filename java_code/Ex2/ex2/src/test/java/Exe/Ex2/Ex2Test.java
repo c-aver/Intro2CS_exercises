@@ -48,7 +48,7 @@ public class Ex2Test {
   }
   
   @Test
-  public void testAdd() {
+  public void testAddMul() {
     double[] p12 = Ex2.add(po1, po2);
     double[] minus1 = {-1};
     double[] pp2 = Ex2.mul(po2, minus1);

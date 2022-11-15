@@ -111,7 +111,7 @@ public class Ex2Test {
   @Test
   public void testDeterminant() {
     double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
-    double det = Ex2.det(mat, null);
+    double det = Ex2.det(mat);
     assertEquals(-8.0, det, Ex2.EPS);
   }
   @Test

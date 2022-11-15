@@ -75,7 +75,7 @@ public class Ex2 {
         for (int k = 0; k < n - 1; ++k)                                 // iterate on the submatrix cells
           for (int l = 0; l < n - 1; ++l)                               // "
             submatrix[k][l] = mat[(k >= i ? k + 1 : k)][(l >= j ? l + 1 : l)];  // set the submatrix cell by matrix cell, if we are to the right or below the excluded cell add 1 to the index from which we are taking the value
-        double m_i_j = det(submatrix, null);                    // this is the minor for cell i, j, computed as the determinant of the submatrix
+        double m_i_j = det(submatrix);                    // this is the minor for cell i, j, computed as the determinant of the submatrix
         ans[i][j] = m_i_j * sign;                                       // the cofactor is the minor multiplied by the sign
       }
 
@@ -115,17 +115,34 @@ public class Ex2 {
     return ans;                               // return the computed result
   }
   /**
-   * This functions computes the determinant of a nxn matrix
+   * This functions computes the determinant of a nxn matrix, given the matrix of cofactors
    * This function uses the methed described in https://en.wikipedia.org/wiki/Determinant
    * @param mat the matrix for which to compute the determinant
    * @param cofacs the cofactor matrix, if null will be computed from mat
    * @return the determinant of the matrix
    */
   public static double det(double[][] mat, double[][] cofacs) {
+    if (cofacs == null) return det(mat);                              // check if cofacs were not provided, for backwards compatibility
     if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)  // the base case of a 2x2 matrix in which the determinant is a simple computation
       return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];           // the 2x2 determinant formula
     double ans = 0.0;                                                 // initialize answer as 0
-    if (cofacs == null) cofacs = cofactorMatrix(mat);                 // if cofacs were not passed, compute them
+    for (int i = 0; i < mat.length; ++i)                              // iterate on cells of the first row
+      ans += mat[i][0] * cofacs[i][0];                                // add the cell times the cofactor to the answer
+    return ans;                                                       // return the computed answer
+  }
+  /**
+   * This functions computes the determinant of a nxn matrix
+   * This overloads the previous method and computes the cofactors itself
+   * This function uses the methed described in https://en.wikipedia.org/wiki/Determinant
+   * @param mat the matrix for which to compute the determinant
+   * @param cofacs the cofactor matrix, if null will be computed from mat
+   * @return the determinant of the matrix
+   */
+  public static double det(double[][] mat) {
+    if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)  // the base case of a 2x2 matrix in which the determinant is a simple computation
+      return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];           // the 2x2 determinant formula
+    double ans = 0.0;                                                 // initialize answer as 0
+    double[][] cofacs = cofactorMatrix(mat);                          // if cofacs were not passed, compute them
     for (int i = 0; i < mat.length; ++i)                              // iterate on cells of the first row
       ans += mat[i][0] * cofacs[i][0];                                // add the cell times the cofactor to the answer
     return ans;                                                       // return the computed answer

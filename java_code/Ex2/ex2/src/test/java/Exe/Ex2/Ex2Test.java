@@ -90,15 +90,12 @@ public class Ex2Test {
 	}
 	@Test
 	public void testCofactor() {
-		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
-		double [][] cofacs = Ex2.cofactorMatrix(mat);
-		assertArrayEquals(new double[][] {{-45.0, -38.0, 27.0}, {19.0, 18.0, -13.0}, {20.0, 16.0, -12.0}}, cofacs);
-	}
-	@Test
-	public void testCofactornxn() {
-		double[][] mat = {{1, 4, 7, 2}, {3, 0, 5, -3}, {-1, 9, 11, 4}, {4, 2, -7, 4}};
-		double [][] cofacs = Ex2.cofactorMatrix(mat);
-		assertArrayEquals(new double[][] {{115.0, -427.0, 198.0, 445.0}, {78.0, 138.0, -32.0, -203.0}, {-66.0, 251.0, -78.0, -196.0}, {67.0, 66.0, -45.0, -8.0}}, cofacs);
+		double[][] mat3 = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+		double[][] mat4 = {{1, 4, 7, 2}, {3, 0, 5, -3}, {-1, 9, 11, 4}, {4, 2, -7, 4}};
+		double [][] cofacs3 = Ex2.cofactorMatrix(mat3);
+		double [][] cofacs4 = Ex2.cofactorMatrix(mat4);
+		assertArrayEquals(new double[][] {{-45.0, -38.0, 27.0}, {19.0, 18.0, -13.0}, {20.0, 16.0, -12.0}}, cofacs3);
+		assertArrayEquals(new double[][] {{115.0, -427.0, 198.0, 445.0}, {78.0, 138.0, -32.0, -203.0}, {-66.0, 251.0, -78.0, -196.0}, {67.0, 66.0, -45.0, -8.0}}, cofacs4);
 	}
 	@Test
 	public void testTranspose() {
@@ -114,17 +111,14 @@ public class Ex2Test {
 	}
 	@Test
 	public void testInvert() {
-		double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
-		double[][] inv_mat = Ex2.invert(mat);
-		assertArrayEquals(new double[][] {{5.625, -2.375, -2.5}, {4.75, -2.25, -2.0}, {-3.375, 1.625, 1.5}}, inv_mat);
-	}
-	@Test
-	public void testInvertnxn() {
-		double[][] mat = {{1, 4, 7, 2}, {3, 0, 5, -3}, {-1, 9, 11, 4}, {4, 2, -7, 4}};
-		double[][] inv_mat = Ex2.invert(mat);
+		double[][] mat3 = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
+		double[][] mat4 = {{1, 4, 7, 2}, {3, 0, 5, -3}, {-1, 9, 11, 4}, {4, 2, -7, 4}};
+		double[][] inv_mat3 = Ex2.invert(mat3);
+		double[][] inv_mat4 = Ex2.invert(mat4);
 		double[][] expected = new double[][] {{0.1683748, 0.114202049, -0.0966325, 0.0980966}, {-0.625183, 0.20204978, 0.367496, 0.0966325}, {0.28989751, -0.04685212, -0.11420204978, -0.06588579795}, {0.65153733, -0.297218155, -0.286868253294, -0.011713030746}};
-		for (int i = 0; i < inv_mat.length; ++i) {
-			assertArrayEquals(expected[i], inv_mat[i], Ex2.EPS);
+		assertArrayEquals(new double[][] {{5.625, -2.375, -2.5}, {4.75, -2.25, -2.0}, {-3.375, 1.625, 1.5}}, inv_mat3);
+		for (int i = 0; i < inv_mat4.length; ++i) {
+			assertArrayEquals(expected[i], inv_mat4[i], Ex2.EPS);
 		}
 	}
 	@Test
@@ -136,18 +130,15 @@ public class Ex2Test {
 	}
 	@Test
 	public void testPolynomFromPoints() {
-		double[] xx = {22.3, -52.2, 14.3};
-		double[] yy = {41.2, 21.2, -32.0};
-		double[] poly = Ex2.PolynomFromPoints(xx, yy);
-		boolean eq = Ex2.equals(poly, new double[] {-120.25499, 4.261812, 0.133557});
-		assertEquals(true, eq);
-	}
-	@Test
-	public void testPolynomFromPointsN() {
-		double[] xx = {22.3, -52.2, 14.3, 12.7};
-		double[] yy = {41.2, 21.2, -32.0, -8.0};
-		double[] poly = Ex2.PolynomFromPoints(xx, yy);
-		boolean eq = Ex2.equals(poly, new double[] {490.716, -54.1568, 0.706134, 0.0367037});
-		assertEquals(true, eq);
+		double[] xx3 = {22.3, -52.2, 14.3};
+		double[] yy3 = {41.2, 21.2, -32.0};
+		double[] xx4 = {22.3, -52.2, 14.3, 12.7};
+		double[] yy4 = {41.2, 21.2, -32.0, -8.0};
+		double[] poly3 = Ex2.PolynomFromPoints(xx3, yy3);
+		double[] poly4 = Ex2.PolynomFromPoints(xx4, yy4);
+		boolean eq3 = Ex2.equals(poly3, new double[] {-120.25499, 4.261812, 0.133557});
+		boolean eq4 = Ex2.equals(poly4, new double[] {490.716, -54.1568, 0.706134, 0.0367037});
+		assertEquals(true, eq3);
+		assertEquals(true, eq4);
 	}
 }

@@ -11,6 +11,7 @@ public class Ex2 {
   public static final double EPS = 0.001; // the epsilon to be used for the root approximation.
   /** The zero polynom is represented as an array with a single (0) entry. */
   public static final double[] ZERO = {0};
+
   /**
    * This function computes a polynomial representation from a set of 2D points on the polynom.
    * Note: this fuction only works for a set of points containing three points, else returns null.

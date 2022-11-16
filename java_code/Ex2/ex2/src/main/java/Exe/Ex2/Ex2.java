@@ -1,7 +1,7 @@
 package Exe.Ex2;
 
 /** 
- * This class represents a set of functions on a polynom - represented as array of doubles.
+ * This class represents a set of functions on a polynomial - represented as array of doubles.
  * @author c-aver
  * Name: Chaim Averbach
  * ID: 207486473
@@ -9,12 +9,12 @@ package Exe.Ex2;
 public class Ex2 {
   /** Epsilon value for numerical computation, it serves as a "close enough" threshold. */
   public static final double EPS = 0.001; // the epsilon to be used for the root approximation.
-  /** The zero polynom is represented as an array with a single (0) entry. */
+  /** The zero polynomial is represented as an array with a single (0) entry. */
   public static final double[] ZERO = {0};
 
   /**
    * This function computes a polynomial representation from a set of 2D points on the polynom.
-   * Note: this fuction only works for a set of points containing three points, else returns null.
+   * Note: this function works for any number of points.
    * @param xx an array of x values of points
    * @param yy an array of y values of points
    * @return an array of doubles representing the coefficients of the polynomial which goes through the points
@@ -26,16 +26,18 @@ public class Ex2 {
     int n = xx.length;
     assert yy.length == n : "Unequal number of x and y values was given";
     // this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
-    // a_2*x_1^2+a_1*x_1+a_0 = y_1, a_2*x_2^2+a_1*x_2+a_0 = y_2, a_2*x_3^2+a_1*x_3+a_0 = y_3,
+    // a_2*x_1^2+a_1*x_1+a_0 = y_1
+    // a_2*x_2^2+a_1*x_2+a_0 = y_2 
+    // a_2*x_3^2+a_1*x_3+a_0 = y_3
     // so we will solve it with linear algebra
-    double[][] coefficients = new double[n][n];
-    for (int i = 0; i < n; ++i) {
-      for (int j = 0; j < n; ++j)
-        coefficients[i][j] = Math.pow(xx[i], j);
+    double[][] coefficients = new double[n][n];   // initialize the matrix of coefficients, note that this is the equation system's coefficients, not the polynomials'
+    for (int i = 0; i < n; ++i) {                 // iterate on the matrix of coefficients
+      for (int j = 0; j < n; ++j)                 // "
+        coefficients[i][j] = Math.pow(xx[i], j);  // each coefficient is the x value in the current equation raised to the power of its place in the equation
     }
-    double[] constants = new double[n];
-    for (int i = 0; i < n; ++i) {
-      constants[i] = yy[i];
+    double[] constants = new double[n];           // initialize the vector of constant for the equation system
+    for (int i = 0; i < n; ++i) {                 // iterate on the vector
+      constants[i] = yy[i];                       // each constant is the solution to the equation, which is the y value of the point
     }
     double[][] coeff_inv = invert(coefficients);  // compute the inverse of the coefficient matrix to be multiplied by 
     ans = vec_mul(coeff_inv, constants);          // the answer is the multiplication of the inverted coefficient matrix by the constant matrix, if you want to know why take Linear Algebra 1
@@ -50,7 +52,7 @@ public class Ex2 {
    */
   public static double[] vec_mul(double[][] mat, double[] vec) {
     int n = vec.length;
-    assert mat.length == n && mat[0].length == n : "Cannot multiply vector and matrix of different sizes";  // assert that user abides by function limitations
+    assert mat.length == n && mat[0].length == n : "Cannot multiply vector and matrix of different sizes";  // assert that user abides by function limitations, this is not a fool-proof assertion ({{1, 2}, {1}} fools it) but should be good enough
     double[] ans = new double[n];          // intialize the result as a vector of size n
     for (int i = 0; i < n; ++i)            // iterate on the cells of the answer vector
       for (int j = 0; j < n; j++)          // iterate on the columns of mat
@@ -75,7 +77,7 @@ public class Ex2 {
         for (int k = 0; k < n - 1; ++k)                                 // iterate on the submatrix cells
           for (int l = 0; l < n - 1; ++l)                               // "
             submatrix[k][l] = mat[(k >= i ? k + 1 : k)][(l >= j ? l + 1 : l)];  // set the submatrix cell by matrix cell, if we are to the right or below the excluded cell add 1 to the index from which we are taking the value
-        double m_i_j = det(submatrix);                    // this is the minor for cell i, j, computed as the determinant of the submatrix
+        double m_i_j = det(submatrix);                                  // this is the minor for cell i, j, computed as the determinant of the submatrix
         ans[i][j] = m_i_j * sign;                                       // the cofactor is the minor multiplied by the sign
       }
 
@@ -140,9 +142,9 @@ public class Ex2 {
    */
   public static double det(double[][] mat) {
     if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)  // the base case of a 2x2 matrix in which the determinant is a simple computation
-      return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];           // the 2x2 determinant formula
+      return (mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]);       // the 2x2 determinant formula
     double ans = 0.0;                                                 // initialize answer as 0
-    double[][] cofacs = cofactorMatrix(mat);                          // if cofacs were not passed, compute them
+    double[][] cofacs = cofactorMatrix(mat);                          // this function does not take cofacs so we must compute them
     for (int i = 0; i < mat.length; ++i)                              // iterate on cells of the first row
       ans += mat[i][0] * cofacs[i][0];                                // add the cell times the cofactor to the answer
     return ans;                                                       // return the computed answer

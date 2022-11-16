@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 /**
- * This JUnit class represents a very simple (and partial) unit testing for Ex2 - It should be improved and generalized significantly!
+ * This JUnit class represents a very simple unit testing for Ex2.
  * @author c-aver
  * Name: Chaim Averbach
  * ID: 207486473

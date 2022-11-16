@@ -167,14 +167,13 @@ public class Ex2 {
         return false;                                       // longer polynomial has a non-0 cofficient which is not in shorter polynomal, so they are different
       }
     }
-
     return true;                                            // if we made it so far, the polynomials are equal
   }
   /**
-   * Computes the f(x) value of the polynom at x.
+   * Computes the f(x) value of the polynomial at x.
    * @param poly the polynomial to be evaluated
    * @param x the value at which to evaluate
-   * @return f(x) - the polynom value at x.
+   * @return f(x) - the polynomial's value at x.
    */
   public static double f(double[] poly, double x) {
     double ans = 0;                        // initialize answer as 0
@@ -185,10 +184,10 @@ public class Ex2 {
     return ans;                            // return the computed answer
   }
   /** 
-   * Computes a String representing the polynom.
-   * For example the array {2,0,3.1,-1.2} will be presented as the following String  "-1.2x^3 +3.1x^2 +2.0"
-   * @param poly the polynom represented as an array of doubles
-   * @return String representing the polynom: 
+   * Creates a string representation of a polynomial.
+   * For example the array {2, 0, 3.1, -1.2} will be presented as the following String  "-1.2x^3 +3.1x^2 +2.0"
+   * @param poly the polynomial represented as an array of doubles
+   * @return String representing the polynomial 
    */
   public static String poly(double[] poly) {
     String ans = "";                                         // initialize an empty string for the answer
@@ -197,21 +196,21 @@ public class Ex2 {
     for (int i = poly.length - 1; i >= 0; --i) {             // iterate on the coefficients
       if (poly[i] == 0.0)                                    // if the coefficient is 0
         continue;                                            // we just skip the term
-      if (poly[i] > 0.0 && i != poly.length - 1) ans += "+"; // if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term
+      if (poly[i] > 0.0 && i != poly.length - 1) ans += "+"; // if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term (we don't want "+0.5x" but just "0.5x")
       ans += poly[i];                                        // add the coefficient to the result string
       if (i == 1) ans += "x ";                               // if we are on the x term, add only the letter x to the result string
-      else if (i > 1)                                        // if we are on a higher power
+      else if (i > 1)                                        // if we are on a larger power
         ans += "x^" + i;                                     // add x raised to the power of the current degree
-      if (i > 0)                                             // if we are not on the last term (int the order of the string)
+      if (i > 0)                                             // if we are not on the last term (in the order of the string)
         ans += " ";                                          // we add a space to seperate from the next term
     }
     return ans;
   }
   /**
-   * Given two polynoms (p1,p2), a range [x1,x2] and an epsilon eps. This function computes an x value (x1<=x<=x2)
-   * for which |p1(x) -p2(x)| < eps, assuming (p1(x1)-p2(x1)) * (p1(x2)-p2(x2)) <= 0.
-   * @param p1 - first polynom
-   * @param p2 - second polynom
+   * Given two polynomials (p1,p2), a range [x1,x2] and an epsilon eps. This function computes an x value (x1<=x<=x2)
+   * for which |p1(x) - p2(x)| < eps, assuming (p1(x1)-p2(x1)) * (p1(x2)-p2(x2)) <= 0.
+   * @param p1 - first polynomial
+   * @param p2 - second polynomial
    * @param x1 - minimal value of the range
    * @param x2 - maximal value of the range
    * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
@@ -224,7 +223,7 @@ public class Ex2 {
     
     double higherAtx1 = (f(p1, x1) - f(p2, x1));   // this value is positive if p1 is higher at x1 and negative if p2 is higher at x1
 
-    while (Math.abs(f(p1, x) - f(p2, x)) > EPS) {
+    while (Math.abs(f(p1, x) - f(p2, x)) > EPS) {  // run as long as out requirement is not fulfilled
       x = (x1+x2)/2;                               // recalculate midpoint
       double higherAtx = f(p1, x) - f(p2, x);      // check which polynomial is higher at x using the same method as the check at x1, this will be useful for knowing which side the equality is on
       if (higherAtx * higherAtx1 <= 0)             // if the multiplication is negative, differnet polynomial are higher at x1 and at x, which means the turning point is closer to x1
@@ -236,11 +235,11 @@ public class Ex2 {
     return x;
   }
   /**
-   * Given a polynom (p), a range [x1,x2] and an epsilon eps. 
+   * Given a polynomial (p), a range [x1,x2] and an epsilon eps. 
    * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
-   * assuming p(x1)*p(x1) <= 0. 
-   * This function should be implemented iteratively (none recursive).
-   * @param p - the polynom
+   * assuming p(x1)*p(x2) <= 0. 
+   * This function should be implemented iteratively (no recursive).
+   * @param p - the polynomial
    * @param x1 - minimal value of the range
    * @param x2 - maximal value of the range
    * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
@@ -248,13 +247,11 @@ public class Ex2 {
    */
   public static double root(double[] p, double x1, double x2, double eps) {
     assert x1 < x2 : "Cannot find root in negative range";
-                                        // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages, it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
-    double x = (x1+x2)/2;               // the first x we will check is the middle of the range,
-                                        // from there we will close in on the true answer
-
+    // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
+    // it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
+    double x = (x1+x2)/2;               // the first x we will check is the middle of the range, from there we will close in on the true answer
     double[] p_ = derivative(p);        // calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
     while (Math.abs(f(p, x)) > eps) {   // iterate as long as our answer is not close enough to 0
-      
       if (f(p, x) * f(p_, x) >= 0)      // if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher
         x2 = x;                         // we move the range (x1-x2) to (x1-x), effectively cutting the right side half, since the 0 is on our left
       else                              // if the function times the derivative is negative, we are either on a rising function with the 0 being higher or a falling function with the 0 being lower
@@ -262,13 +259,13 @@ public class Ex2 {
       x = (x1+x2)/2;                    // recompute the middle of the range
     }
 
-    return x;                           // since we exited the loop f(p,x) is sufficiently close to 0
+    return x;                           // since we exited the loop f(p,x) is close enough to 0
   }
-  /** Given a polynom (p), a range [x1,x2] and an epsilon eps. 
+  /** Given a polynomial (p), a range [x1,x2] and an epsilon eps. 
    * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
    * assuming p(x1)*p(x1) <= 0. 
-   * This function should be implemented recursivly.
-   * @param p - the polynom
+   * This function should be implemented recursively
+   * @param p - the polynomial
    * @param x1 - minimal value of the range
    * @param x2 - maximal value of the range
    * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
@@ -276,8 +273,9 @@ public class Ex2 {
    */
   public static double root_rec(double[] p, double x1, double x2, double eps) {
     assert x1 < x2 : "Cannot find root in negative range";
-    // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages, it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
-    double x = (x1+x2)/2;              // get the middle of the range (could be any other point in the range)
+    // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
+    // it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
+    double x = (x1+x2)/2;              // get the middle of the range
     if (Math.abs(f(p, x)) < eps)       // if its value under p is within the accepted range
       return x;                        // return it as the answer
 
@@ -289,15 +287,15 @@ public class Ex2 {
     return root_rec(p, x, x2, eps);    //  look for the root on the right side of the range (x, x2)
   }
   /**
-   * Given two polynoms (p1,p2), a range [x1,x2] and an integer representing the number of "boxes". 
-   * This function computes an approximation of the area between the polynoms within the x-range.
+   * Given two polynomials (p1,p2), a range [x1,x2] and an integer representing the number of "boxes". 
+   * This function computes an approximation of the area between the curves representated by the polynomials within the x-range.
    * The area is computed using Riemann's like integral (https://en.wikipedia.org/wiki/Riemann_integral)
-   * @param p1 - first polynom
-   * @param p2 - second polynom
+   * @param p1 - first polynomial
+   * @param p2 - second polynomial
    * @param x1 - minimal value of the range
    * @param x2 - maximal value of the range
-   * @param numberOfBoxes - a natural number representing the number of boxes between x1 and x2.
-   * @return the approximated area between the two polynoms within the [x1,x2] range.
+   * @param numberOfBoxes - a natural number representing the number of boxes between x1 and x2, the larger this is the more accurate the result will be at the cost of runtime
+   * @return the approximated area between the two curves within the [x1,x2] range.
    */
   public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
     assert x1 < x2 : "Cannot calculate area in negative range";
@@ -305,70 +303,70 @@ public class Ex2 {
 
     double ans = 0;                                      // initialize anwer as zero
 
-    for (int i = 0; i < numberOfBoxes; ++i) {
+    for (int i = 0; i < numberOfBoxes; ++i) {            // iterate on the number of boxes
       x2 = x1 + dx;                                      // set the end of the range (of our current box) to dx (the width of the box) after x1 (the start of the box)
       double x = (x1 + x2) / 2;                          // set the value to be computed as the middle of the range
-      double box_height = Math.abs(f(p1, x) - f(p2, x)); // calculate the height of the box between the two functions, which is just the difference of their height
+      double box_height = Math.abs(f(p1, x) - f(p2, x)); // calculate the height of the box between the two functions, which is just the difference of their heights
       double box_area = box_height * dx;                 // calculate the area of the box, its height times its width (which is dx)
       ans += box_area;                                   // add the area to the total answer
       x1 = x2;                                           // move the left of the range to the right, to be expanded on the next iteration
     }
-    return ans;
+    return ans;         // return the computed answer
   }
   /**
-   * This function computes the array representation of a polynom from a String
-   * representation. Note:given a polynom represented as a double array,  
+   * This function parses a string into an array representation of a polynomial
+   * Note: given a polynomial represented as a double array,  
    * getPolynomFromString(poly(p)) should return an array equals to p.
    * 
-   * @param p - a String representing polynom.
+   * @param p - a String representing polynomial
    * @return  the parsed polynomial as an array of doubles
    */
   // string to parse: "0.0x^4 -1.0x^3 +3.0x^2 +0.0x +2.0"
   // after splitting: {"0.0x^4" ,"-1.0x^3", "+3.0x^2", "+0.0x", "+2.0" }
   public static double[] getPolynomFromString(String p) {
-    String[] terms = p.split(" ");        // we split the string by " " to isolate the terms
+    String[] terms = p.split(" ");                        // we split the string by " " to isolate the terms
     int polyDegree = getDegreeFromTerm(terms[0]);         // the degree of the polynomial is the degree of the first term (by definition the first term is the largest degree)
     
     double[] ans = new double[polyDegree + 1];            // initialize the answer array, note that array sizes are one larger than the degree of the polynomial
-
+                                                          // this is guaranteed to be initialized with {0.0} by the language spec
     for (String term : terms) {                           // iterate on the terms, we will parse each one seperately, I don't like foreach either but it's really convinient here
       int degree = getDegreeFromTerm(term);               // parse the degree from the term string
       double coefficient = getCoefficientFromTerm(term);  // parse the coefficient from the term
       ans[degree] = coefficient;                          // set the appropriate place in the answer to be the coefficient
     }
     
-    return ans;
+    return ans;      // return the parsed string
   }
   /**
-   * This function takes a term of a polynomial as a string and returns its degree (the power to which x is raised)
-   * 
+   * This function takes a term of a polynomial (a monomial) as a string and returns its degree (the power to which x is raised)
+   * This is a helper function for PolynomFromString(string)
    * @param term - a String representing a term of a polynomial
    * @return the degree of the term
    */
   private static int getDegreeFromTerm(String term) {
-    String[] split_term = term.split("x");               // split the term into the garbage at the end ("x^n") and the actual coefficient
-    if (split_term.length < 2)                           // this is the case where there was no garbage to begin with
+    String[] split_term = term.split("x");               // split the term into the garbage at the end ("^n") and the actual coefficient
+    if (split_term.length < 2)                           // this is the case where there was no "x" to split by
       return 0;                                          // this means the power is 0, such as in "+2.0"
     if (split_term[1].length() == 0)                     // this is the case where there was nothing after the "x", such as in "+2.0x"
       return 1;                                          // so the degree is 1 (x=x^1)
     return Integer.parseInt(split_term[1].substring(1)); // in all other cases, the degree can be found by parsing the garbage except for the first character (which is '^'), so we return it
   }
   /**
-   * This function takes a term of a polynomial as a string and returns its coefficient (the power to which x is raised)
-   * 
+   * This function takes a term of a polynomial (a monomial) as a string and returns its coefficient (the number by which it is multiplied)
+   * This is a helper function for PolynomFromString(string)
    * @param term - a String representing a term of a polynomial
    * @return the coefficient of the term
    */
   private static double getCoefficientFromTerm(String term) {
-    String[] split_term = term.split("x");    // split the term into the garbage at the end ("x^n") and the actual coefficient
-    return Double.parseDouble(split_term[0]); // the coefficient can be found by parsing the garbage except for the first character (which is '^'), so we return it
+    String[] split_term = term.split("x");    // split the term into the garbage at the end ("^n") and the actual coefficient
+    return Double.parseDouble(split_term[0]); // the coefficient can be found by parsing everything before the "x", so we return it, note that this works the same for any degree of the monomial
   }
 
   /**
    * This function computes the polynomial which is the sum of two polynomials (p1,p2)
    * @param p1 first addend
    * @param p2 second addend
-   * @return the polynomial sum of the two addends, as polynomials
+   * @return the polynomial sum of the two addends
    */
   public static double[] add(double[] p1, double[] p2) {
     double shorter[] = p1, longer[] = p2;  // assume p1 is the shorter of the polynomials
@@ -405,7 +403,7 @@ public class Ex2 {
     return ans;
   }
   /**
-   * This function computes the derivative polynom.
+   * This function computes the derivative of a polynomial.
    * @param po some polynomial
    * @return the polynomial representaion of the derivative of po
    */

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
  */
 
 public class Ex2Test {
-  static double[] po1={2, 0, 3, -1, 0};
+  static double[] po1 = {2, 0, 3, -1, 0};
   static double[] po2 = {0.1, 0, 1, 0.1, 3};
 
   @Test
@@ -62,25 +62,27 @@ public class Ex2Test {
     double dd = Ex2.f(p12, 5);
     assertEquals(1864.6, dd, Ex2.EPS);
   }
+
   @Test
   public void testDerivativeArrayDoubleArray() {
     double[] p = {1,2,3}; // 3X^2+2x+1
     double[] dp1 = {2,6}; // 6x+2
     double[] dp2 = Ex2.derivative(p);
-    assertEquals(dp1[0], dp2[0], Ex2.EPS);
-    assertEquals(dp1[1], dp2[1], Ex2.EPS);
-    assertEquals(dp1.length, dp2.length);
+    assertArrayEquals(dp1, dp2, Ex2.EPS);
   }
+
   @Test
   public void testAreaBetweenPolys() {
     double a1 = Ex2.area(po1, po2, 0.0, 10.0, 100000);
     assertEquals(62067.72029, a1, Ex2.EPS);        // expected value calculated by Symbolab
   }
+
   @Test
   public void testSameValue() {
     double eqp = Ex2.sameValue(po1, po2, 0.5, 2, Ex2.EPS);
     assertEquals(0.981738, eqp, Ex2.EPS);          // expected value calculated by WoflramAlpha
   }
+
   @Test
   public void testString() {
     String spo0 = Ex2.poly(Ex2.ZERO);
@@ -93,6 +95,7 @@ public class Ex2Test {
     assertEquals(true, po1eq);
     assertEquals(true, po2eq);
   }
+
   @Test
   public void testCofactor() {
     double[][] mat3 = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
@@ -102,18 +105,21 @@ public class Ex2Test {
     assertArrayEquals(new double[][] {{-45.0, -38.0, 27.0}, {19.0, 18.0, -13.0}, {20.0, 16.0, -12.0}}, cofacs3);
     assertArrayEquals(new double[][] {{115.0, -427.0, 198.0, 445.0}, {78.0, 138.0, -32.0, -203.0}, {-66.0, 251.0, -78.0, -196.0}, {67.0, 66.0, -45.0, -8.0}}, cofacs4);
   }
+
   @Test
   public void testTranspose() {
     double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
     double [][] transposed = Ex2.transpose(mat);
     assertArrayEquals(new double[][] {{1.0, 3.0, -1.0}, {4.0, 0.0, 9.0}, {7.0, 5.0, 11.0}}, transposed);
   }
+
   @Test
   public void testDeterminant() {
     double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
     double det = Ex2.det(mat);
     assertEquals(-8.0, det, Ex2.EPS);
   }
+
   @Test
   public void testInvert() {
     double[][] mat3 = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
@@ -126,6 +132,7 @@ public class Ex2Test {
       assertArrayEquals(expected[i], inv_mat4[i], Ex2.EPS);
     }
   }
+
   @Test
   public void testMatMul() {
     double[][] mat = {{1, 4, 7}, {3, 0, 5}, {-1, 9, 11}};
@@ -133,6 +140,7 @@ public class Ex2Test {
     double[] mul = Ex2.vec_mul(mat, vec);
     assertArrayEquals(new double[] {46.5, 51.5, 53.5}, mul, Ex2.EPS);
   }
+
   @Test
   public void testPolynomFromPoints() {
     double[] xx3 = {22.3, -52.2, 14.3};

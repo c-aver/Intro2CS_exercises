@@ -1,7 +1,7 @@
 package Exe.Ex2;
 
 /** 
- * This class represents a set of functions on a polynomial - represented as array of doubles.
+ * This class represents a set of functions on a polynomial - represented as an array of doubles.
  * @author c-aver
  * Name: Chaim Averbach
  * ID: 207486473
@@ -13,11 +13,13 @@ public class Ex2 {
   public static final double[] ZERO = {0};
 
   /**
-   * This function computes a polynomial representation from a set of 2D points on the polynom.
+   * This function computes a polynomial that passes through a set of points on the plane
+   * The polynomial's degree will be one less than the number of points, e.g. a parabola for 3 points
    * Note: this function works for any number of points.
+   * If no points are provided will return null
    * @param xx an array of x values of points
    * @param yy an array of y values of points
-   * @return an array of doubles representing the coefficients of the polynomial which goes through the points
+   * @return an array of doubles representing the coefficients of the polynomial which passes through the points
    */
   public static double[] PolynomFromPoints(double[] xx, double[] yy) {
     double [] ans = null;
@@ -45,16 +47,17 @@ public class Ex2 {
   }
   /**
    * This function multiplies a matrix by a vector
-   * Note that the params must be double[n][n] mat and double[n] vec
+   * Note that the params must be double[m][n] mat and double[n] vec
    * @param mat the matrix to be multiplied
    * @param vec the vector to multiply in
    * @return the vector answer of the multiplication
    */
   public static double[] vec_mul(double[][] mat, double[] vec) {
-    int n = vec.length;
-    assert mat.length == n && mat[0].length == n : "Cannot multiply vector and matrix of different sizes";  // assert that user abides by function limitations, this is not a fool-proof assertion ({{1, 2}, {1}} fools it) but should be good enough
+    int m = mat.length;                    // get the number of rows in the matrix
+    int n = mat[0].length;                 // get the number of columns in the matrix, assumes rectangular matrix
+    assert vec.length == n : "Vector to be multiplies by mat[m][n] must be of size n";
     double[] ans = new double[n];          // intialize the result as a vector of size n
-    for (int i = 0; i < n; ++i)            // iterate on the cells of the answer vector
+    for (int i = 0; i < m; ++i)            // iterate on the cells of the answer vector
       for (int j = 0; j < n; j++)          // iterate on the columns of mat
         ans[i] += vec[j] * mat[i][j];      // sum up the vector multiplication of vec and mat[i]
 

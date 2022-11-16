@@ -124,9 +124,9 @@ public class Ex2 {
    * @return the determinant of the matrix
    */
   public static double det(double[][] mat, double[][] cofacs) {
-    if (cofacs == null) return det(mat);                              // check if cofacs were not provided and redirect to the appropriate function, for backwards compatibility
+    if (cofacs == null) cofacs = cofactorMatrix(mat);                 // if cofacs were not provided compute them, for backwards compatibility
     if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)  // the base case of a 2x2 matrix in which the determinant is a simple computation
-      return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];           // the 2x2 determinant formula
+      return (mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]);       // the 2x2 determinant formula
     double ans = 0.0;                                                 // initialize answer as 0
     for (int i = 0; i < mat.length; ++i)                              // iterate on cells of the first row
       ans += mat[i][0] * cofacs[i][0];                                // add the cell times the cofactor to the answer
@@ -134,20 +134,14 @@ public class Ex2 {
   }
   /**
    * This functions computes the determinant of a nxn matrix
-   * This overloads the previous method and computes the cofactors itself
+   * This overloads the previous method and computes the cofactors itself, for ease of use
    * This function uses the methed described in https://en.wikipedia.org/wiki/Determinant
    * @param mat the matrix for which to compute the determinant
    * @param cofacs the cofactor matrix, if null will be computed from mat
    * @return the determinant of the matrix
    */
   public static double det(double[][] mat) {
-    if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)  // the base case of a 2x2 matrix in which the determinant is a simple computation
-      return (mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]);       // the 2x2 determinant formula
-    double ans = 0.0;                                                 // initialize answer as 0
-    double[][] cofacs = cofactorMatrix(mat);                          // this function does not take cofacs so we must compute them
-    for (int i = 0; i < mat.length; ++i)                              // iterate on cells of the first row
-      ans += mat[i][0] * cofacs[i][0];                                // add the cell times the cofactor to the answer
-    return ans;                                                       // return the computed answer
+    return det(mat, cofactorMatrix(mat));    // compute the cofactor matrix and send to the appropriate function
   }
 
   /** Two polynoms are equal if and only if the have the same coefficients - up to an epsilon (aka EPS) value.

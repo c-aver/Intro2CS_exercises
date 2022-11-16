@@ -124,7 +124,7 @@ public class Ex2 {
    * @return the determinant of the matrix
    */
   public static double det(double[][] mat, double[][] cofacs) {
-    if (cofacs == null) return det(mat);                              // check if cofacs were not provided, for backwards compatibility
+    if (cofacs == null) return det(mat);                              // check if cofacs were not provided and redirect to the appropriate function, for backwards compatibility
     if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)  // the base case of a 2x2 matrix in which the determinant is a simple computation
       return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];           // the 2x2 determinant formula
     double ans = 0.0;                                                 // initialize answer as 0

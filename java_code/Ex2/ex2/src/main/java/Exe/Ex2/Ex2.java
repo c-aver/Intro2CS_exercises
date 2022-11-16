@@ -124,9 +124,11 @@ public class Ex2 {
    * @return the determinant of the matrix
    */
   public static double det(double[][] mat, double[][] cofacs) {
-    if (cofacs == null) cofacs = cofactorMatrix(mat);                 // if cofacs were not provided compute them, for backwards compatibility
+    if (mat.length == 0) return 1;                                    // an extremely odd case, but technically the determinant of an empty matrix is 1, the other base cases are not required for correctness
+    if (mat.length == 1 && mat[0].length == 1) return mat[0][0];      // this is another odd case of a 1x1 matrix, shouldn't even be reached, but for completeness' sake...
     if (mat.length == 2 && mat[0].length == 2 && mat[1].length == 2)  // the base case of a 2x2 matrix in which the determinant is a simple computation
       return (mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]);       // the 2x2 determinant formula
+    if (cofacs == null) cofacs = cofactorMatrix(mat);                 // if cofacs were not provided compute them, for backwards compatibility
     double ans = 0.0;                                                 // initialize answer as 0
     for (int i = 0; i < mat.length; ++i)                              // iterate on cells of the first row
       ans += mat[i][0] * cofacs[i][0];                                // add the cell times the cofactor to the answer
@@ -141,7 +143,7 @@ public class Ex2 {
    * @return the determinant of the matrix
    */
   public static double det(double[][] mat) {
-    return det(mat, cofactorMatrix(mat));    // compute the cofactor matrix and send to the appropriate function
+    return det(mat, null);    // compute the cofactor matrix and send to the appropriate function
   }
 
   /** Two polynoms are equal if and only if the have the same coefficients - up to an epsilon (aka EPS) value.

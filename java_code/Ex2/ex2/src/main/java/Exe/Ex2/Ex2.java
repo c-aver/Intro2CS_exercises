@@ -160,13 +160,13 @@ public class Ex2 {
       shorter = p2;                                         // set the arrays accordingly
       longer = p1;                                          // -"-
     }
-
+    // this part will make sure the coefficients are equal at the common part
     for (int i = 0; i < shorter.length; ++i) {              // iterate for the length of the shorter polynomial to compare coefficients
       if (Math.abs(shorter[i] - longer[i]) > EPS)  {        // make sure coefficients aren't too different
         return false;                                       // coefficients are diferrent, so the polynomials are not equal
       }
     }                                                       // now we know that all coeffcients are the same up to the shorter polynomial, we need to make sure the longer one only has leading 0s
-    
+    // this part will make sure the longer polynomial doensn't have coefficients not in the shorter one (above EPS)
     for (int i = shorter.length; i < longer.length; ++i) {  // iterate on the coefficients of the longer polynomial which are not in the shorter
       if (longer[i] > EPS) {                                // make sure the coefficient is near enough to 0
         return false;                                       // longer polynomial has a non-0 cofficient which is not in shorter polynomal, so they are different
@@ -181,12 +181,12 @@ public class Ex2 {
    * @return f(x) - the polynomial's value at x.
    */
   public static double f(double[] poly, double x) {
-    double ans = 0;                        // initialize answer as 0
+    double ans = 0;                         // initialize answer as 0
     
-    for (int i = 0; i < poly.length; ++i)  // iterate on parts of the polynomial
-      ans += poly[i] * (Math.pow(x, i));   // add to the answer the coefficients multiplied by the current power of x
-
-    return ans;                            // return the computed answer
+    for (int i = 0; i < poly.length; ++i) { // iterate on parts of the polynomial
+      ans += poly[i] * (Math.pow(x, i));    // add to the answer the coefficient multiplied by the current power of x
+    }
+    return ans;                             // return the computed answer
   }
   /** 
    * Creates a string representation of a polynomial.
@@ -228,7 +228,7 @@ public class Ex2 {
     
     double higherAtx1 = (f(p1, x1) - f(p2, x1));   // this value is positive if p1 is higher at x1 and negative if p2 is higher at x1
 
-    while (Math.abs(f(p1, x) - f(p2, x)) > EPS) {  // run as long as out requirement is not fulfilled
+    while (Math.abs(f(p1, x) - f(p2, x)) > EPS) {  // run as long as our requirement is not fulfilled
       x = (x1+x2)/2;                               // recalculate midpoint
       double higherAtx = f(p1, x) - f(p2, x);      // check which polynomial is higher at x using the same method as the check at x1, this will be useful for knowing which side the equality is on
       if (higherAtx * higherAtx1 <= 0)             // if the multiplication is negative, differnet polynomial are higher at x1 and at x, which means the turning point is closer to x1

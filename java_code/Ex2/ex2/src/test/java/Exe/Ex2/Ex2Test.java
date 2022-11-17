@@ -4,16 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+
 /**
  * This JUnit class represents a very simple unit testing for Ex2.
  * @author c-aver
  * Name: Chaim Averbach
  * ID: 207486473
  */
-
 public class Ex2Test {
-  static double[] po1 = {2, 0, 3, -1, 0};
-  static double[] po2 = {0.1, 0, 1, 0.1, 3};
+  static double[] po1 = {2, 0, 3, -1, 0};     // premade polynomials for testing
+  static double[] po2 = {0.1, 0, 1, 0.1, 3};  // ""
 
   @Test
   public void testEquals() {
@@ -57,10 +57,9 @@ public class Ex2Test {
   }
 
   @Test
-  public void testMulDoubleArrayDoubleArray() {
+  public void testAdd() {
     double[] p12 = Ex2.add(po1, po2);
-    double dd = Ex2.f(p12, 5);
-    assertEquals(1864.6, dd, Ex2.EPS);
+    assertArrayEquals(new double[] {2.1, 0, 4, -0.9, 3}, p12, Ex2.EPS);
   }
 
   @Test

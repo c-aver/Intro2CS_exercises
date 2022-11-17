@@ -53,7 +53,7 @@ public class Ex2Test {
     double[] minus1 = {-1};
     double[] pp2 = Ex2.mul(po2, minus1);
     double[] p1 = Ex2.add(p12, pp2);
-    assertEquals(Ex2.poly(po1), Ex2.poly(p1));
+    assertArrayEquals(po1, p1);
   }
 
   @Test
@@ -63,8 +63,8 @@ public class Ex2Test {
   }
 
   @Test
-  public void testDerivativeArrayDoubleArray() {
-    double[] p = {1,2,3}; // 3X^2+2x+1
+  public void testDerivative() {
+    double[] p = {1,2,3}; // 3x^2+2x+1
     double[] dp1 = {2,6}; // 6x+2
     double[] dp2 = Ex2.derivative(p);
     assertArrayEquals(dp1, dp2, Ex2.EPS);

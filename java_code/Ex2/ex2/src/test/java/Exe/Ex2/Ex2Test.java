@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
  */
 public class Ex2Test {
   static double[] po1 = {2, 0, 3, -1, 0};     // premade polynomials for testing
-  static double[] po2 = {0.1, 0, 1, 0.1, 3};  // ""
+  static double[] po2 = {0.1, 0, 1, 0.1, 3};  // -"-
 
   @Test
   public void testEquals() {

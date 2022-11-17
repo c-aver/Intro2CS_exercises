@@ -34,7 +34,7 @@ public class Ex2 {
     // so we will solve it with linear algebra
     double[][] coefficients = new double[n][n];   // initialize the matrix of coefficients, note that this is the equation system's coefficients, not the polynomials'
     for (int i = 0; i < n; ++i) {                 // iterate on the matrix of coefficients
-      for (int j = 0; j < n; ++j)                 // "
+      for (int j = 0; j < n; ++j)                 // -"-
         coefficients[i][j] = Math.pow(xx[i], j);  // each coefficient is the x value in the current equation raised to the power of its place in the equation
     }
     double[] constants = new double[n];           // initialize the vector of constant for the equation system
@@ -74,11 +74,11 @@ public class Ex2 {
     assert mat[0].length == n : "Cannot create cofactor matrix for non-square matrix";
     double[][] ans = new double[n][n];                                  // initialize the answer matrix
     for (int i = 0; i < n; ++i)                                         // we will iterate on each number in the matrix to set it in the ans
-      for (int j = 0; j < n; ++j) {                                     // "
+      for (int j = 0; j < n; ++j) {                                     // -"-
         int sign = ((i + j) % 2 == 0 ? 1 : -1 );                        // this is the sign that the minor needs to be multiplied in, depending on the parity of i + j
         double[][] submatrix = new double[n - 1][n - 1];                // this is the submatrix needed to compute the minor, one smaller in each dimension from the original
         for (int k = 0; k < n - 1; ++k)                                 // iterate on the submatrix cells
-          for (int l = 0; l < n - 1; ++l)                               // "
+          for (int l = 0; l < n - 1; ++l)                               // -"-
             submatrix[k][l] = mat[(k >= i ? k + 1 : k)][(l >= j ? l + 1 : l)];  // set the submatrix cell by matrix cell, if we are to the right or below the excluded cell add 1 to the index from which we are taking the value
         double m_i_j = det(submatrix);                                  // this is the minor for cell i, j, computed as the determinant of the submatrix
         ans[i][j] = m_i_j * sign;                                       // the cofactor is the minor multiplied by the sign
@@ -96,7 +96,7 @@ public class Ex2 {
     assert mat[0].length == n : "Cannot transpose non-square matrix";
     double [][] ans = new double[n][n];  // initialize the answer matrix
     for (int i = 0; i < n; ++i)          // iterate on cells of answer matrix
-      for (int j = 0; j < n; ++j)        // "
+      for (int j = 0; j < n; ++j)        // -"-
         ans[i][j] = mat[j][i];           // set the cell to be the transposed cell from the original
     return ans;                          // return the tranposed matrix
   }
@@ -115,7 +115,7 @@ public class Ex2 {
     double[][] cofacs_T = transpose(cofacs);  // then tranpose the cofactor matrix
     double det_ops = 1.0 / det(mat, cofacs);  // compute the inverse of the determinant of the matrix
     for (int i = 0; i < n; ++i)               // iterate on the cells of the answer
-      for (int j = 0; j < n; j++)             // "
+      for (int j = 0; j < n; j++)             // -"-
         ans[i][j] = det_ops * cofacs_T[i][j]; // set the answer as the transposed cofactor multiplied by the opposite of the determinant
     return ans;                               // return the computed result
   }
@@ -158,7 +158,7 @@ public class Ex2 {
     double shorter[] = p1, longer[] = p2;                   // assume p1 is the shorter of the polynomials
     if (p1.length > p2.length) {                            // if assumption is incorrect
       shorter = p2;                                         // set the arrays accordingly
-      longer = p1;                                          // "
+      longer = p1;                                          // -"-
     }
 
     for (int i = 0; i < shorter.length; ++i) {              // iterate for the length of the shorter polynomial to compare coefficients
@@ -377,7 +377,7 @@ public class Ex2 {
     double shorter[] = p1, longer[] = p2;  // assume p1 is the shorter of the polynomials
     if (p1.length > p2.length) {           // if assumption is incorrect
       shorter = p2;                        // set the arrays accordingly
-      longer = p1;                         // "
+      longer = p1;                         // -"-
     }
 
     double[] ans = new double[longer.length];  // initialize answer as long as the longer of the polynomials (note: guaranteed to be initialized with 0.0 by language spec)
@@ -402,7 +402,7 @@ public class Ex2 {
     double[] ans = new double[p1.length + p2.length - 1];  // initialize the answer with the degree being the sum of the two degrees (note that the size of the array is 1 higher than the degree), this is because the rank of the answer (the power of the biggest x) is the ranks of the multiplicants added (since x^n*x^m=x^(m+n))
 
     for (int i = 0; i < p1.length; ++i)          // iterate on both polynomial, since we need to multiply each coefficient from the first by each coefficient from the second
-      for (int j = 0; j < p2.length; ++j)        // "
+      for (int j = 0; j < p2.length; ++j)        // -"-
         ans[i + j] += p1[i] * p2[j];             // a*x^n * b*x^m = a*b^(m+n)
 
     return ans;

@@ -11,8 +11,11 @@ public class Ex2 {
   public static final double EPS = 0.001; // the epsilon to be used for the root approximation.
   /** The zero polynomial is represented as an array with a single (0) entry. */
   public static final double[] ZERO = {0};
-  /** This boolean decides whether to run PolynomFromPoints in generalized mode */
-  public final static boolean GEN = false;
+  /** This boolean decides whether to run PolynomFromPoints in generalized mode, with a value of false it will only work on a set of 3 points 
+   *  I set it to false so you won't complain about not abiding with exercise requirements, I do not take responsibility on the effects of changing this
+  */
+  public final static boolean GENERALIZED = false;
+
   /**
    * This function computes a polynomial that passes through a set of points on the plane
    * The polynomial's degree will be one less than the number of points, e.g. a parabola for 3 points
@@ -24,7 +27,7 @@ public class Ex2 {
    */
   public static double[] PolynomFromPoints(double[] xx, double[] yy) {
     double [] ans = null;                         // initilize empty answer array
-    if (xx == null || yy == null || (!GEN && (xx.length != 3 || yy.length != 3)))  // make sure parameters are within constraints, including non-generalized constraints
+    if (xx == null || yy == null || (!GENERALIZED && (xx.length != 3 || yy.length != 3)))  // make sure parameters are within constraints, including non-generalized constraints
       return null;
     int n = xx.length;
     assert yy.length == n : "Unequal number of x and y values was given";

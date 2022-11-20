@@ -150,7 +150,7 @@ public class Ex2Test {
     double[] poly3 = Ex2.PolynomFromPoints(xx3, yy3);
     boolean eq3 = Ex2.equals(poly3, new double[] {-120.25499, 4.261812, 0.133557});
     assertEquals(true, eq3);
-    if (Ex2.GEN) {
+    if (Ex2.GENERALIZED) {
       double[] xx1 = {1.0};
       double[] yy1 = {1.0};
       double[] xx4 = {22.3, -52.2, 14.3, 12.7};

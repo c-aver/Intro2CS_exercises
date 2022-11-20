@@ -1,4 +1,4 @@
-package Exe.EX3;
+package Exe.Ex3;
 
 // https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java.html
 /******************************************************************************
@@ -709,7 +709,7 @@ public final class StdDraw_Ex3 implements ActionListener, MouseListener, MouseMo
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);            // closes all windows
 		// frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);      // closes only current window
-		frame.setTitle("EX3 I2CS (Ariel) based on Standard Draw");
+		frame.setTitle("Ex3 I2CS (Ariel) based on Standard Draw");
 		frame.setJMenuBar(createMenuBar());
 		frame.pack();
 		frame.requestFocusInWindow();

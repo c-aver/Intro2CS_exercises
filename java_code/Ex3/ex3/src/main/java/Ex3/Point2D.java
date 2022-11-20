@@ -1,5 +1,5 @@
 
-package Exe.EX3;
+package Exe.Ex3;
 /**
  * Introduction to Computer Science, Ariel University, Ex3:
  * This class represents a 2D point in the plane.

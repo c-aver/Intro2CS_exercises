@@ -1,4 +1,4 @@
-package Exe.EX3;
+package Exe.Ex3;
 
 import java.awt.Color;
 

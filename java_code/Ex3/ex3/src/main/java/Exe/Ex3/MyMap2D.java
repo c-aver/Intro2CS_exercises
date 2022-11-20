@@ -19,25 +19,25 @@ public class MyMap2D implements Map2D{
 	@Override
 	public void init(int[][] arr) {
 		init(arr.length,arr[0].length);
-		for(int x = 0;x<this.getWidth()&& x<arr.length;x++) {
-			for(int y=0;y<this.getHeight()&& y<arr[0].length;y++) {
+		for(int x = 0; x < this.getWidth() &&  x < arr.length; x++) {
+			for(int y = 0; y < this.getHeight() && y < arr[0].length; y++) {
 				this.setPixel(x, y, arr[x][y]);
 			}
 		}
 	}
 	
 	@Override
-	public int getWidth() {return _map.length;}
+	public int getWidth() { return _map.length; }
 	@Override
-	public int getHeight() {return _map[0].length;}
+	public int getHeight() { return _map[0].length; }
 	@Override
-	public int getPixel(int x, int y) { return _map[x][y];}
+	public int getPixel(int x, int y) { return _map[x][y]; }
 	@Override
 	public int getPixel(Point2D p) { 
 		return this.getPixel(p.ix(),p.iy());
 	}
 	
-	public void setPixel(int x, int y, int v) {_map[x][y] = v;}
+	public void setPixel(int x, int y, int v) { _map[x][y] = v; }
 	public void setPixel(Point2D p, int v) { 
 		setPixel(p.ix(), p.iy(), v);
 	}
@@ -45,7 +45,7 @@ public class MyMap2D implements Map2D{
 	@Override
 	public void drawSegment(Point2D p1, Point2D p2, int v) {
 		// TODO Auto-generated method stub
-		
+        
 	}
 
 	@Override
@@ -91,8 +91,8 @@ public class MyMap2D implements Map2D{
 	}
 	@Override
 	public void fill(int c) {
-		for(int x = 0;x<this.getWidth();x++) {
-			for(int y = 0;y<this.getHeight();y++) {
+		for(int x = 0; x < this.getWidth(); x++) {
+			for(int y = 0; y < this.getHeight(); y++) {
 				this.setPixel(x, y, c);
 			}
 		}

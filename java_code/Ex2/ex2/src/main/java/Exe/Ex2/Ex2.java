@@ -23,7 +23,6 @@ public class Ex2 {
    * @return an array of doubles representing the coefficients of the polynomial which passes through the points
    */
   public static double[] PolynomFromPoints(double[] xx, double[] yy) {
-    
     double [] ans = null;                         // initilize empty answer array
     if (xx == null || yy == null || (!GEN && (xx.length != 3 || yy.length != 3)))  // make sure parameters are within constraints, including non-generalized constraints
       return null;
@@ -141,8 +140,7 @@ public class Ex2 {
   }
   /**
    * This functions computes the determinant of a nxn matrix
-   * This overloads the previous method and computes the cofactors itself, for ease of use
-   * This function uses the methed described in https://en.wikipedia.org/wiki/Determinant
+   * This overload is for backwards compatibility
    * @param mat the matrix for which to compute the determinant
    * @param cofacs the cofactor matrix, if null will be computed from mat
    * @return the determinant of the matrix
@@ -225,7 +223,7 @@ public class Ex2 {
    */
   public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
     assert (f(p1, x1) - f(p2, x1))*(f(p1, x2) - f(p2, x2)) <= 0 : "The higher polynomial must be different at each endpoint";    // NOTE: this assertion guarantees an answer, but can also fail when there is an answer, this will happen if the polynomials cross an even number of times within the range
-
+    assert x1 < x2 : "Cannot find equal value in negative range";
     double x = (x1+x2)/2;                          // find the midpoint of the range as a starting point
     
     double higherAtx1 = (f(p1, x1) - f(p2, x1));   // this value is positive if p1 is higher at x1 and negative if p2 is higher at x1
@@ -256,6 +254,7 @@ public class Ex2 {
     assert x1 < x2 : "Cannot find root in negative range";
     // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
     // it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
+    // if I want it to work like the other one I could simply call sameValue(p, ZERO)
     double x = (x1+x2)/2;               // the first x we will check is the middle of the range, from there we will close in on the true answer
     double[] p_ = derivative(p);        // calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
     while (Math.abs(f(p, x)) > eps) {   // iterate as long as our answer is not close enough to 0
@@ -306,6 +305,7 @@ public class Ex2 {
    */
   public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
     assert x1 < x2 : "Cannot calculate area in negative range";
+    assert numberOfBoxes > 0 : "Cannot use non-positive number of boxes";
     double dx = (x2 - x1) / numberOfBoxes;               // the interval on which we need to calculate the box area
 
     double ans = 0;                                      // initialize anwer as zero

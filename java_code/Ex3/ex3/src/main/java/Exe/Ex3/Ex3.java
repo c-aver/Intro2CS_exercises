@@ -11,7 +11,7 @@ import java.awt.Color;
  *
  */
 public class Ex3 {
-	private static  Map2D _map = null;
+	private static Map2D _map = null;
 	private static Color _color = Color.blue;
 	private static String _mode = "";
 	public static final int WHITE = Color.WHITE.getRGB();
@@ -30,7 +30,7 @@ public class Ex3 {
 		drawArray(_map);		
 	}
 	
-	 public static void drawGrid(Map2D map) {
+	public static void drawGrid(Map2D map) {
 		 int w = map.getWidth();
 		 int h = map.getHeight();
 		 for(int i=0;i<w;i++) {

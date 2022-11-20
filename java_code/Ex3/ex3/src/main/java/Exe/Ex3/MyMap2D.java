@@ -7,15 +7,14 @@ public class MyMap2D implements Map2D{
 	
 	public MyMap2D(int w, int h) {init(w,h);}
 	public MyMap2D(int size) {this(size,size);}
-	
 	public MyMap2D(int[][] data) { 
 		this(data.length, data[0].length);
 		init(data);
 	}
+
 	@Override
 	public void init(int w, int h) {
 		_map = new int[w][h];
-		
 	}
 	@Override
 	public void init(int[][] arr) {
@@ -26,6 +25,7 @@ public class MyMap2D implements Map2D{
 			}
 		}
 	}
+	
 	@Override
 	public int getWidth() {return _map.length;}
 	@Override

@@ -145,20 +145,22 @@ public class Ex2Test {
 
   @Test
   public void testPolynomFromPoints() {
-    double[] xx1 = {1.0};
-    double[] yy1 = {1.0};
     double[] xx3 = {22.3, -52.2, 14.3};
     double[] yy3 = {41.2, 21.2, -32.0};
-    double[] xx4 = {22.3, -52.2, 14.3, 12.7};
-    double[] yy4 = {41.2, 21.2, -32.0, -8.0};
-    double[] poly1 = Ex2.PolynomFromPoints(xx1, yy1);
     double[] poly3 = Ex2.PolynomFromPoints(xx3, yy3);
-    double[] poly4 = Ex2.PolynomFromPoints(xx4, yy4);
-    boolean eq1 = Ex2.equals(poly1, new double[] {1.0});
     boolean eq3 = Ex2.equals(poly3, new double[] {-120.25499, 4.261812, 0.133557});
-    boolean eq4 = Ex2.equals(poly4, new double[] {490.716, -54.1568, 0.706134, 0.0367037});
-    assertEquals(true, eq1);
     assertEquals(true, eq3);
-    assertEquals(true, eq4);
+    if (Ex2.GEN) {
+      double[] xx1 = {1.0};
+      double[] yy1 = {1.0};
+      double[] xx4 = {22.3, -52.2, 14.3, 12.7};
+      double[] yy4 = {41.2, 21.2, -32.0, -8.0};
+      double[] poly1 = Ex2.PolynomFromPoints(xx1, yy1);
+      double[] poly4 = Ex2.PolynomFromPoints(xx4, yy4);
+      boolean eq1 = Ex2.equals(poly1, new double[] {1.0});
+      boolean eq4 = Ex2.equals(poly4, new double[] {490.716, -54.1568, 0.706134, 0.0367037});
+      assertEquals(true, eq1);
+      assertEquals(true, eq4);
+    }
   }
 }

@@ -45,6 +45,13 @@ public class Ex2Test {
     double x12_rec = Ex2.root_rec(po1, 0, 10, Ex2.EPS);
     assertEquals(3.1958, x12, Ex2.EPS);
     assertEquals(3.1958, x12_rec, Ex2.EPS);
+    try {
+      Ex2.root(po1, 10, 0, Ex2.EPS);
+      Ex2.root_rec(po1, 10, 0, Ex2.EPS);
+      assert false : "Succeeded in finding root in negative range";
+    } catch (AssertionError e) {
+      assertEquals("Cannot find root in negative range", e.getMessage());
+    }
   }
   
   @Test
@@ -64,10 +71,18 @@ public class Ex2Test {
 
   @Test
   public void testDerivative() {
+    double[] cons = {1};
     double[] p = {1,2,3}; // 3x^2+2x+1
     double[] dp1 = {2,6}; // 6x+2
     double[] dp2 = Ex2.derivative(p);
+    assertArrayEquals(Ex2.ZERO, Ex2.derivative(cons));
     assertArrayEquals(dp1, dp2, Ex2.EPS);
+    try {
+      Ex2.derivative(new double[] {});
+      assert false : "Found dertivative of polynomial with 0 terms";
+    } catch (AssertionError e) {
+      assertEquals("Cannot find derivative of polynomial with 0 terms", e.getMessage());
+    }
   }
 
   @Test
@@ -98,6 +113,12 @@ public class Ex2Test {
       assert false : "Succeeded with negative range";
     } catch (AssertionError e) {
       assertEquals("Cannot find equal value in negative range", e.getMessage());
+    }
+    try {
+      Ex2.sameValue(po1, po2, 2, 2.1, Ex2.EPS);
+      assert false : "Succeeded with same higher polynomial in each endpoint";
+    } catch (AssertionError e) {
+      assertEquals("The higher polynomial must be different at each endpoint", e.getMessage());
     }
   }
 

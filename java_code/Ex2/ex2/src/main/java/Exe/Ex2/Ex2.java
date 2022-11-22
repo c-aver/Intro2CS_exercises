@@ -12,18 +12,18 @@ public class Ex2 {
   /** The zero polynomial is represented as an array with a single (0) entry. */
   public static final double[] ZERO = {0};
   /** This boolean decides whether to run PolynomFromPoints in generalized mode, with a value of false it will only work on a set of 3 points 
-   *  I set it to false so you won't complain about not abiding with exercise requirements, I do not take responsibility on the effects of changing this
+   *  I set it to false so you won't complain about not abiding with exercise requirements, I do not take responsibility for the effects of changing this
   */
   public final static boolean GENERALIZED = false;
 
   /**
    * This function computes a polynomial that passes through a set of points on the plane
    * The polynomial's degree will be one less than the number of points, e.g. a parabola for 3 points
-   * Note: this function works for any number of points.
-   * If no points are provided will return null
+   * Note: this function works for any number of points iff GENERALIZED is set to true, otherwise it will work only on a set of three points
+   * If an illegal number of points is provided will return null
    * @param xx an array of x values of points
    * @param yy an array of y values of points
-   * @return an array of doubles representing the coefficients of the polynomial which passes through the points
+   * @return an array of doubles representing the coefficients of the lowest-degree polynomial which passes through the points
    */
   public static double[] PolynomFromPoints(double[] xx, double[] yy) {
     double [] ans = null;                         // initilize empty answer array
@@ -37,10 +37,9 @@ public class Ex2 {
     // a_2*x_3^2+a_1*x_3+a_0 = y_3
     // so we will solve it with linear algebra
     double[][] coefficients = new double[n][n];   // initialize the matrix of coefficients, note that this is the equation system's coefficients, not the polynomials'
-    for (int i = 0; i < n; ++i) {                 // iterate on the matrix of coefficients
+    for (int i = 0; i < n; ++i)                   // iterate on the matrix of coefficients
       for (int j = 0; j < n; ++j)                 // -"-
         coefficients[i][j] = Math.pow(xx[i], j);  // each coefficient is the x value in the current equation raised to the power of its place in the equation
-    }
     double[] constants = new double[n];           // initialize the vector of constant for the equation system
     for (int i = 0; i < n; ++i) {                 // iterate on the vector
       constants[i] = yy[i];                       // each constant is the solution to the equation, which is the y value of the point

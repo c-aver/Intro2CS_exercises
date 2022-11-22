@@ -426,8 +426,9 @@ public class Ex2 {
    * @param po some polynomial
    * @return the polynomial representaion of the derivative of po
    */
-  public static double[] derivative (double[] po) {
+  public static double[] derivative(double[] po) {
     assert po.length > 0: "Cannot find derivative of polynomial with 0 terms";
+    if (po.length == 1) return ZERO;            // a polynomial of 0-th degree is a constant and the derivative is 0
     double[] ans = new double[po.length - 1];   // initalize an answer polynomial 1 degree lower than input
     for (int i = 1; i < ans.length + 1; ++i) {  // iterate on the coefficients starting from the second one (first one is the constant which is cancelled by the derivative)
       ans[i - 1] = i * po[i];                   // the previous coefficient is the current one multiplied by its place

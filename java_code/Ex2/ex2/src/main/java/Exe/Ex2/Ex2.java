@@ -206,6 +206,9 @@ public class Ex2 {
         continue;                                            // we just skip the term
       if (poly[i] > 0.0 && i != poly.length - 1) ans += "+"; // if the coefficient is non-negative, add a plus sign (minus sign is automatically added for negatives), unless it is the first printed term (we don't want "+0.5x" but just "0.5x")
       ans += poly[i];                                        // add the coefficient to the result string
+      // NOTE: this will give "1.0x" for {0.0, 1.0}, this is not how we usually write this but is more in-line with exercise requirements
+      // I could add special cases for poly[i] == 1.0 and poly[i] == -1.0 (when i != 0) but eleceted not to
+      // NOTE: the same applies for "2.0x" where we would want "2x" but same reasoning applies
       if (i == 1) ans += "x ";                               // if we are on the x term, add only the letter x to the result string
       else if (i > 1)                                        // if we are on a larger power
         ans += "x^" + i;                                     // add x raised to the power of the current degree
@@ -335,10 +338,14 @@ public class Ex2 {
   // after splitting: {"0.0x^4" ,"-1.0x^3", "+3.0x^2", "+0.0x", "+2.0" }
   public static double[] getPolynomFromString(String p) {
     String[] terms = p.split(" ");                        // we split the string by " " to isolate the terms
-    int polyDegree = getDegreeFromTerm(terms[0]);         // the degree of the polynomial is the degree of the first term (by definition the first term is the largest degree)
-    
+    int polyDegree = 0;                                   // initialize the polynomial's degree as 0
+    for (String term : terms) {                           // iterate on the terms
+      int degree = getDegreeFromTerm(term);               // get the term's degree
+      if (degree > polyDegree) polyDegree = degree;       // if it is larger than our current polynomial degree than it is the polynomial's degree
+    }
+
     double[] ans = new double[polyDegree + 1];            // initialize the answer array, note that array sizes are one larger than the degree of the polynomial
-                                                          // this is guaranteed to be initialized with {0.0} by the language spec
+                                                          // this is guaranteed to be initialized with {0.0} by the language spec so non-appearing terms will be 0.0
     for (String term : terms) {                           // iterate on the terms, we will parse each one seperately, I don't like foreach either but it's really convinient here
       int degree = getDegreeFromTerm(term);               // parse the degree from the term string
       double coefficient = getCoefficientFromTerm(term);  // parse the coefficient from the term

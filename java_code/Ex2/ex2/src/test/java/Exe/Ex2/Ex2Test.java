@@ -133,6 +133,12 @@ public class Ex2Test {
     assertEquals(true, po0eq);
     assertEquals(true, po1eq);
     assertEquals(true, po2eq);
+    try {
+      Ex2.poly(new double[] {});
+      assert false : "Converted 0-term polynomial to string";
+    } catch (AssertionError e) {
+      assertEquals("Cannot convert 0-term polynomial to string", e.getMessage());
+    }
   }
 
   @Test

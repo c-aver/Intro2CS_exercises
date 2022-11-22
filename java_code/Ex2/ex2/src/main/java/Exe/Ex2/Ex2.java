@@ -197,9 +197,10 @@ public class Ex2 {
    * @return String representing the polynomial 
    */
   public static String poly(double[] poly) {
+    assert poly.length > 0 : "Cannot convert 0-term polynomial to string";
     String ans = "";                                         // initialize an empty string for the answer
     if (poly.length == 1 && poly[0] == 0.0)                  // check special case of zero polynomial
-      return "0";                                            // in this case we want a "0" string
+      return "0.0";                                          // in this case we want a "0" string
     for (int i = poly.length - 1; i >= 0; --i) {             // iterate on the coefficients
       if (poly[i] == 0.0)                                    // if the coefficient is 0
         continue;                                            // we just skip the term

@@ -23,7 +23,7 @@ public class Ex2_GUI {
 		double x2 = Ex2.sameValue(po1,po2, 0,5,Ex2.EPS);
 		double area1 = 0;
 		StdDraw.setPenColor(StdDraw.YELLOW);
-		int numberOfBoxes = 100;
+		int numberOfBoxes = 13;
 		double delta = (x2-x1)/numberOfBoxes;
 		for(double x = x1;x<x2;x+=delta) {
 			double y1 = Ex2.f(po1, x);

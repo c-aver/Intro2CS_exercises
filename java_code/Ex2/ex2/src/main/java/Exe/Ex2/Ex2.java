@@ -249,8 +249,8 @@ public class Ex2 {
    * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
    * assuming p(x1)*p(x2) <= 0. 
    * This function should be implemented iteratively (no recursive).
-   * this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
-   * it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
+   * This function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
+   * It will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
    * IMPORTANT NOTE: if you want it to work like the other one you should call sameValue(p, ZERO)
    * @param p - the polynomial
    * @param x1 - minimal value of the range
@@ -276,6 +276,9 @@ public class Ex2 {
    * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
    * assuming p(x1)*p(x1) <= 0. 
    * This function should be implemented recursively
+   * This function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
+   * It will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
+   * IMPORTANT NOTE: if you want it to work like the other one you should call sameValue(p, ZERO)
    * @param p - the polynomial
    * @param x1 - minimal value of the range
    * @param x2 - maximal value of the range
@@ -391,7 +394,7 @@ public class Ex2 {
       longer = p1;                         // -"-
     }
 
-    double[] ans = new double[longer.length];  // initialize answer as long as the longer of the polynomials (note: guaranteed to be initialized with 0.0 by language spec)
+    double[] ans = new double[longer.length];  // initialize answer as long as the longer of the polynomials
 
     for (int i = 0; i < shorter.length; ++i)   // iterate on coefficient up to the shorter array (the part where both arrays have values)
       ans[i] = shorter[i] + longer[i];         // set the answer's coefficient to the sum of the coefficients of the two polynomials
@@ -411,7 +414,7 @@ public class Ex2 {
   public static double[] mul(double[] p1, double[] p2) {
 
     double[] ans = new double[p1.length + p2.length - 1];  // initialize the answer with the degree being the sum of the two degrees (note that the size of the array is 1 higher than the degree), this is because the rank of the answer (the power of the biggest x) is the ranks of the multiplicants added (since x^n*x^m=x^(m+n))
-
+    // NOTE: ans is guaranteed to be 0.0 initialized by language spec
     for (int i = 0; i < p1.length; ++i)          // iterate on both polynomial, since we need to multiply each coefficient from the first by each coefficient from the second
       for (int j = 0; j < p2.length; ++j)        // -"-
         ans[i + j] += p1[i] * p2[j];             // a*x^n * b*x^m = a*b^(m+n)

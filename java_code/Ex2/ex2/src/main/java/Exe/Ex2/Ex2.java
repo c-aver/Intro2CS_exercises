@@ -27,10 +27,10 @@ public class Ex2 {
    */
   public static double[] PolynomFromPoints(double[] xx, double[] yy) {
     double [] ans = null;                         // initilize empty answer array
+    int n = xx.length;
+    assert yy.length == n : "PolynomFromPoints got " + n + " x values and " + yy.length + " y values, they must be equal";
     if (xx == null || yy == null || (!GENERALIZED && (xx.length != 3 || yy.length != 3)))  // make sure parameters are within constraints, including non-generalized constraints
       return null;
-    int n = xx.length;
-    assert yy.length == n : "Unequal number of x and y values was given";
     // this function, in essence, solves a system of equations with a_i as the coefficients of the result polynomial:
     // a_2*x_1^2+a_1*x_1+a_0 = y_1
     // a_2*x_2^2+a_1*x_2+a_0 = y_2 
@@ -427,7 +427,7 @@ public class Ex2 {
    * @return the polynomial representaion of the derivative of po
    */
   public static double[] derivative (double[] po) {
-    assert po.length > 0: "Cannot find derivative of polynomial with no terms";
+    assert po.length > 0: "Cannot find derivative of polynomial with 0 terms";
     double[] ans = new double[po.length - 1];   // initalize an answer polynomial 1 degree lower than input
     for (int i = 1; i < ans.length + 1; ++i) {  // iterate on the coefficients starting from the second one (first one is the constant which is cancelled by the derivative)
       ans[i - 1] = i * po[i];                   // the previous coefficient is the current one multiplied by its place

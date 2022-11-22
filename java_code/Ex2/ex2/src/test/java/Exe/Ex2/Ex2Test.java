@@ -74,12 +74,31 @@ public class Ex2Test {
   public void testAreaBetweenPolys() {
     double a1 = Ex2.area(po1, po2, 0.0, 10.0, 10000);
     assertEquals(62067.72029, a1, Ex2.EPS);        // expected value calculated by Symbolab
+    try {
+      Ex2.area(po1, po2, 2, 0.5, 1);
+      assert false : "Succeeded with negative range";
+    } catch (AssertionError e) {
+      assertEquals("Cannot calculate area in negative range", e.getMessage());
+    }
+    try {
+      Ex2.area(po1, po2, 0.5, 2, -1);
+      Ex2.area(po1, po2, 0.5, 2, 0);
+      assert false : "Succeeded with negative number of boxes";
+    } catch (AssertionError e) {
+      assertEquals("Cannot use non-positive number of boxes", e.getMessage());
+    }
   }
 
   @Test
   public void testSameValue() {
     double eqp = Ex2.sameValue(po1, po2, 0.5, 2, Ex2.EPS);
     assertEquals(0.981738, eqp, Ex2.EPS);          // expected value calculated by WoflramAlpha
+    try {
+      Ex2.sameValue(po1, po2, 2, 0.5, Ex2.EPS);
+      assert false : "Succeeded with negative range";
+    } catch (AssertionError e) {
+      assertEquals("Cannot find equal value in negative range", e.getMessage());
+    }
   }
 
   @Test
@@ -150,17 +169,28 @@ public class Ex2Test {
     double[] poly3 = Ex2.PolynomFromPoints(xx3, yy3);
     boolean eq3 = Ex2.equals(poly3, new double[] {-120.25499, 4.261812, 0.133557});
     assertEquals(true, eq3);
+    double[] xx1 = {1.0};
+    double[] yy1 = {1.0};
+    double[] xx4 = {22.3, -52.2, 14.3, 12.7};
+    double[] yy4 = {41.2, 21.2, -32.0, -8.0};
+    double[] poly1 = Ex2.PolynomFromPoints(xx1, yy1);
+    double[] poly4 = Ex2.PolynomFromPoints(xx4, yy4);
     if (Ex2.GENERALIZED) {
-      double[] xx1 = {1.0};
-      double[] yy1 = {1.0};
-      double[] xx4 = {22.3, -52.2, 14.3, 12.7};
-      double[] yy4 = {41.2, 21.2, -32.0, -8.0};
-      double[] poly1 = Ex2.PolynomFromPoints(xx1, yy1);
-      double[] poly4 = Ex2.PolynomFromPoints(xx4, yy4);
       boolean eq1 = Ex2.equals(poly1, new double[] {1.0});
       boolean eq4 = Ex2.equals(poly4, new double[] {490.716, -54.1568, 0.706134, 0.0367037});
       assertEquals(true, eq1);
       assertEquals(true, eq4);
+    }
+    else {
+      assertEquals(null, poly1);
+      assertEquals(null, poly4);
+    }
+
+    try {
+      Ex2.PolynomFromPoints(xx3, yy4);
+      assert false : "Succeeded with unequal number of x and y values";
+    } catch (AssertionError e) {
+      assertEquals("PolynomFromPoints got 3 x values and 4 y values, they must be equal", e.getMessage());
     }
   }
 }

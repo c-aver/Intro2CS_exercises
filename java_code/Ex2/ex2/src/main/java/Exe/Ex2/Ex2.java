@@ -249,6 +249,9 @@ public class Ex2 {
    * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
    * assuming p(x1)*p(x2) <= 0. 
    * This function should be implemented iteratively (no recursive).
+   * this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
+   * it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
+   * IMPORTANT NOTE: if you want it to work like the other one you should call sameValue(p, ZERO)
    * @param p - the polynomial
    * @param x1 - minimal value of the range
    * @param x2 - maximal value of the range
@@ -257,9 +260,6 @@ public class Ex2 {
    */
   public static double root(double[] p, double x1, double x2, double eps) {
     assert x1 < x2 : "Cannot find root in negative range";
-    // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
-    // it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
-    // if I want it to work like the other one I could simply call sameValue(p, ZERO)
     double x = (x1+x2)/2;               // the first x we will check is the middle of the range, from there we will close in on the true answer
     double[] p_ = derivative(p);        // calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
     while (Math.abs(f(p, x)) > eps) {   // iterate as long as our answer is not close enough to 0

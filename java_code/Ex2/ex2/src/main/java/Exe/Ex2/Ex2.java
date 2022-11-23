@@ -404,6 +404,7 @@ public class Ex2 {
    * @return the polynomial sum of the two addends
    */
   public static double[] add(double[] p1, double[] p2) {
+    assert p1 != null && p2 != null : "Cannot add null array";
     double shorter[] = p1, longer[] = p2;  // assume p1 is the shorter of the polynomials
     if (p1.length > p2.length) {           // if assumption is incorrect
       shorter = p2;                        // set the arrays accordingly
@@ -428,7 +429,7 @@ public class Ex2 {
    * @return the polynomial multiplication of the two parameters
    */
   public static double[] mul(double[] p1, double[] p2) {
-
+    assert p1 != null && p2 != null : "Cannot multiply null array";
     double[] ans = new double[p1.length + p2.length - 1];  // initialize the answer with the degree being the sum of the two degrees (note that the size of the array is 1 higher than the degree), this is because the rank of the answer (the power of the biggest x) is the ranks of the multiplicants added (since x^n*x^m=x^(m+n))
     // NOTE: ans is guaranteed to be 0.0 initialized by language spec
     for (int i = 0; i < p1.length; ++i)          // iterate on both polynomial, since we need to multiply each coefficient from the first by each coefficient from the second
@@ -443,6 +444,7 @@ public class Ex2 {
    * @return the polynomial representaion of the derivative of po
    */
   public static double[] derivative(double[] po) {
+    assert po != null : "Cannot find derivative of null array";
     assert po.length > 0: "Cannot find derivative of polynomial with 0 terms";
     if (po.length == 1) return ZERO;            // a polynomial of 0-th degree is a constant and the derivative is 0
     double[] ans = new double[po.length - 1];   // initalize an answer polynomial 1 degree lower than input

@@ -77,12 +77,24 @@ public class Ex2Test {
     double[] p12 = Ex2.mul(po1, po2);
     // -3 x^7 + 8.9 x^6 - 0.7 x^5 + 9 x^4 + 0.1 x^3 + 2.3 x^2 + 0.2 calculated by WolframAlpha
     assertArrayEquals(new double[] {0.2, 0.0, 2.3, 0.1, 9.0, -0.7, 8.9, -3.0}, p12);
+    try {
+      Ex2.mul(po1, null);
+      assert false : "Successfully multiplied null array";
+    } catch (AssertionError e) {
+      assertEquals("Cannot multiply null array", e.getMessage());
+    }
   }
 
   @Test
   public void testAdd() {
     double[] p12 = Ex2.add(po1, po2);
     assertArrayEquals(new double[] {2.1, 0, 4, -0.9, 3}, p12, Ex2.EPS);
+    try {
+      Ex2.add(po1, null);
+      assert false : "Successfully added null array";
+    } catch (AssertionError e) {
+      assertEquals("Cannot add null array", e.getMessage());
+    }
   }
 
   @Test
@@ -98,6 +110,12 @@ public class Ex2Test {
       assert false : "Found dertivative of polynomial with 0 terms";
     } catch (AssertionError e) {
       assertEquals("Cannot find derivative of polynomial with 0 terms", e.getMessage());
+    }
+    try {
+      Ex2.derivative(null);
+      assert false : "Successfully found derivative of null array";
+    } catch (AssertionError e) {
+      assertEquals("Cannot find derivative of null array", e.getMessage());
     }
   }
 

@@ -139,6 +139,16 @@ public class Ex2Test {
     } catch (AssertionError e) {
       assertEquals("Cannot convert 0-term polynomial to string", e.getMessage());
     }
+    String[] illegalStrings = {"Hello, World!", "xxxx", "5.0x^3.5"};
+    for (String string : illegalStrings) {
+      try {
+        Ex2.getPolynomFromString(string);
+        assert false : "Succesfully parsed illegal string";
+      } catch (AssertionError e) {
+        assertEquals("Illegaly foramtted string was provided", e.getMessage());
+      }
+    }
+    
   }
 
   @Test

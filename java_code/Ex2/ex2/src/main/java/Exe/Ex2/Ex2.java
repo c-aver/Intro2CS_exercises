@@ -343,16 +343,24 @@ public class Ex2 {
     String[] terms = p.split(" ");                        // we split the string by " " to isolate the terms
     int polyDegree = 0;                                   // initialize the polynomial's degree as 0
     for (String term : terms) {                           // iterate on the terms
+      try {
       int degree = getDegreeFromTerm(term);               // get the term's degree
       if (degree > polyDegree) polyDegree = degree;       // if it is larger than our current polynomial degree than it is the polynomial's degree
+      } catch (NumberFormatException e) {                 // if a NumberFormatException was thrown we had something that was not an int as a degree
+        assert false : "Illegaly foramtted string was provided";
+      }
     }
 
     double[] ans = new double[polyDegree + 1];            // initialize the answer array, note that array sizes are one larger than the degree of the polynomial
                                                           // this is guaranteed to be initialized with {0.0} by the language spec so non-appearing terms will be 0.0
     for (String term : terms) {                           // iterate on the terms, we will parse each one seperately, I don't like foreach either but it's really convinient here
-      int degree = getDegreeFromTerm(term);               // parse the degree from the term string
-      double coefficient = getCoefficientFromTerm(term);  // parse the coefficient from the term
-      ans[degree] = coefficient;                          // set the appropriate place in the answer to be the coefficient
+      try {                                                 // wrapping in a try block to intercept thrown errors from parse functions (inside get functions)
+        int degree = getDegreeFromTerm(term);               // parse the degree from the term string
+        double coefficient = getCoefficientFromTerm(term);  // parse the coefficient from the term
+        ans[degree] = coefficient;                          // set the appropriate place in the answer to be the coefficient
+      } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {                   // if a NumberFormatException was thrown, we had something that was not an int as a degree or something that was not a double as a coefficient, if an ArrayIndexOutOfBoundsException was thrown there was a term with no coefficient
+        assert false : "Illegaly foramtted string was provided";
+      }
     }
     
     return ans;      // return the parsed string

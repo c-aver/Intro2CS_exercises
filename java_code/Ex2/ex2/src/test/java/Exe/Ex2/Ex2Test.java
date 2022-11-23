@@ -35,7 +35,7 @@ public class Ex2Test {
     assertEquals(false, neq4);
     try {
       Ex2.equals(Ex2.ZERO, null);
-      assert false : "Succesfully checked equality on null array";
+      assert false : "Successfully checked equality on null array";
     } catch (AssertionError e) {
       assertEquals("Cannot check equality on null array", e.getMessage());
     }
@@ -49,6 +49,12 @@ public class Ex2Test {
     assertEquals(2, fx0, Ex2.EPS);
     assertEquals(4, fx1, Ex2.EPS);
     assertEquals(6, fx2, Ex2.EPS);
+    try {
+      Ex2.f(null, 0);
+      assert false : "Successfully evaluated null array";
+    } catch (AssertionError e) {
+      assertEquals("Cannot evaluate point on null array", e.getMessage());
+    }
   }
 
   @Test
@@ -149,14 +155,19 @@ public class Ex2Test {
     } catch (AssertionError e) {
       assertEquals("Cannot convert 0-term polynomial to string", e.getMessage());
     }
-    String[] illegalStrings = {"Hello, World!", "xxxx", "5.0x^3.5"};
+    String[] illegalStrings = {"Hello, World!", "xxxx", "5.0x^3.5", "", "  "};
     for (String string : illegalStrings) {
       try {
         Ex2.getPolynomFromString(string);
-        assert false : "Succesfully parsed illegal string";
+        assert false : "Successfully parsed illegal string";
       } catch (AssertionError e) {
         assertEquals("Illegaly foramtted string was provided", e.getMessage());
       }
+    }
+    try {
+      Ex2.poly(null);
+    } catch (AssertionError e) {
+      assertEquals("Cannot convert null array to string", e.getMessage());
     }
     
   }

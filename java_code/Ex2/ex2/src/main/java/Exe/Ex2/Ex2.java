@@ -186,6 +186,8 @@ public class Ex2 {
    * @return f(x) - the polynomial's value at x.
    */
   public static double f(double[] poly, double x) {
+    assert poly != null : "Cannot evaluate point on null array";
+
     double ans = 0;                         // initialize answer as 0
     
     for (int i = 0; i < poly.length; ++i) { // iterate on parts of the polynomial
@@ -200,6 +202,7 @@ public class Ex2 {
    * @return String representing the polynomial 
    */
   public static String poly(double[] poly) {
+    assert poly != null : "Cannot convert null array to string";
     assert poly.length > 0 : "Cannot convert 0-term polynomial to string";
     String ans = "";                                         // initialize an empty string for the answer
     if (poly.length == 1 && poly[0] == 0.0)                  // check special case of zero polynomial
@@ -344,6 +347,7 @@ public class Ex2 {
   // after splitting: {"0.0x^4" ,"-1.0x^3", "+3.0x^2", "+0.0x", "+2.0" }
   public static double[] getPolynomFromString(String p) {
     String[] terms = p.split(" ");                        // we split the string by " " to isolate the terms
+    assert terms.length > 0 : "Illegaly foramtted string was provided";
     int polyDegree = 0;                                   // initialize the polynomial's degree as 0
     for (String term : terms) {                           // iterate on the terms
       try {

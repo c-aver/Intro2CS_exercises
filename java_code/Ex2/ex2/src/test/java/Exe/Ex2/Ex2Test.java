@@ -20,13 +20,25 @@ public class Ex2Test {
     boolean eq1 = Ex2.equals(po1, new double[] {2, 0, 3, -1, 0});
     boolean eq2 = Ex2.equals(po1, new double[] {2, 0, 3, -1});
     boolean eq3 = Ex2.equals(po1, new double[] {2 + Ex2.EPS/2, 0 - Ex2.EPS/2, 3, -1 - Ex2.EPS/2});
+    boolean eq4 = Ex2.equals(Ex2.ZERO, Ex2.ZERO);
     boolean neq1 = Ex2.equals(po1, po2);
     boolean neq2 = Ex2.equals(po1, new double[] {2, 0, 3, -1, 0, 5});
+    boolean neq3 = Ex2.equals(po1, Ex2.ZERO);
+    boolean neq4 = Ex2.equals(Ex2.ZERO, new double[] {});
     assertEquals(true, eq1);
     assertEquals(true, eq2);
     assertEquals(true, eq3);
+    assertEquals(true, eq4);
     assertEquals(false, neq1);
     assertEquals(false, neq2);
+    assertEquals(false, neq3);
+    assertEquals(false, neq4);
+    try {
+      Ex2.equals(Ex2.ZERO, null);
+      assert false : "Succesfully checked equality on null array";
+    } catch (AssertionError e) {
+      assertEquals("Cannot check equality on null array", e.getMessage());
+    }
   }
 
   @Test

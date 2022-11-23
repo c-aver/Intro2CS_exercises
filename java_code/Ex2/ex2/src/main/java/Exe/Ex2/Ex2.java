@@ -157,11 +157,14 @@ public class Ex2 {
    * @return true iff p1 represents the same polynom as p2.
    */
   public static boolean equals(double[] p1, double[] p2) {
+    assert p1 != null && p2 != null : "Cannot check equality on null array";
     double shorter[] = p1, longer[] = p2;                   // assume p1 is the shorter of the polynomials
     if (p1.length > p2.length) {                            // if assumption is incorrect
       shorter = p2;                                         // set the arrays accordingly
       longer = p1;                                          // -"-
     }
+    if (shorter.length == 0 && longer.length != 0)          // we only allow 0 term polynomials to be equals to other 0 term polynomials
+      return false;                                         // so in this case we return false
     // this part will make sure the coefficients are equal at the common part
     for (int i = 0; i < shorter.length; ++i) {              // iterate for the length of the shorter polynomial to compare coefficients
       if (Math.abs(shorter[i] - longer[i]) > EPS)  {        // make sure coefficients aren't too different

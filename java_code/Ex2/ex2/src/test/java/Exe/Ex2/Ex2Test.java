@@ -66,9 +66,9 @@ public class Ex2Test {
     try {
       Ex2.root(po1, 10, 0, Ex2.EPS);
       Ex2.root_rec(po1, 10, 0, Ex2.EPS);
-      assert false : "Succeeded in finding root in negative range";
+      assert false : "Succeeded in finding root in non-positive range";
     } catch (AssertionError e) {
-      assertEquals("Cannot find root in negative range", e.getMessage());
+      assertEquals("Cannot find root in non-positive range", e.getMessage());
     }
   }
   
@@ -125,9 +125,9 @@ public class Ex2Test {
     assertEquals(62067.72029, a1, Ex2.EPS);        // expected value calculated by Symbolab
     try {
       Ex2.area(po1, po2, 2, 0.5, 1);
-      assert false : "Succeeded with negative range";
+      assert false : "Succeeded with non-positive range";
     } catch (AssertionError e) {
-      assertEquals("Cannot calculate area in negative range", e.getMessage());
+      assertEquals("Cannot calculate area in non-positive range", e.getMessage());
     }
     try {
       Ex2.area(po1, po2, 0.5, 2, -1);
@@ -135,6 +135,12 @@ public class Ex2Test {
       assert false : "Succeeded with negative number of boxes";
     } catch (AssertionError e) {
       assertEquals("Cannot use non-positive number of boxes", e.getMessage());
+    }
+    try {
+      Ex2.area(po1, null, 0.0, 0.5, 5);
+      assert false : "Successfully found area under null array";
+    } catch (AssertionError e) {
+      assertEquals("Cannot find area with null array", e.getMessage());
     }
   }
 
@@ -144,9 +150,9 @@ public class Ex2Test {
     assertEquals(0.981738, eqp, Ex2.EPS);          // expected value calculated by WoflramAlpha
     try {
       Ex2.sameValue(po1, po2, 2, 0.5, Ex2.EPS);
-      assert false : "Succeeded with negative range";
+      assert false : "Succeeded with non-positive range";
     } catch (AssertionError e) {
-      assertEquals("Cannot find equal value in negative range", e.getMessage());
+      assertEquals("Cannot find equal value in non-positive range", e.getMessage());
     }
     try {
       Ex2.sameValue(po1, po2, 2, 2.1, Ex2.EPS);

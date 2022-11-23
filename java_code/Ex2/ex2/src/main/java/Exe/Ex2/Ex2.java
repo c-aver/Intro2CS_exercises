@@ -235,7 +235,7 @@ public class Ex2 {
    */
   public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
     assert (f(p1, x1) - f(p2, x1))*(f(p1, x2) - f(p2, x2)) <= 0 : "The higher polynomial must be different at each endpoint";    // NOTE: this assertion guarantees an answer, but can also fail when there is an answer, this will happen if the polynomials cross an even number of times within the range
-    assert x1 < x2 : "Cannot find equal value in negative range";
+    assert x1 < x2 : "Cannot find equal value in non-positive range";
     double x = (x1+x2)/2;                          // find the midpoint of the range as a starting point
     
     double higherAtx1 = (f(p1, x1) - f(p2, x1));   // this value is positive if p1 is higher at x1 and negative if p2 is higher at x1
@@ -266,7 +266,7 @@ public class Ex2 {
    * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
    */
   public static double root(double[] p, double x1, double x2, double eps) {
-    assert x1 < x2 : "Cannot find root in negative range";
+    assert x1 < x2 : "Cannot find root in non-positive range";
     double x = (x1+x2)/2;               // the first x we will check is the middle of the range, from there we will close in on the true answer
     double[] p_ = derivative(p);        // calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
     while (Math.abs(f(p, x)) > eps) {   // iterate as long as our answer is not close enough to 0
@@ -293,7 +293,7 @@ public class Ex2 {
    * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
    */
   public static double root_rec(double[] p, double x1, double x2, double eps) {
-    assert x1 < x2 : "Cannot find root in negative range";
+    assert x1 < x2 : "Cannot find root in non-positive range";
     // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
     // it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
     double x = (x1+x2)/2;              // get the middle of the range
@@ -319,7 +319,8 @@ public class Ex2 {
    * @return the approximated area between the two curves within the [x1,x2] range.
    */
   public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
-    assert x1 < x2 : "Cannot calculate area in negative range";
+    assert p1 != null && p2 != null : "Cannot find area with null array";
+    assert x1 < x2 : "Cannot calculate area in non-positive range";
     assert numberOfBoxes > 0 : "Cannot use non-positive number of boxes";
     double dx = (x2 - x1) / numberOfBoxes;               // the interval on which we need to calculate the box area
 

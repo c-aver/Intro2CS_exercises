@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
  * ID: 207486473
  */
 public class Ex2Test {
-  static double[] po1 = {2, 0, 3, -1, 0};     // premade polynomials for testing
+  static double[] po1 = {2, 0, 3, -1};     // premade polynomials for testing
   static double[] po2 = {0.1, 0, 1, 0.1, 3};  // -"-
 
   @Test
@@ -55,12 +55,10 @@ public class Ex2Test {
   }
   
   @Test
-  public void testAddMul() {
-    double[] p12 = Ex2.add(po1, po2);
-    double[] minus1 = {-1};
-    double[] pp2 = Ex2.mul(po2, minus1);
-    double[] p1 = Ex2.add(p12, pp2);
-    assertArrayEquals(po1, p1);
+  public void testMul() {
+    double[] p12 = Ex2.mul(po1, po2);
+    // -3 x^7 + 8.9 x^6 - 0.7 x^5 + 9 x^4 + 0.1 x^3 + 2.3 x^2 + 0.2 calculated by WolframAlpha
+    assertArrayEquals(new double[] {0.2, 0.0, 2.3, 0.1, 9.0, -0.7, 8.9, -3.0}, p12);
   }
 
   @Test

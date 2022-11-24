@@ -293,6 +293,10 @@ public class Ex2 {
    * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
    */
   public static double root_rec(double[] p, double x1, double x2, double eps) {
+    return root_rec(p, x1, x2, eps, derivative(p));          // we will call our private recursive function with the polynomial's derivative, as a way of optimisation
+  }
+  /** This function is only used as a helper for root_rec, anyone outside of this file should not use it */
+  private static double root_rec(double[] p, double x1, double x2, double eps, double[] p_) {
     assert x1 < x2 : "Cannot find root in non-positive range";
     // this function is implemented differently from sameValue (and from what the exercise expects, I presume), which gives it some advantages and disadvantages
     // it will work on any number of intersections with the x-axis but will get stuck on local minima above the x-axis or maxima below it
@@ -300,12 +304,10 @@ public class Ex2 {
     if (Math.abs(f(p, x)) < eps)       // if its value under p is within the accepted range
       return x;                        // return it as the answer
 
-    double[] p_ = derivative(p);       // calculate the derivative of our polynomial, useful for getting the direction of movement (up or down)
-
     if (f(p, x) * f(p_, x) >= 0)       // if the function times the derivative is positive, we are either on a rising function with the 0 being lower or a falling function with the 0 being higher,
-      return root_rec(p, x1, x, eps);  // this means the root is on the left side half (x1, x) of the range, so we look for it there
+      return root_rec(p, x1, x, eps, p_);  // this means the root is on the left side half (x1, x) of the range, so we look for it there
                                        // if we didn't return on the last line, the root is on the right side of the range
-    return root_rec(p, x, x2, eps);    //  look for the root on the right side of the range (x, x2)
+    return root_rec(p, x, x2, eps, p_);    //  look for the root on the right side of the range (x, x2)
   }
   /**
    * Given two polynomials (p1,p2), a range [x1,x2] and an integer representing the number of "boxes". 

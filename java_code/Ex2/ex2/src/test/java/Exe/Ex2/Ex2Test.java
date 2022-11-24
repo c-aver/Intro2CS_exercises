@@ -146,6 +146,8 @@ public class Ex2Test {
 
   @Test
   public void testSameValue() {
+    double x12 = Ex2.sameValue(po1, Ex2.ZERO, 0, 10, Ex2.EPS);
+    assertEquals(3.1958, x12, Ex2.EPS);
     double eqp = Ex2.sameValue(po1, po2, 0.5, 2, Ex2.EPS);
     assertEquals(0.981738, eqp, Ex2.EPS);          // expected value calculated by WoflramAlpha
     try {

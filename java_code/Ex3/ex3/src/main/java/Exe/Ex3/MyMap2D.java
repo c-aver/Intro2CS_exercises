@@ -1,4 +1,4 @@
-package Exe.Ex3;
+package Exe.EX3;
 /**
  * This class implements the Map2D interface.
  * You should change (implement) this class as part of Ex3. */

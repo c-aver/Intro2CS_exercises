@@ -14,6 +14,7 @@ public class Ex3 {
 	private static Map2D _map = null;
 	private static Color _color = Color.blue;
 	private static String _mode = "";
+	private static Point2D _last = null;
 	public static final int WHITE = Color.WHITE.getRGB();
 	public static final int BLACK = Color.BLACK.getRGB();
 
@@ -73,6 +74,27 @@ public class Ex3 {
 	public static void mouseClicked(Point2D p) {
 		System.out.println(p);
 		int col = _color.getRGB();
+		if(_mode.equals("Circle")) {
+			_last = p;
+			_mode = "_Circle";
+		}
+		if(_mode.equals("_Circle")) {
+			_map.drawCircle(_last, p.distance(_last), col);
+		}
+		if(_mode.equals("Segment")) {
+			_last = p;
+			_mode = "_Segment";
+		}
+		if(_mode.equals("_Segment")) {
+			_map.drawSegment(p, _last, col);
+		}
+		if(_mode.equals("Rect")) {
+			_last = p;
+			_mode = "_Rect";
+		}
+		if(_mode.equals("_Rect")) {
+			_map.drawRect(p, _last, col);
+		}
 		if(_mode.equals("Point")) {
 			_map.setPixel(p,col );
 		}
@@ -82,6 +104,17 @@ public class Ex3 {
 		}
 		if(_mode.equals("Gol")) {
 			_map.nextGenGol();	
+		}
+		if(_mode.equals("ShortestPath")) {
+			_last = p;
+			_mode = "_ShortestPath";
+		}
+		if(_mode.equals("_ShortestPath")) {
+			Point2D[] path = _map.shortestPath(p, _last);
+			for (Point2D point : path) {
+				_map.setPixel(point, col);
+			}
+			_mode = "none";
 		}
 		drawArray(_map);
 	}

@@ -102,8 +102,34 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public int shortestPathDist(Point2D p1, Point2D p2) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (p1.equals(p2)) return 0;                      // if the points are equal their distance is 0
+		int ix = p1.ix(), iy = p1.iy();                   // get p1's coords as ints to find neighbors
+		Point2D above = new Point2D(ix, iy + 1);  // get the point above p1
+		Point2D below = new Point2D(ix, iy - 1);  // get the point below p1
+		Point2D right = new Point2D(ix - 1, iy);  // get the point to the right of p1
+		Point2D left  = new Point2D(ix + 1, iy);  // get the point to the left of p1
+		int ans = Integer.MAX_VALUE;
+		if (iy < getHeight() - 1 && getPixel(above) == getPixel(p1)) { // if the neighbor above is of the same color
+			int dist = shortestPathDist(above, p2);                    // calculate the distance from it to p2
+			if (dist < ans)                                            // if it is less than the current ans
+				ans = dist;                                            // set the ans as it
+		}
+		if (iy > 0 && getPixel(below) == getPixel(p1)) {               // if the neighbor below is of the same color
+			int dist = shortestPathDist(below, p2);                    // calculate the distance from it to p2
+			if (dist < ans)                                            // if it is less than the current ans
+				ans = dist;                                            // set the ans as it
+		}
+		if (ix < getWidth() - 1 && getPixel(right) == getPixel(p1)) {  // if the neighbor right is of the same color
+			int dist = shortestPathDist(right, p2);                    // calculate the distance from it to p2
+			if (dist < ans)                                            // if it is less than the current ans
+				ans = dist;                                            // set the ans as it
+		}
+		if (ix > 0 && getPixel(left ) == getPixel(p1)) {               // if the neighbor left  is of the same color
+			int dist = shortestPathDist(left , p2);                    // calculate the distance from it to p2
+			if (dist < ans)                                            // if it is less than the current ans
+				ans = dist;                                            // set the ans as it
+		}
+		return ans;
 	}
 
 	@Override
@@ -160,6 +186,5 @@ public class MyMap2D implements Map2D{
 				this.setPixel(x, y, c);
 			}
 		}
-		
 	}
 }

@@ -118,7 +118,7 @@ public class Ex3 {
 			for (Point2D point : path) {
 				_map.setPixel(point, col);
 			} */
-			_mode = "none";
+			_mode = "ShortestPath";
 		}
 		System.out.println("New mode: " + _mode);
 		drawArray(_map);

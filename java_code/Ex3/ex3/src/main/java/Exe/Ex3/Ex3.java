@@ -110,7 +110,8 @@ public class Ex3 {
 			_mode = "_ShortestPath";
 		}
 		else if(_mode.equals("_ShortestPath")) {
-			System.out.println(_map.shortestPathDist(p, _last));
+			Point2D p1 = new Point2D(_last.ix(), _last.iy()), p2 = new Point2D(p.ix(), p.iy());
+			System.out.println(_map.shortestPathDist(p1, p2));
 			/* Point2D[] path = _map.shortestPath(p, _last);
 			for (Point2D point : path) {
 				_map.setPixel(point, col);

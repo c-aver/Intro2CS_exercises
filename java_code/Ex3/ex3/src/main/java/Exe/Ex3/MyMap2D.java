@@ -128,7 +128,43 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
-		return null;
+		int dist = 0;                                    // initialize answer as 0
+		int currentDistCount = 1;                       // initialize count of pixels in the current distance as 1 (the origin we are about to add)
+		int nextDistCount = 0;                          // initialize count of pixels in the next distance as 0
+		boolean foundPath = false;                      // assume we are not going to find a path
+
+		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
+		Point2D[][] parent = new Point2D[getWidth()][getHeight()];   // matrix to track which point led to each of the visited one, to reconstruct the path
+		Queue<Point2D> q = new LinkedList<Point2D>();                // the queue of points to check through
+		q.add(p1);                                      // add the origin point as the first point to check
+		visited[p1.ix()][p1.iy()] = true;               // document that the origin was visited (so we don't step back into it)
+		while (!q.isEmpty()) {                          // iterate as long as we have points to check
+			Point2D next = q.remove();                  // take the next point to be processed
+			--currentDistCount;                         // document the fact that the current distance from the origin has one less point in the queue
+			visited[next.ix()][next.iy()] = true;       // document the fact that the currently processed point was visited
+			if (next.equals(p2)) {                      // if the point is the destination
+				foundPath = true;                       // document that we found a path
+				break;                                  // exit the loop to start reconstructing the path
+			}
+			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points
+			nextDistCount += legalNeighbors.size();     // add to the next distance count the number of legal neighbors (they are 1 farther away than the current point)
+			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed after the current distance is finished
+			for (Point2D neighbor : legalNeighbors)          // iterate on the legal neighbors of the currently processing point
+				parent[neighbor.ix()][neighbor.iy()] = next; // set the current as their parent
+			if (currentDistCount == 0) {                // if we ran out of points in the current distance, we are going to start processing the next distance
+				++dist;                                 // since we are now on the next distance, if we find the destination it is one farther away than before
+				currentDistCount = nextDistCount;       // move the next distance to the current distance, to start decrementing as we process the points
+				nextDistCount = 0;                      // set the next distance count to be 0, to start accumulating as we add neighbors
+			}
+		}
+		if (!foundPath) return null;                // if we finished processing all points and never found the destination, return null to signal no path found
+		Point2D[] path = new Point2D[dist + 1];     // initialize the array path one longer than the distance (since it is inclusive of origin and destination)
+		Point2D current = p2;                       // the first point in the path is the destination (it is reversed but that's meaningless)
+		for (int i = 0; i < path.length; ++i) {    // iterate on the elements of the path
+			path[i] = current;                      // set the point in the path to the current point
+			current = parent[current.ix()][current.iy()]; // set the next current point to the current's parent (to step back in the path)
+		}
+		return path;
 	}
 	/**
 	 * This function checks whether a neighbor is legal to make a path through

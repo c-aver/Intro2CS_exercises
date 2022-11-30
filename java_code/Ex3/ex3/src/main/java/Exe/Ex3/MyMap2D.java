@@ -1,4 +1,8 @@
 package Exe.EX3;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * This class implements the Map2D interface.
  * You should change (implement) this class as part of Ex3. */
@@ -89,8 +93,8 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public void drawCircle(Point2D p, double rad, int col) {
-		int x1 = p.ix() - (int) rad, x2 = p.ix() + (int) rad;   // set the furtherstmost possible x values
-		int y1 = p.iy() - (int) rad, y2 = p.iy() + (int) rad;   // set the furtherstmost possible y values
+		int x1 = p.ix() - (int) rad, x2 = p.ix() + (int) rad;   // set the fartherstmost possible x values
+		int y1 = p.iy() - (int) rad, y2 = p.iy() + (int) rad;   // set the fartherstmost possible y values
 		for (int x = x1; x <= x2; ++x)                          // iterate on all points with x1 <= x <= x2
 			for (int y = y1; y <= y2; ++y) {                    // iterate on all points with y1 <= y <= y2
 					if (inBounds(x, y)) {
@@ -126,67 +130,64 @@ public class MyMap2D implements Map2D{
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
 		return null;
 	}
-	public Point2D[] shortestPath(Point2D p1, Point2D p2, Point2D[] visited) {
-		return null;
-	}
 	/**
 	 * This function checks whether a neighbor is legal to make a path through
 	 * @param p1 the current point
 	 * @param p2 the neighbor
-	 * @param visited the previously visited points
+	 * @param visited an array stating whether a point was visited
 	 * @return whether the neighbor is legal to go through
 	 */
-	private boolean isLegal(Point2D p1, Point2D p2) {
+	private boolean isLegal(Point2D p1, Point2D p2, boolean[][] visited) {
 		int x = p2.ix(), y = p2.iy();             // get p2's coords for ease of use
 		                                          // if we didn't return already we need to check a couple things:
-		return (x >= 0 && x < getWidth())         // x coord is within map
-		    && (y >= 0 && y < getWidth())         // AND y coord is within map
+		return inBounds(x, y)                     // make sure neighbor is within bounds, to avoid out of bounds errors on the next conditions
+			&& (!visited[x][y])                   // the neighbor was not already visited
 			&& (getPixel(p1) == getPixel(p2));    // AND p2 is of the same color as p1
+	}
+	/**
+	 * This function return a list of all legal neighbors of a point
+	 * @param p point to check the neighbors of
+	 * @param visited an array stating whether a point was visited
+	 * @return a list of all legal neighbors
+	 */
+	private LinkedList<Point2D> legalNeighbors(Point2D p, boolean[][] visited) {
+		LinkedList<Point2D> ans = new LinkedList<>();   // initialize result list
+		int x = p.ix(), y = p.iy();                     // get p1's coords as ints to find neighbors
+		Point2D above = new Point2D(x, y + 1);          // get the point above p1
+		Point2D below = new Point2D(x, y - 1);          // get the point below p1
+		Point2D right = new Point2D(x - 1, y);          // get the point to the right of p1
+		Point2D left  = new Point2D(x + 1, y);          // get the point to the left of p1
+		if (isLegal(p, above, visited)) ans.add(above);          // if neighbor above is legal, add it to result list
+		if (isLegal(p, below, visited)) ans.add(below);          // if neighbor below is legal, add it to result list
+		if (isLegal(p, right, visited)) ans.add(right);          // if neighbor to the right is legal, add it to result list
+		if (isLegal(p, left , visited)) ans.add(left );          // if neighbor to the left is legal, add it to result list
+		return ans;                                     // return result list
 	}
 	@Override
 	public int shortestPathDist(Point2D p1, Point2D p2) {
-		if (p1.equals(p2)) return 0;            // if the points are equal their distance is 0
-		int x = p1.ix(), y = p1.iy();           // get p1's coords as ints to find neighbors
-		Point2D above = new Point2D(x, y + 1);  // get the point above p1
-		Point2D below = new Point2D(x, y - 1);  // get the point below p1
-		Point2D right = new Point2D(x - 1, y);  // get the point to the right of p1
-		Point2D left  = new Point2D(x + 1, y);  // get the point to the left of p1
-		int ans = Integer.MAX_VALUE;
-		boolean noPath = true;
-		if (isLegal(p1, above)) {
-			int dist = shortestPathDist(above, p2);
-			if (dist != -1) {
-				noPath = false;
-				if (dist < ans)
-					ans = dist;
+		int ans = 0;                                    // initialize answer as 0
+		int currentDistCount = 1;                       // initialize count of pixels in the current distance as 1 (the origin we are about to add)
+		int nextDistCount = 0;                          // initialize count of pixels in the next distance as 0
+
+		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
+		Queue<Point2D> q = new LinkedList<Point2D>();                // the queue of points to check through
+		q.add(p1);                                      // add the origin point as the first point to check
+		visited[p1.ix()][p1.iy()] = true;               // document that the origin was visited (so we don't step back into it)
+		while (!q.isEmpty()) {                          // iterate as long as we have points to check
+			Point2D next = q.remove();                  // take the next point to be processed
+			--currentDistCount;                         // document the fact that the current distance from the origin has one less point in the queue
+			visited[next.ix()][next.iy()] = true;       // document the fact that the currently processed point was visited
+			if (next.equals(p2)) return ans;            // if the point is the destination, return the current distance
+			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points
+			nextDistCount += legalNeighbors.size();     // add to the next distance count the number of legal neighbors (they are 1 farther away than the current point)
+			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed after the current distance is finished
+			if (currentDistCount == 0) {                // if we ran out of points in the current distance, we are going to start processing the next distance
+				++ans;                                  // since we are now on the next distance, if we find the destination it is one farther away than before
+				currentDistCount = nextDistCount;       // move the next distance to the current distance, to start decrementing as we process the points
+				nextDistCount = 0;                      // set the next distance count to be 0, to start accumulating as we add neighbors
 			}
 		}
-		if (isLegal(p1, below)) {
-			int dist = shortestPathDist(below, p2);
-			if (dist != -1) {
-				noPath = false;
-				if (dist < ans)
-					ans = dist;
-			}
-		}
-		if (isLegal(p1, right)) {
-			int dist = shortestPathDist(right, p2);
-			if (dist != -1) {
-				noPath = false;
-				if (dist < ans)
-					ans = dist;
-			}
-		}
-		if (isLegal(p1, left )) {
-			int dist = shortestPathDist(left , p2);
-			if (dist != -1) {
-				noPath = false;
-				if (dist < ans)
-					ans = dist;
-			}
-		}
-		if (noPath) return -1;
-		return ans + 1;
+		return -1;      // if we finished processing all points and never found the destination, return -1 to signal no path found
 	}
 	@Override
 	public void nextGenGol() {

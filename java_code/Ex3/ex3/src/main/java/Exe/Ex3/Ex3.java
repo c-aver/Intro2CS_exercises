@@ -80,6 +80,7 @@ public class Ex3 {
 		}
 		else if(_mode.equals("_Circle")) {
 			_map.drawCircle(_last, p.distance(_last), col);
+			_mode = "Circle";
 		}
 		if(_mode.equals("Segment")) {
 			_last = p;
@@ -87,6 +88,7 @@ public class Ex3 {
 		}
 		else if(_mode.equals("_Segment")) {
 			_map.drawSegment(p, _last, col);
+			_mode = "Segment";
 		}
 		if(_mode.equals("Rect")) {
 			_last = p;
@@ -94,13 +96,13 @@ public class Ex3 {
 		}
 		else if(_mode.equals("_Rect")) {
 			_map.drawRect(p, _last, col);
+			_mode = "Rect";
 		}
 		if(_mode.equals("Point")) {
 			_map.setPixel(p,col );
 		}
 		if(_mode.equals("Fill")) {
 			_map.fill(p, col);
-			_mode = "none";
 		}
 		if(_mode.equals("Gol")) {
 			_map.nextGenGol();	
@@ -118,7 +120,7 @@ public class Ex3 {
 			} */
 			_mode = "none";
 		}
-		System.out.println(_mode);
+		System.out.println("New mode: " + _mode);
 		drawArray(_map);
 	}
 	static private void drawPixel(int x, int y) {

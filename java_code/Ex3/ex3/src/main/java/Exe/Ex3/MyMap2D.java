@@ -54,7 +54,7 @@ public class MyMap2D implements Map2D{
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) {
+	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: fix this
         int x1 = p1.ix(), y1 = p1.iy(), x2 = p2.ix(), y2 = p2.iy();
 		if (y2 < y1) {
 			int ty = y1;    int tx = x1;

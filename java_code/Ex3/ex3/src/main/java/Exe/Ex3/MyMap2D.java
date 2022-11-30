@@ -61,8 +61,14 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public void drawCircle(Point2D p, double rad, int col) {
-		// TODO Auto-generated method stub
-		
+		int x1 = p.ix() - (int) rad, x2 = p.ix() + (int) rad;   // set the furtherstmost possible x values
+		int y1 = p.iy() - (int) rad, y2 = p.iy() + (int) rad;   // set the furtherstmost possible y values
+		for (int x = x1; x <= x2; ++x)                          // iterate on all points with x1 <= x <= x2
+			for (int y = y1; y <= y2; ++y) {                    // iterate on all points with y1 <= y <= y2
+				double dist = p.distance(new Point2D(x, y));    // compute the distance between the current point and the center
+				if ((dist * dist) < (rad * rad))                // if the squared distance is less than the squared radius, we are inside the circle
+					setPixel(x, y, col);                        // so we set the pixel to the required color
+			}
 	}
 
 	@Override

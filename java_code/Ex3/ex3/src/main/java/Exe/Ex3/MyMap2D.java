@@ -44,10 +44,36 @@ public class MyMap2D implements Map2D{
 		setPixel(p.ix(), p.iy(), v);
 	}
 
+	private boolean inBounds(int x, int y) {
+		return (x >= 0 && x < getWidth())         // x coord is within map
+		    && (y >= 0 && y < getWidth());        // AND y coord is within map
+	}
+
 	@Override
 	public void drawSegment(Point2D p1, Point2D p2, int v) {
-		// TODO Auto-generated method stub
-        
+        int x1 = p1.ix(), y1 = p1.iy(), x2 = p2.ix(), y2 = p2.iy();
+		if (y2 < y1) {
+			int ty = y1;    int tx = x1;
+			y1 = y2;        x1 = x2;
+			y2 = ty;        x2 = tx;
+		}
+		int dx = x2 - x1, dy = y2 - y1;
+		for (int i = 7; dx > 0 && dy > 0; --i) {
+			setPixel(x1, y1, v);
+			setPixel(x2, y2, v);
+			while (dx > i*dy) {
+				x1 += 1; x2 -= 1;
+				dx -= 2;
+				setPixel(x1, y1, v);
+				setPixel(x2, y2, v);
+			}
+			x1 += 1; x2 -= 1;
+			dx -= 2;
+			y1 += 1; y2 -= 1;
+			dy -= 2;
+		}
+		setPixel(x1, y1, v);
+		setPixel(x2, y2, v);
 	}
 
 	@Override
@@ -67,9 +93,11 @@ public class MyMap2D implements Map2D{
 		int y1 = p.iy() - (int) rad, y2 = p.iy() + (int) rad;   // set the furtherstmost possible y values
 		for (int x = x1; x <= x2; ++x)                          // iterate on all points with x1 <= x <= x2
 			for (int y = y1; y <= y2; ++y) {                    // iterate on all points with y1 <= y <= y2
-				double dist = p.distance(new Point2D(x, y));    // compute the distance between the current point and the center
-				if ((dist * dist) < (rad * rad))                // if the squared distance is less than the squared radius, we are inside the circle
-					setPixel(x, y, col);                        // so we set the pixel to the required color
+					if (inBounds(x, y)) {
+					double dist = p.distance(new Point2D(x, y));    // compute the distance between the current point and the center
+					if ((dist * dist) < (rad * rad))                // if the squared distance is less than the squared radius, we are inside the circle
+						setPixel(x, y, col);                        // so we set the pixel to the required color
+					}
 			}
 	}
 

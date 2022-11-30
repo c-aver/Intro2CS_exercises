@@ -4,7 +4,9 @@ package Exe.EX3;
  * You should change (implement) this class as part of Ex3. */
 public class MyMap2D implements Map2D{
 	private int[][] _map;
-	
+	public static final int ALIVE = Ex3.BLACK;
+	public static final int DEAD  = Ex3.WHITE;
+
 	public MyMap2D(int w, int h) {init(w,h);}
 	public MyMap2D(int size) {this(size,size);}
 	public MyMap2D(int[][] data) { 
@@ -106,9 +108,51 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public void nextGenGol() {
-		// TODO Auto-generated method stub
+		int[][] ans = new int[getWidth()][getHeight()];                   // initialize answer matrix
 		
+		for (int x = 0; x < getWidth(); ++x)                              // iterate on matrix size
+			for (int y = 0; y < getHeight(); ++y) {                       //="-
+				ans[x][y] = DEAD;                                         // assume cell is going to be dead, set it as such
+				int livingNeighbors = livingNeighbors(x, y);              // compute number of living neighbors
+				if (isAlive(x, y)) {                                      // if the cell is alive
+					if (livingNeighbors == 2 || livingNeighbors == 3)     // and it has 2 or 3 neighbors
+						ans[x][y] = ALIVE;                                // it stays alive
+				} else {                                                  // if the cell is dead
+					if (livingNeighbors == 3)                             // and it has 3 neighbors
+						ans[x][y] = ALIVE;                                // it comes to life
+				}
+			}
+
+		for (int x = 0; x < getWidth(); ++x)                              // iterate on the map
+			for (int y = 0; y < getHeight(); ++y)                         // -"-
+				_map[x][y] = ans[x][y];                                   // copy the answer into the map
 	}
+	/**
+	 * This functions decides whether a cell is alive for the purposes of GoL
+	 * @param x x coordinate of the cell
+	 * @param y y coordinate of the cell
+	 * @return true iff the cell is alive
+	 */
+	protected boolean isAlive(int x, int y) {     // we need to check 3 things
+		return    (x >= 0 && x < getWidth())      // x coord is within map
+		       && (y >= 0 && y < getWidth())      // AND y coord is within map
+			   && (getPixel(x, y) != DEAD);       // AND the cell is not dead (note that anything other than DEAD is considered alive, not just ALIVE)
+	}
+	/**
+	 * This function computes the number of living neighbors of a cell for the puposes of GoL
+	 * @param x x coordinate of the cell
+	 * @param y y coordinate of the cell
+	 * @return the number of living neighbors
+	 */
+	protected int livingNeighbors(int x, int y) {
+		int res = 0;                                                   // initialize result as 0
+		for (int i = -1; i <= 1; ++i)                                  // iterate on offsets of absolute value up to 1 on the x axis
+			for (int j = -1; j <= 1; ++j)                              // iterate on offsets of absolute value up to 1 on the y axis
+				if (((i != 0) || (j != 0)) && isAlive(x + i, y + j))   // if one of the offset is not 0 the cell is in fact a neighbor and not the current one, then if it is alive
+					++res;                                             // increment the result
+		return res;       // return the computed result
+	}
+
 	@Override
 	public void fill(int c) {
 		for(int x = 0; x < this.getWidth(); x++) {
@@ -118,5 +162,4 @@ public class MyMap2D implements Map2D{
 		}
 		
 	}
-
 }

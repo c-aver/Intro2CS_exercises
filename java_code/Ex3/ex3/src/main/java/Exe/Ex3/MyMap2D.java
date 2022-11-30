@@ -73,13 +73,22 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public int fill(Point2D p, int new_v) {
-		// TODO Auto-generated method stub
-		return 0;
+		return fill(p.ix(), p.iy(), new_v);                  // send to the equivalent function with the coords as ints
 	}
 
 	@Override
 	public int fill(int x, int y, int new_v) {
-		// TODO Auto-generated method stub
+		int old_v = getPixel(x, y);                           // we need to remember what the old color was to correctly identify relevant neighbors
+		if (old_v == new_v) return 0;                         // if we are already in the correct color we need to stop
+		setPixel(x, y, new_v);                                // then we set our current pixel to the required color
+		if ((x - 1) >= 0 && (getPixel(x - 1, y) == old_v))                   // if the point below and to the left is the same as the old color
+			fill(x - 1, y, new_v);     // we fill it as well                    and it is within the borders
+		if ((x + 1) < getWidth( )&& (getPixel(x + 1, y) == old_v))           // if the point above and to the left is the same as the old color
+			fill(x + 1, y, new_v);     // we fill it as well                    and it is within the borders
+		if ((y - 1) >= 0 && (getPixel(x, y - 1) == old_v))                   // if the point below and to the right is the same as the old color
+			fill(x, y - 1, new_v);     // we fill it as well                    and it is within the borders
+		if ((y + 1) < getHeight() && (getPixel(x, y + 1) == old_v))          // if the point below and to the left is the same as the old color
+			fill(x, y + 1, new_v);     // we fill it as well                    and it is within the borders
 		return 0;
 	}
 

@@ -50,8 +50,13 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public void drawRect(Point2D p1, Point2D p2, int col) {
-		// TODO Auto-generated method stub
-		
+		int x1 = p1.ix(), x2 = p2.ix();                     // pull x coords from points as ints
+		int y1 = p1.iy(), y2 = p2.iy();                     // pull y coords from points as ints
+		if (x1 > x2) { int t = x1; x1 = x2; x2 = t; }       // make sure x1 is the smaller
+		if (y1 > y2) { int t = y1; y1 = y2; y2 = t; }       // make sure y1 is the smaller
+		for (int x = x1; x <= x2; ++x)                      // iterate on all points with x1 <= x <= x2
+			for (int y = y1; y <= y2; ++y)                  // iterate on all points with y1 <= y <= y2
+				setPixel(x, y, col);                        // set the point to the requested color
 	}
 
 	@Override

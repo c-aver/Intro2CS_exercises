@@ -78,21 +78,21 @@ public class Ex3 {
 			_last = p;
 			_mode = "_Circle";
 		}
-		if(_mode.equals("_Circle")) {
+		else if(_mode.equals("_Circle")) {
 			_map.drawCircle(_last, p.distance(_last), col);
 		}
 		if(_mode.equals("Segment")) {
 			_last = p;
 			_mode = "_Segment";
 		}
-		if(_mode.equals("_Segment")) {
+		else if(_mode.equals("_Segment")) {
 			_map.drawSegment(p, _last, col);
 		}
 		if(_mode.equals("Rect")) {
 			_last = p;
 			_mode = "_Rect";
 		}
-		if(_mode.equals("_Rect")) {
+		else if(_mode.equals("_Rect")) {
 			_map.drawRect(p, _last, col);
 		}
 		if(_mode.equals("Point")) {
@@ -109,13 +109,15 @@ public class Ex3 {
 			_last = p;
 			_mode = "_ShortestPath";
 		}
-		if(_mode.equals("_ShortestPath")) {
-			Point2D[] path = _map.shortestPath(p, _last);
+		else if(_mode.equals("_ShortestPath")) {
+			System.out.println(_map.shortestPathDist(p, _last));
+			/* Point2D[] path = _map.shortestPath(p, _last);
 			for (Point2D point : path) {
 				_map.setPixel(point, col);
-			}
+			} */
 			_mode = "none";
 		}
+		System.out.println(_mode);
 		drawArray(_map);
 	}
 	static private void drawPixel(int x, int y) {

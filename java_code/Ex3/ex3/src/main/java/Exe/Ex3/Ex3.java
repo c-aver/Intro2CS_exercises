@@ -63,9 +63,9 @@ public class Ex3 {
 		if(p.equals("Yellow")){_color = Color.YELLOW;}
 		if(p.equals("Green")) {_color = Color.GREEN; }
 		
-		if(p.equals("20x20")) {init(20);}
-		if(p.equals("40x40")) {init(40);}
-		if(p.equals("80x80")) {init(80);}
+		if(p.equals("20x20"))   {init(20);}
+		if(p.equals("40x40"))   {init(40);}
+		if(p.equals("80x80"))   {init(80);}
 		if(p.equals("160x160")) {init(160);}
 
 		drawArray(_map);

@@ -96,42 +96,70 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
+	public Point2D[] shortestPath(Point2D p1, Point2D p2, Point2D[] visited) {
+		return null;
+	}
+	/**
+	 * This function checks whether a neighbor is legal to make a path through
+	 * @param p1 the current point
+	 * @param p2 the neighbor
+	 * @param visited the previously visited points
+	 * @return whether the neighbor is legal to go through
+	 */
+	private boolean isLegal(Point2D p1, Point2D p2) {
+		int x = p2.ix(), y = p2.iy();             // get p2's coords for ease of use
+		                                          // if we didn't return already we need to check a couple things:
+		return (x >= 0 && x < getWidth())         // x coord is within map
+		    && (y >= 0 && y < getWidth())         // AND y coord is within map
+			&& (getPixel(p1) == getPixel(p2));    // AND p2 is of the same color as p1
+	}
 	@Override
 	public int shortestPathDist(Point2D p1, Point2D p2) {
-		if (p1.equals(p2)) return 0;                      // if the points are equal their distance is 0
-		int ix = p1.ix(), iy = p1.iy();                   // get p1's coords as ints to find neighbors
-		Point2D above = new Point2D(ix, iy + 1);  // get the point above p1
-		Point2D below = new Point2D(ix, iy - 1);  // get the point below p1
-		Point2D right = new Point2D(ix - 1, iy);  // get the point to the right of p1
-		Point2D left  = new Point2D(ix + 1, iy);  // get the point to the left of p1
+		if (p1.equals(p2)) return 0;            // if the points are equal their distance is 0
+		int x = p1.ix(), y = p1.iy();           // get p1's coords as ints to find neighbors
+		Point2D above = new Point2D(x, y + 1);  // get the point above p1
+		Point2D below = new Point2D(x, y - 1);  // get the point below p1
+		Point2D right = new Point2D(x - 1, y);  // get the point to the right of p1
+		Point2D left  = new Point2D(x + 1, y);  // get the point to the left of p1
 		int ans = Integer.MAX_VALUE;
-		if (iy < getHeight() - 1 && getPixel(above) == getPixel(p1)) { // if the neighbor above is of the same color
-			int dist = shortestPathDist(above, p2);                    // calculate the distance from it to p2
-			if (dist < ans)                                            // if it is less than the current ans
-				ans = dist;                                            // set the ans as it
+		boolean noPath = true;
+		if (isLegal(p1, above)) {
+			int dist = shortestPathDist(above, p2);
+			if (dist != -1) {
+				noPath = false;
+				if (dist < ans)
+					ans = dist;
+			}
 		}
-		if (iy > 0 && getPixel(below) == getPixel(p1)) {               // if the neighbor below is of the same color
-			int dist = shortestPathDist(below, p2);                    // calculate the distance from it to p2
-			if (dist < ans)                                            // if it is less than the current ans
-				ans = dist;                                            // set the ans as it
+		if (isLegal(p1, below)) {
+			int dist = shortestPathDist(below, p2);
+			if (dist != -1) {
+				noPath = false;
+				if (dist < ans)
+					ans = dist;
+			}
 		}
-		if (ix < getWidth() - 1 && getPixel(right) == getPixel(p1)) {  // if the neighbor right is of the same color
-			int dist = shortestPathDist(right, p2);                    // calculate the distance from it to p2
-			if (dist < ans)                                            // if it is less than the current ans
-				ans = dist;                                            // set the ans as it
+		if (isLegal(p1, right)) {
+			int dist = shortestPathDist(right, p2);
+			if (dist != -1) {
+				noPath = false;
+				if (dist < ans)
+					ans = dist;
+			}
 		}
-		if (ix > 0 && getPixel(left ) == getPixel(p1)) {               // if the neighbor left  is of the same color
-			int dist = shortestPathDist(left , p2);                    // calculate the distance from it to p2
-			if (dist < ans)                                            // if it is less than the current ans
-				ans = dist;                                            // set the ans as it
+		if (isLegal(p1, left )) {
+			int dist = shortestPathDist(left , p2);
+			if (dist != -1) {
+				noPath = false;
+				if (dist < ans)
+					ans = dist;
+			}
 		}
-		return ans;
+		if (noPath) return -1;
+		return ans + 1;
 	}
-
 	@Override
 	public void nextGenGol() {
 		int[][] ans = new int[getWidth()][getHeight()];                   // initialize answer matrix

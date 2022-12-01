@@ -261,9 +261,9 @@ public class MyMap2D implements Map2D {
 
 	@Override
 	public void fill(int c) {
-		for(int x = 0; x < this.getWidth(); x++) {
-			for(int y = 0; y < this.getHeight(); y++) {
-				this.setPixel(x, y, c);
+		for(int x = 0; x < this.getWidth(); x++) {           // iterate on the map
+			for(int y = 0; y < this.getHeight(); y++) {      // -"-
+				this.setPixel(x, y, c);                      // set the pixel to the required color
 			}
 		}
 	}

@@ -6,7 +6,7 @@ import java.util.Queue;
 /**
  * This class implements the Map2D interface.
  * You should change (implement) this class as part of Ex3. */
-public class MyMap2D implements Map2D{
+public class MyMap2D implements Map2D {
 	private int[][] _map;
 	public static final int ALIVE = Ex3.BLACK;
 	public static final int DEAD  = Ex3.WHITE;
@@ -54,30 +54,17 @@ public class MyMap2D implements Map2D{
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: fix this
-        int x1 = p1.ix(), y1 = p1.iy(), x2 = p2.ix(), y2 = p2.iy();
-		if (y2 < y1) {
-			int ty = y1;    int tx = x1;
-			y1 = y2;        x1 = x2;
-			y2 = ty;        x2 = tx;
-		}
-		int dx = x2 - x1, dy = y2 - y1;
-		for (int i = 7; dx > 0 && dy > 0; --i) {
-			setPixel(x1, y1, v);
-			setPixel(x2, y2, v);
-			while (dx > i*dy) {
-				x1 += 1; x2 -= 1;
-				dx -= 2;
-				setPixel(x1, y1, v);
-				setPixel(x2, y2, v);
-			}
-			x1 += 1; x2 -= 1;
-			dx -= 2;
-			y1 += 1; y2 -= 1;
-			dy -= 2;
-		}
-		setPixel(x1, y1, v);
-		setPixel(x2, y2, v);
+	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows
+		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();   // find the delta in the axes
+		double dist = Math.sqrt(dx*dx + dy*dy);              // find the distance between the points
+		double xStep = dx / dist, yStep = dy / dist;         // calulate the required step distances by some expression I made up that seems to work fine
+		Point2D step = new Point2D(xStep, yStep);            // create a step vector
+		Point2D cursor = new Point2D(p1);                    // start the cursor on p1
+		do {                                                 // run the cursor through the segment
+			setPixel(cursor, v);                             // set the pixel under the cursor to the required color
+			cursor = cursor.add(step);                       // step the cursor by the step vector
+		} while (!cursor.close2equals(p2, 1.0));         // run as long as we are not within p2
+		setPixel(cursor, v);                                 // set the last point again
 	}
 
 	@Override

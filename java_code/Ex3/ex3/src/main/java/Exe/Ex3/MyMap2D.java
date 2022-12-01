@@ -128,7 +128,6 @@ public class MyMap2D implements Map2D {
 		while (!q.isEmpty()) {                          // iterate as long as we have points to check
 			Point2D next = q.remove();                  // take the next point to be processed
 			--currentDistCount;                         // document the fact that the current distance from the origin has one less point in the queue
-			visited[next.ix()][next.iy()] = true;       // document the fact that the currently processed point was visited
 			if (next.equals(p2)) {                      // if the point is the destination
 				foundPath = true;                       // document that we found a path
 				break;                                  // exit the loop to start reconstructing the path
@@ -136,8 +135,10 @@ public class MyMap2D implements Map2D {
 			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points
 			nextDistCount += legalNeighbors.size();     // add to the next distance count the number of legal neighbors (they are 1 farther away than the current point)
 			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed after the current distance is finished
-			for (Point2D neighbor : legalNeighbors)          // iterate on the legal neighbors of the currently processing point
-				parent[neighbor.ix()][neighbor.iy()] = next; // set the current as their parent
+			for (Point2D neighbor : legalNeighbors) {          // iterate on the legal neighbors of the currently processing point
+				visited[neighbor.ix()][neighbor.iy()] = true;  // document they have been visited
+				parent[neighbor.ix()][neighbor.iy()] = next;   // set the current as their parent
+			}
 			if (currentDistCount == 0) {                // if we ran out of points in the current distance, we are going to start processing the next distance
 				++dist;                                 // since we are now on the next distance, if we find the destination it is one farther away than before
 				currentDistCount = nextDistCount;       // move the next distance to the current distance, to start decrementing as we process the points
@@ -180,10 +181,10 @@ public class MyMap2D implements Map2D {
 		Point2D below = new Point2D(x, y - 1);          // get the point below p1
 		Point2D right = new Point2D(x - 1, y);          // get the point to the right of p1
 		Point2D left  = new Point2D(x + 1, y);          // get the point to the left of p1
-		if (isLegal(p, above, visited)) ans.add(above);          // if neighbor above is legal, add it to result list
-		if (isLegal(p, below, visited)) ans.add(below);          // if neighbor below is legal, add it to result list
-		if (isLegal(p, right, visited)) ans.add(right);          // if neighbor to the right is legal, add it to result list
-		if (isLegal(p, left , visited)) ans.add(left );          // if neighbor to the left is legal, add it to result list
+		if (isLegal(p, above, visited)) ans.add(above); // if neighbor above is legal, add it to result list
+		if (isLegal(p, below, visited)) ans.add(below); // if neighbor below is legal, add it to result list
+		if (isLegal(p, right, visited)) ans.add(right); // if neighbor to the right is legal, add it to result list
+		if (isLegal(p, left , visited)) ans.add(left ); // if neighbor to the left is legal, add it to result list
 		return ans;                                     // return result list
 	}
 	@Override
@@ -199,11 +200,12 @@ public class MyMap2D implements Map2D {
 		while (!q.isEmpty()) {                          // iterate as long as we have points to check
 			Point2D next = q.remove();                  // take the next point to be processed
 			--currentDistCount;                         // document the fact that the current distance from the origin has one less point in the queue
-			visited[next.ix()][next.iy()] = true;       // document the fact that the currently processed point was visited
 			if (next.equals(p2)) return ans;            // if the point is the destination, return the current distance
 			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points
 			nextDistCount += legalNeighbors.size();     // add to the next distance count the number of legal neighbors (they are 1 farther away than the current point)
 			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed after the current distance is finished
+			for (Point2D neighbor : legalNeighbors)           // iterate on the nieghbors
+				visited[neighbor.ix()][neighbor.iy()] = true; // document that they have been and put into the queue so the next neighbor doesn't have to
 			if (currentDistCount == 0) {                // if we ran out of points in the current distance, we are going to start processing the next distance
 				++ans;                                  // since we are now on the next distance, if we find the destination it is one farther away than before
 				currentDistCount = nextDistCount;       // move the next distance to the current distance, to start decrementing as we process the points

@@ -3,6 +3,7 @@ package Exe.EX3;
 import org.junit.jupiter.api.Test;
 
 public class MyMap2DTest {
+    // TODO: idea: create encoding of maps as string arrays for creation and comparison
     @Test
     public void testDrawSegment() {
         // TODO: implement test

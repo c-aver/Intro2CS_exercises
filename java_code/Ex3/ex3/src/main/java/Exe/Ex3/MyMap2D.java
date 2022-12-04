@@ -48,22 +48,30 @@ public class MyMap2D implements Map2D {
 		setPixel(p.ix(), p.iy(), v);
 	}
 
+	/**
+	 * This function determines whether a given point is within the boundries of the map
+	 * @param x x coordinate of the point
+	 * @param y y coordinate of the point
+	 * @return true iff the point is within the boundries of the map
+	 */
 	private boolean inBounds(int x, int y) {
 		return (x >= 0 && x < getWidth())         // x coord is within map
 		    && (y >= 0 && y < getWidth());        // AND y coord is within map
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows
-		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();   // find the delta in the axes
+	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows TODO: sometimes doesn't color last pixel
+		Point2D ip1 = new Point2D(p1.ix(), p1.iy()), ip2 = new Point2D(p2.ix(), p2.iy());
+		double dx = ip2.x() - ip1.x(), dy = ip2.y() - ip1.y();   // find the delta in the axes
 		double dist = Math.sqrt(dx*dx + dy*dy);              // find the distance between the points
 		double xStep = dx / dist, yStep = dy / dist;         // calulate the required step distances by some expression I made up that seems to work fine
 		Point2D step = new Point2D(xStep, yStep);            // create a step vector
-		Point2D cursor = new Point2D(p1);                    // start the cursor on p1
-		do {                                                 // run the cursor through the segment
+		double stepDist = step.distance();
+		Point2D cursor = new Point2D(ip1);                    // start the cursor on p1
+		while (!cursor.close2equals(ip2, stepDist)) {          // run the cursor through the segment as long as we are not within p2
 			setPixel(cursor, v);                             // set the pixel under the cursor to the required color
 			cursor = cursor.add(step);                       // step the cursor by the step vector
-		} while (!cursor.close2equals(p2, 1.0));         // run as long as we are not within p2
+		}
 		setPixel(cursor, v);                                 // set the last point again
 	}
 
@@ -226,7 +234,7 @@ public class MyMap2D implements Map2D {
 			   && (getPixel(x, y) != DEAD);       // AND the cell is not dead (note that anything other than DEAD is considered alive, not just ALIVE)
 	}
 	/**
-	 * This function computes the number of living neighbors of a cell for the puposes of GoL
+	 * This function computes the number of living neighbors of a cell for the purposes of GoL
 	 * @param x x coordinate of the cell
 	 * @param y y coordinate of the cell
 	 * @return the number of living neighbors

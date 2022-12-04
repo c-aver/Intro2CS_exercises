@@ -56,17 +56,19 @@ public class Ex3 {
 	}
 	public static void actionPerformed(String p) {
 		_mode = p;
-		if(p.equals("White")) {_color = Color.WHITE; }
-		if(p.equals("Black")) {_color = Color.BLACK; }
-		if(p.equals("Blue"))  {_color = Color.BLUE;  }
-		if(p.equals("Red"))   {_color = Color.RED;   }
-		if(p.equals("Yellow")){_color = Color.YELLOW;}
-		if(p.equals("Green")) {_color = Color.GREEN; }
+		if(p.equals("Clear")) _map.fill(WHITE);
+
+		if(p.equals("White"))  _color = Color.WHITE;
+		if(p.equals("Black"))  _color = Color.BLACK;
+		if(p.equals("Blue"))   _color = Color.BLUE; 
+		if(p.equals("Red"))    _color = Color.RED;  
+		if(p.equals("Yellow")) _color = Color.YELLOW;
+		if(p.equals("Green"))  _color = Color.GREEN;
 		
-		if(p.equals("20x20"))   {init(20);}
-		if(p.equals("40x40"))   {init(40);}
-		if(p.equals("80x80"))   {init(80);}
-		if(p.equals("160x160")) {init(160);}
+		if(p.equals("20x20"))   init(20); 
+		if(p.equals("40x40"))   init(40); 
+		if(p.equals("80x80"))   init(80); 
+		if(p.equals("160x160")) init(160);
 
 		drawArray(_map);
 		
@@ -87,7 +89,7 @@ public class Ex3 {
 			_mode = "_Segment";
 		}
 		else if(_mode.equals("_Segment")) {
-			_map.drawSegment(p, _last, col);
+			_map.drawSegment(_last, p, col);
 			_mode = "Segment";
 		}
 		if(_mode.equals("Rect")) {

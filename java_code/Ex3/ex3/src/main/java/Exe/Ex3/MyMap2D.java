@@ -73,19 +73,19 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows TODO: sometimes doesn't color last pixel
+	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows
 		Point2D ip1 = new Point2D(p1.ix(), p1.iy()), ip2 = new Point2D(p2.ix(), p2.iy());
 		double dx = ip2.x() - ip1.x(), dy = ip2.y() - ip1.y();   // find the delta in the axes
 		double dist = Math.sqrt(dx*dx + dy*dy);              // find the distance between the points
 		double xStep = dx / dist, yStep = dy / dist;         // calulate the required step distances by some expression I made up that seems to work fine
 		Point2D step = new Point2D(xStep, yStep);            // create a step vector
 		double stepDist = step.distance();
-		Point2D cursor = new Point2D(ip1);                    // start the cursor on p1
-		while (!cursor.close2equals(ip2, stepDist)) {          // run the cursor through the segment as long as we are not within p2
+		Point2D cursor = new Point2D(ip1);                   // start the cursor on p1
+		while (!cursor.close2equals(ip2, stepDist)) {        // run the cursor through the segment as long as we are not within p2
 			setPixel(cursor, v);                             // set the pixel under the cursor to the required color
 			cursor = cursor.add(step);                       // step the cursor by the step vector
 		}
-		setPixel(cursor, v);                                 // set the last point again
+		setPixel(ip2, v);                                    // now we just need to set the target point (we close enough to reached it)
 	}
 
 	@Override
@@ -184,7 +184,7 @@ public class MyMap2D implements Map2D {
 				foundPath = true;                       // document that we found a path
 				break;                                  // exit the loop to start reconstructing the path
 			}
-			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points
+			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, considering the previously visited points
 			nextDistCount += legalNeighbors.size();     // add to the next distance count the number of legal neighbors (they are 1 farther away than the current point)
 			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed after the current distance is finished
 			for (Point2D neighbor : legalNeighbors) {          // iterate on the legal neighbors of the currently processing point
@@ -263,7 +263,7 @@ public class MyMap2D implements Map2D {
 		int[][] ans = new int[getWidth()][getHeight()];                   // initialize answer matrix
 		
 		for (int x = 0; x < getWidth(); ++x)                              // iterate on matrix size
-			for (int y = 0; y < getHeight(); ++y) {                       //="-
+			for (int y = 0; y < getHeight(); ++y) {                       // -"-
 				ans[x][y] = DEAD;                                         // assume cell is going to be dead, set it as such
 				int livingNeighbors = livingNeighbors(x, y);              // compute number of living neighbors
 				if (isAlive(x, y)) {                                      // if the cell is alive

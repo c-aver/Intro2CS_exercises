@@ -117,7 +117,7 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public int fill(int x, int y, int new_v) {
+	public int fill(int x, int y, int new_v) { // TODO: this can stack overflow
 		int old_v = getPixel(x, y);                           // we need to remember what the old color was to correctly identify relevant neighbors
 		if (old_v == new_v) return 0;                         // if we are already in the correct color we need to stop
 		setPixel(x, y, new_v);                                // then we set our current pixel to the required color

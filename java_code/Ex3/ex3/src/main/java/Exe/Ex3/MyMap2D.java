@@ -8,6 +8,8 @@ import java.util.Queue;
  * You should change (implement) this class as part of Ex3. */
 public class MyMap2D implements Map2D {
 	private int[][] _map;
+
+	public static final int BACKGROUND = Ex3.WHITE;
 	public static final int ALIVE = Ex3.BLACK;
 	public static final int DEAD  = Ex3.WHITE;
 
@@ -37,13 +39,16 @@ public class MyMap2D implements Map2D {
 	@Override
 	public int getHeight() { return _map[0].length; }
 	@Override
-	public int getPixel(int x, int y) { return _map[x][y]; }
+	public int getPixel(int x, int y) {
+		if (inBounds(x, y)) return _map[x][y];   // make sure the coordinates are within the map
+		else return BACKGROUND;                  // otherwise we assume background color
+	}
 	@Override
 	public int getPixel(Point2D p) { 
 		return this.getPixel(p.ix(),p.iy());
 	}
 	
-	public void setPixel(int x, int y, int v) { _map[x][y] = v; }
+	public void setPixel(int x, int y, int v) { if (inBounds(x, y)) _map[x][y] = v; } // only set the pixel if it is within the map
 	public void setPixel(Point2D p, int v) { 
 		setPixel(p.ix(), p.iy(), v);
 	}
@@ -57,6 +62,14 @@ public class MyMap2D implements Map2D {
 	private boolean inBounds(int x, int y) {
 		return (x >= 0 && x < getWidth())         // x coord is within map
 		    && (y >= 0 && y < getWidth());        // AND y coord is within map
+	}
+	/**
+	 * This function determines whether a given point is within the boundries of the map
+	 * @param p the point to be checked
+	 * @return true iff the point is within the boundries of the map
+	 */
+	private boolean inBounds(Point2D p) {
+		return inBounds(p.ix(), p.iy());
 	}
 
 	@Override

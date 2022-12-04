@@ -12,7 +12,7 @@ import java.awt.Color;
  */
 public class Ex3 {
 	private static Map2D _map = null;
-	private static Color _color = Color.blue;
+	private static Color _color = Color.black;
 	private static String _mode = "";
 	private static Point2D _last = null;
 	public static final int WHITE = Color.WHITE.getRGB();

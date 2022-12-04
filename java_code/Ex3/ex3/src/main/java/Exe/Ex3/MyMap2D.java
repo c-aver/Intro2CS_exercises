@@ -112,7 +112,40 @@ public class MyMap2D implements Map2D {
 			fill(x, y + 1, new_v);     // we fill it as well                    and it is within the borders
 		return 0;
 	}
-
+	
+	/**
+	 * This function checks whether a neighbor is legal to make a path through
+	 * @param p1 the current point
+	 * @param p2 the neighbor
+	 * @param visited an array stating whether a point was visited
+	 * @return whether the neighbor is legal to go through
+	 */
+	private boolean isLegal(Point2D p1, Point2D p2, boolean[][] visited) {
+		int x = p2.ix(), y = p2.iy();             // get p2's coords for ease of use
+		                                          // if we didn't return already we need to check a couple things:
+		return inBounds(x, y)                     // make sure neighbor is within bounds, to avoid out of bounds errors on the next conditions
+			&& (!visited[x][y])                   // the neighbor was not already visited
+			&& (getPixel(p1) == getPixel(p2));    // AND p2 is of the same color as p1
+	}
+	/**
+	 * This function return a list of all legal neighbors of a point
+	 * @param p point to check the neighbors of
+	 * @param visited an array stating whether a point was visited
+	 * @return a list of all legal neighbors
+	 */
+	private LinkedList<Point2D> legalNeighbors(Point2D p, boolean[][] visited) {
+		LinkedList<Point2D> ans = new LinkedList<>();   // initialize result list
+		int x = p.ix(), y = p.iy();                     // get p1's coords as ints to find neighbors
+		Point2D above = new Point2D(x, y + 1);          // get the point above p1
+		Point2D below = new Point2D(x, y - 1);          // get the point below p1
+		Point2D right = new Point2D(x - 1, y);          // get the point to the right of p1
+		Point2D left  = new Point2D(x + 1, y);          // get the point to the left of p1
+		if (isLegal(p, above, visited)) ans.add(above); // if neighbor above is legal, add it to result list
+		if (isLegal(p, below, visited)) ans.add(below); // if neighbor below is legal, add it to result list
+		if (isLegal(p, right, visited)) ans.add(right); // if neighbor to the right is legal, add it to result list
+		if (isLegal(p, left , visited)) ans.add(left ); // if neighbor to the left is legal, add it to result list
+		return ans;                                     // return result list
+	}
 	@Override
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
 		int dist = 0;                                    // initialize answer as 0
@@ -154,39 +187,6 @@ public class MyMap2D implements Map2D {
 		}
 		return path;
 	}
-	/**
-	 * This function checks whether a neighbor is legal to make a path through
-	 * @param p1 the current point
-	 * @param p2 the neighbor
-	 * @param visited an array stating whether a point was visited
-	 * @return whether the neighbor is legal to go through
-	 */
-	private boolean isLegal(Point2D p1, Point2D p2, boolean[][] visited) {
-		int x = p2.ix(), y = p2.iy();             // get p2's coords for ease of use
-		                                          // if we didn't return already we need to check a couple things:
-		return inBounds(x, y)                     // make sure neighbor is within bounds, to avoid out of bounds errors on the next conditions
-			&& (!visited[x][y])                   // the neighbor was not already visited
-			&& (getPixel(p1) == getPixel(p2));    // AND p2 is of the same color as p1
-	}
-	/**
-	 * This function return a list of all legal neighbors of a point
-	 * @param p point to check the neighbors of
-	 * @param visited an array stating whether a point was visited
-	 * @return a list of all legal neighbors
-	 */
-	private LinkedList<Point2D> legalNeighbors(Point2D p, boolean[][] visited) {
-		LinkedList<Point2D> ans = new LinkedList<>();   // initialize result list
-		int x = p.ix(), y = p.iy();                     // get p1's coords as ints to find neighbors
-		Point2D above = new Point2D(x, y + 1);          // get the point above p1
-		Point2D below = new Point2D(x, y - 1);          // get the point below p1
-		Point2D right = new Point2D(x - 1, y);          // get the point to the right of p1
-		Point2D left  = new Point2D(x + 1, y);          // get the point to the left of p1
-		if (isLegal(p, above, visited)) ans.add(above); // if neighbor above is legal, add it to result list
-		if (isLegal(p, below, visited)) ans.add(below); // if neighbor below is legal, add it to result list
-		if (isLegal(p, right, visited)) ans.add(right); // if neighbor to the right is legal, add it to result list
-		if (isLegal(p, left , visited)) ans.add(left ); // if neighbor to the left is legal, add it to result list
-		return ans;                                     // return result list
-	}
 	@Override
 	public int shortestPathDist(Point2D p1, Point2D p2) {
 		int ans = 0;                                    // initialize answer as 0
@@ -214,27 +214,6 @@ public class MyMap2D implements Map2D {
 		}
 		return -1;      // if we finished processing all points and never found the destination, return -1 to signal no path found
 	}
-	@Override
-	public void nextGenGol() {
-		int[][] ans = new int[getWidth()][getHeight()];                   // initialize answer matrix
-		
-		for (int x = 0; x < getWidth(); ++x)                              // iterate on matrix size
-			for (int y = 0; y < getHeight(); ++y) {                       //="-
-				ans[x][y] = DEAD;                                         // assume cell is going to be dead, set it as such
-				int livingNeighbors = livingNeighbors(x, y);              // compute number of living neighbors
-				if (isAlive(x, y)) {                                      // if the cell is alive
-					if (livingNeighbors == 2 || livingNeighbors == 3)     // and it has 2 or 3 neighbors
-						ans[x][y] = ALIVE;                                // it stays alive
-				} else {                                                  // if the cell is dead
-					if (livingNeighbors == 3)                             // and it has 3 neighbors
-						ans[x][y] = ALIVE;                                // it comes to life
-				}
-			}
-
-		for (int x = 0; x < getWidth(); ++x)                              // iterate on the map
-			for (int y = 0; y < getHeight(); ++y)                         // -"-
-				_map[x][y] = ans[x][y];                                   // copy the answer into the map
-	}
 	/**
 	 * This functions decides whether a cell is alive for the purposes of GoL
 	 * @param x x coordinate of the cell
@@ -259,6 +238,27 @@ public class MyMap2D implements Map2D {
 				if (((i != 0) || (j != 0)) && isAlive(x + i, y + j))   // if one of the offset is not 0 the cell is in fact a neighbor and not the current one, then if it is alive
 					++res;                                             // increment the result
 		return res;       // return the computed result
+	}
+	@Override
+	public void nextGenGol() {
+		int[][] ans = new int[getWidth()][getHeight()];                   // initialize answer matrix
+		
+		for (int x = 0; x < getWidth(); ++x)                              // iterate on matrix size
+			for (int y = 0; y < getHeight(); ++y) {                       //="-
+				ans[x][y] = DEAD;                                         // assume cell is going to be dead, set it as such
+				int livingNeighbors = livingNeighbors(x, y);              // compute number of living neighbors
+				if (isAlive(x, y)) {                                      // if the cell is alive
+					if (livingNeighbors == 2 || livingNeighbors == 3)     // and it has 2 or 3 neighbors
+						ans[x][y] = ALIVE;                                // it stays alive
+				} else {                                                  // if the cell is dead
+					if (livingNeighbors == 3)                             // and it has 3 neighbors
+						ans[x][y] = ALIVE;                                // it comes to life
+				}
+			}
+
+		for (int x = 0; x < getWidth(); ++x)                              // iterate on the map
+			for (int y = 0; y < getHeight(); ++y)                         // -"-
+				_map[x][y] = ans[x][y];                                   // copy the answer into the map
 	}
 
 	@Override

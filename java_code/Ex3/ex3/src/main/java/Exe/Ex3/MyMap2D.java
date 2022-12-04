@@ -95,7 +95,7 @@ public class MyMap2D implements Map2D {
 		if (x1 > x2) { int t = x1; x1 = x2; x2 = t; }       // make sure x1 is the smaller
 		if (y1 > y2) { int t = y1; y1 = y2; y2 = t; }       // make sure y1 is the smaller
 		for (int x = x1; x <= x2; ++x)                      // iterate on all points with x1 <= x <= x2
-			for (int y = y1; y <= y2; ++y)                  // iterate on all points with y1 <= y <= y2
+			for (int y = y1; y <= y2; ++y)                  // iterate on all points with y1 <= y <= y2	
 				setPixel(x, y, col);                        // set the point to the requested color
 	}
 
@@ -105,11 +105,9 @@ public class MyMap2D implements Map2D {
 		int y1 = p.iy() - (int) rad, y2 = p.iy() + (int) rad;   // set the fartherstmost possible y values
 		for (int x = x1; x <= x2; ++x)                          // iterate on all points with x1 <= x <= x2
 			for (int y = y1; y <= y2; ++y) {                    // iterate on all points with y1 <= y <= y2
-					if (inBounds(x, y)) {
-					double dist = p.distance(new Point2D(x, y));    // compute the distance between the current point and the center
-					if ((dist * dist) < (rad * rad))                // if the squared distance is less than the squared radius, we are inside the circle
+				double dist = p.distance(new Point2D(x, y));    // compute the distance between the current point and the center
+				if ((dist * dist) < (rad * rad))                // if the squared distance is less than the squared radius, we are inside the circle
 						setPixel(x, y, col);                        // so we set the pixel to the required color
-					}
 			}
 	}
 
@@ -144,7 +142,7 @@ public class MyMap2D implements Map2D {
 	private boolean isLegal(Point2D p1, Point2D p2, boolean[][] visited) {
 		int x = p2.ix(), y = p2.iy();             // get p2's coords for ease of use
 		                                          // if we didn't return already we need to check a couple things:
-		return inBounds(x, y)                     // make sure neighbor is within bounds, to avoid out of bounds errors on the next conditions
+		return inBounds(p2)                     // make sure neighbor is within bounds, to avoid out of bounds errors on the next conditions
 			&& (!visited[x][y])                   // the neighbor was not already visited
 			&& (getPixel(p1) == getPixel(p2));    // AND p2 is of the same color as p1
 	}

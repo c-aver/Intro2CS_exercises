@@ -54,7 +54,7 @@ public class Ex3 {
 		}		
 		StdDraw_Ex3.show();
 	}
-	public static void actionPerformed(String p) {  // p is the selected option in the menues
+	public static void actionPerformed(String p) {  // p is the selected option in the menus
 		switch (p) {                       // switch p to perform the action associated with the selected option
 			case "Clear":                  // option "Clear"
 				_map.fill(WHITE);          // we fill the map with white
@@ -141,8 +141,24 @@ public class Ex3 {
 			if (path != null)                            // if we actually found a path
 				for (Point2D point : path)               // iterate on the points of the path
 					_map.setPixel(point, col);           // and color them in the current brush color
+			else {                                       // this is the case where no path was found, we want to flash the screen
+				Thread flasher = new Thread(() -> {          // we create a new thread (with a lambda) that will flash the screen
+					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
+					StdDraw_Ex3.show();                      // show the red screen
+					try {                                    // we will try to sleep
+						Thread.sleep(100);                   // here
+					} catch (InterruptedException e) {       // if we caught an InterruptedException
+						Thread.currentThread().interrupt();  // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
+					}
+					drawArray(_map);
+				 });
+				 flasher.start();                            // we now start the thread with the lambda
+				 _mode = "ShortestPath";                     // reset mode, we do this now because we are about to return
+				 System.out.println("New mode: " + _mode);   // same reasoning
+				 return;                                     // exit the function to bypass the final drawArray which will draw on top of the red screen, it will be drawn later by the flasher
+			}
 			_mode = "ShortestPath";                      // reset mode
-		} // TODO: make screen flash when no path was found
+		}
 		System.out.println("New mode: " + _mode);        // for debug puposes (again, the user should not be looking at the console) print the new mode
 		drawArray(_map);                                 // redraw the map after the changes
 	}

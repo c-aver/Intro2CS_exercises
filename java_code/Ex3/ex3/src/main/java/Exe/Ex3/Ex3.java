@@ -35,10 +35,10 @@ public class Ex3 {
 		 int w = map.getWidth();                             // get the width of the map to determine the number of line in the grid
 		 int h = map.getHeight();                            // -"-     height -"-
 		 for(int i=0; i < w; i++) {                          // iterate up to the width
-			 StdDraw_Ex3.line(i, 0, i, h);                   // draw vertical lines across the screen
+			 StdDraw_Ex3.line(i, 0, i, h - 1);                   // draw vertical lines across the screen (only up to the highest point)
 		 }
 		 for(int i=0; i < h; i++) {                          // iterate up to the height
-			 StdDraw_Ex3.line(0, i, w, i);                   // draw horizontal lines across the screen
+			 StdDraw_Ex3.line(0, i, w - 1, i);                   // draw horizontal lines across the screen (only up to the rightmost point)
 		 }
 	}
 	static public void drawArray(Map2D a) {

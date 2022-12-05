@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class MyMap2DTest {
@@ -160,6 +161,8 @@ public class MyMap2DTest {
     public void testShortestPath() {
         Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
         Point2D[] path = map.shortestPath(p1, p2);
+        for (Point2D p : path)
+            map.setPixel(p, GREEN);
         String[] expected = {
             "WWWWWWWWLL",
             "WWWWBWWWRW",
@@ -172,13 +175,13 @@ public class MyMap2DTest {
             "GGLLLWWWWW",
             "WGGYGWBWWW",
         };
-        for (Point2D p : path)
-            map.setPixel(p, GREEN);
         assertArrayEquals(expected, encodeMap(map));
     }
     @Test
     public void testShortestPathDist() {
-        // TODO: implement test
+        Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
+        int pathDist = map.shortestPathDist(p1, p2);
+        assertEquals(16, pathDist);
     }
     @Test
     public void testNextGenGol() {

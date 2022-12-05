@@ -37,8 +37,8 @@ public class MyMap2DTest {
     public Map2D map;
 
     static private char encodePixel(int pix) {
-        if(pix == WHITE)
-			return 'W';
+        if(pix == WHITE)     // this is essentially a mapping of colors (or rather their numeric RGB representation) to a character
+			return 'W';      // I would do this with a switch case
 		if(pix == BLACK)
 			return 'B';
 		if(pix == BLUE)

@@ -199,15 +199,35 @@ public class MyMap2DTest {
             "WWBWBBWWWW",
         };
         assertArrayEquals(expected, encodeMap(map));
+        map.nextGenGol();
+        expected = new String[] {
+            "WWWWWWWWBB",
+            "WWWWWWWBWW",
+            "WWWWWWWBWW",
+            "WWWWWWWBWB",
+            "WWWWWWWBWW",
+            "WWWBWWBBBW",
+            "WWWBWWWBWW",
+            "WWWWBBWWBW",
+            "WBBBBBWWWW",
+            "WWWBBBWWWW",
+        };
+        assertArrayEquals(expected, encodeMap(map));
+
+        String[] stable = new String[] { // created using patters from https://conwaylife.com/wiki/Still_life
+            "BBWWBBWBBW",
+            "BBWWWBWBWW",
+            "WWWWWBWBWW",
+            "WWWWBBWBBW",
+            "WWWWWWWWWW",
+            "WWWWWBBWWW",
+            "WWWWBWWBWW",
+            "WWWWWBBWBW",
+            "WWWWWWWWBW",
+            "WWWWWWWWBB",
+        };
+        Map2D stableMap = decodeMap(stable);
+        for (int i = 0; i < 1000; ++i) map.nextGenGol();
+        assertArrayEquals(stable, encodeMap(stableMap));
     }
 }
-/*"WWWWWWWWLL",
-  "WWWWBWWWRW",
-  "WWWWWWWWWW",
-  "WRRWWWWWBG",
-  "WWWWWWWWLL",
-  "WBRBRWWWYW",
-  "WWWYGWWWLY",
-  "WRLWWWWWGG",
-  "WWLLLWWWWW",
-  "WWWYGWBWWW",*/

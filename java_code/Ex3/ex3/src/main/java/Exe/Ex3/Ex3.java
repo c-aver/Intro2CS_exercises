@@ -19,7 +19,7 @@ public class Ex3 {
 	public static final int BLACK = Color.BLACK.getRGB();    // another one
 
 	public static void main(String[] args) {
-		int dim = 10;                                        // the default side length of the screen map
+		int dim = 20;                                        // the default side length of the screen map
 		init(dim);                                           // initialize the program with the set side length
 	}
 	private static void init(int x) {
@@ -49,7 +49,7 @@ public class Ex3 {
 			for(int x = 0; x < a.getHeight(); x++) {        // -"-
 				int c = a.getPixel(x, y);                   // get the current pixel
 				StdDraw_Ex3.setPenColor(new Color(c));      // set the pen to the pixel color
-				drawPixel(x, y);                             // draw the pixel in the current x, y
+				drawPixel(x, y);                            // draw the pixel in the current x, y
 			}
 		}		
 		StdDraw_Ex3.show();
@@ -146,7 +146,7 @@ public class Ex3 {
 					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
 					StdDraw_Ex3.show();                      // show the red screen
 					try {                                    // we will try to sleep
-						Thread.sleep(70);                   // here
+						Thread.sleep(70);                   //                       here
 					} catch (InterruptedException e) {       // if we caught an InterruptedException
 						Thread.currentThread().interrupt();  // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
 					}

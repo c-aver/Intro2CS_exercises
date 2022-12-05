@@ -5,9 +5,14 @@ import java.awt.Color;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
+@TestMethodOrder(OrderAnnotation.class)
 public class MyMap2DTest {
 	public static final int WHITE  = Color.WHITE.getRGB();
 	public static final int BLACK  = Color.BLACK.getRGB();
@@ -30,7 +35,7 @@ public class MyMap2DTest {
     };
     public Map2D map;
 
-    private char encodePixel(int pix) {
+    static private char encodePixel(int pix) {
         if(pix == WHITE)
 			return 'W';
 		if(pix == BLACK)
@@ -46,7 +51,7 @@ public class MyMap2DTest {
         assert false : "Illegal color in map";
         return '\0';
     }
-    private int decodePixel(char pix) {
+    static private int decodePixel(char pix) {
         if(pix == 'W')
 			return WHITE;
 		if(pix == 'B')
@@ -62,7 +67,7 @@ public class MyMap2DTest {
         assert false : "Illegal color encoding";
         return 0;
     }
-    private String[] encodeMap(Map2D map) {
+    static private String[] encodeMap(Map2D map) {
         int w = map.getWidth(), h = map.getHeight();
         String[] result = new String[w];
         Arrays.fill(result, "");
@@ -73,7 +78,7 @@ public class MyMap2DTest {
             }
         return result;
     }
-    private Map2D decodeMap(String[] cols) {
+    static private Map2D decodeMap(String[] cols) {
         int w = cols.length, h = cols[0].length();
         assert w == h : "Cannot decode non-square map";
         for (String col : cols)
@@ -90,7 +95,9 @@ public class MyMap2DTest {
     public void setUp() { // this functions set ups the tests by resetting the map
         map = decodeMap(originalEncodedMap.clone());  // decode the encoded original map to reset to it
     }
+
     @Test
+    @Order(1) // all other tests depend on the functionalities tested here, so we check them first
     public void testEncodeDecode() { // this tests the encoding and decoding process
         assertArrayEquals(originalEncodedMap, encodeMap(map)); // make sure encoding the decoded map gives the original decoded map
     }

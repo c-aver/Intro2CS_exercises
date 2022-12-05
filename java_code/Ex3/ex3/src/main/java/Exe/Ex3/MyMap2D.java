@@ -79,9 +79,9 @@ public class MyMap2D implements Map2D {
 		double dist = Math.sqrt(dx*dx + dy*dy);                  // find the distance between the points
 		double xStep = dx / dist, yStep = dy / dist;             // calulate the required step distances by some expression I made up that seems to work fine
 		Point2D step = new Point2D(xStep, yStep);                // create a step vector
-		double stepDist = step.distance();    
+		double stepDist = step.distance();                       // calculate the distance of the step vector, hlaf of this is the closest we will ever get to the target
 		Point2D cursor = new Point2D(ip1);                       // start the cursor on p1
-		while (!cursor.close2equals(ip2, stepDist)) {            // run the cursor through the segment as long as we are not within p2
+		while (!cursor.close2equals(ip2, stepDist / 2)) {        // run the cursor through the segment as long as we are not within p2
 			setPixel(cursor, v);                                 // set the pixel under the cursor to the required color
 			cursor = cursor.add(step);                           // step the cursor by the step vector
 		}    
@@ -117,19 +117,23 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public int fill(int x, int y, int new_v) { // TODO: this can stack overflow
-		int old_v = getPixel(x, y);                           // we need to remember what the old color was to correctly identify relevant neighbors
-		if (old_v == new_v) return 0;                         // if we are already in the correct color we need to stop
-		setPixel(x, y, new_v);                                // then we set our current pixel to the required color
-		if ((x - 1) >= 0 && (getPixel(x - 1, y) == old_v))                   // if the point below and to the left is the same as the old color
-			fill(x - 1, y, new_v);     // we fill it as well                    and it is within the borders
-		if ((x + 1) < getWidth( )&& (getPixel(x + 1, y) == old_v))           // if the point above and to the left is the same as the old color
-			fill(x + 1, y, new_v);     // we fill it as well                    and it is within the borders
-		if ((y - 1) >= 0 && (getPixel(x, y - 1) == old_v))                   // if the point below and to the right is the same as the old color
-			fill(x, y - 1, new_v);     // we fill it as well                    and it is within the borders
-		if ((y + 1) < getHeight() && (getPixel(x, y + 1) == old_v))          // if the point below and to the left is the same as the old color
-			fill(x, y + 1, new_v);     // we fill it as well                    and it is within the borders
-		return 0;
+	public int fill(int x, int y, int new_v) {
+		int ans = 0;                                    // initialize answer as 0
+
+		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
+		Queue<Point2D> q = new LinkedList<Point2D>();                // the queue of points to check through
+		q.add(new Point2D(x, y));                                      // add the origin point as the first point to check
+		visited[x][y] = true;               // document that the origin was visited (so we don't step back into it)
+		while (!q.isEmpty()) {                          // iterate as long as we have points to color
+			Point2D next = q.remove();                  // take the next point to be colored
+			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points, have to do this before coloring it to determine if they are the same color
+			setPixel(next, new_v);                      // color the current point in the required color
+			ans += 1;
+			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed
+			for (Point2D neighbor : legalNeighbors)           // iterate on the neighbors
+				visited[neighbor.ix()][neighbor.iy()] = true; // document that they have been visited and put into the queue so the next neighbor doesn't have to
+		}
+		return ans;
 	}
 	
 	/**
@@ -142,7 +146,7 @@ public class MyMap2D implements Map2D {
 	private boolean isLegal(Point2D p1, Point2D p2, boolean[][] visited) {
 		int x = p2.ix(), y = p2.iy();             // get p2's coords for ease of use
 		                                          // if we didn't return already we need to check a couple things:
-		return inBounds(p2)                     // make sure neighbor is within bounds, to avoid out of bounds errors on the next conditions
+		return inBounds(p2)                       // make sure neighbor is within bounds, to avoid out of bounds errors on the next conditions
 			&& (!visited[x][y])                   // the neighbor was not already visited
 			&& (getPixel(p1) == getPixel(p2));    // AND p2 is of the same color as p1
 	}
@@ -223,8 +227,8 @@ public class MyMap2D implements Map2D {
 			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points
 			nextDistCount += legalNeighbors.size();     // add to the next distance count the number of legal neighbors (they are 1 farther away than the current point)
 			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed after the current distance is finished
-			for (Point2D neighbor : legalNeighbors)           // iterate on the nieghbors
-				visited[neighbor.ix()][neighbor.iy()] = true; // document that they have been and put into the queue so the next neighbor doesn't have to
+			for (Point2D neighbor : legalNeighbors)           // iterate on the neighbors
+				visited[neighbor.ix()][neighbor.iy()] = true; // document that they have been visited and put into the queue so the next neighbor doesn't have to
 			if (currentDistCount == 0) {                // if we ran out of points in the current distance, we are going to start processing the next distance
 				++ans;                                  // since we are now on the next distance, if we find the destination it is one farther away than before
 				currentDistCount = nextDistCount;       // move the next distance to the current distance, to start decrementing as we process the points

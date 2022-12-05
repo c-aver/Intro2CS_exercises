@@ -62,33 +62,17 @@ public class Ex3 {
 			case "White":                  // color option "white"
 				_color = Color.WHITE;      // change the brush color to white
 				return;                    // in this case, we don't need to redraw the map, same thing for the next couple options
-			case "Black":
-				_color = Color.BLACK;
-				return;
-			case "Blue":
-				_color = Color.BLUE; 
-				return;
-			case "Red":
-				_color = Color.RED;  
-				return;
-			case "Yellow":
-				_color = Color.YELLOW;
-				return;
-			case "Green":
-				_color = Color.GREEN;
-				return;
-			case "20x20":                  // map option 20x20
-			   init(20);                   // reinitialize the map with side length 20
-			   break;                      // we have to redraw the new map, same thing for the next couple options
-			case "40x40":
-			   init(40); 
-			   break;
-			case "80x80":
-			   init(80); 
-			   break;
-			case "160x160":
-				init(160);
-				break;
+			case "Black":   _color = Color.BLACK;  return;
+			case "Blue":    _color = Color.BLUE;   return;
+			case "Red":	    _color = Color.RED;    return;
+			case "Yellow":	_color = Color.YELLOW; return;
+			case "Green":	_color = Color.GREEN;  return;
+			case "20x20":                  // map option 20x20   
+				init(20);                  // reinitialize the map with side length 20
+				break;                     // we have to redraw the new map, same thing for the next couple options
+			case "40x40":   init(40);  break;
+			case "80x80":   init(80);  break;
+			case "160x160":	init(160); break;
 			default:                       // this any mode which is not clear, brush color, or map size
 				_mode = p;                 // these are the brush modes, and they are represented in _mode
 				return;                    // in these cases no need to redraw the map
@@ -116,7 +100,7 @@ public class Ex3 {
 		}
 		if(_mode.equals("Rect")) {                // basically same thing as the last two
 			_last = p;                            // yada yada
-			_mode = "_Rect";                      // same old "_Draw"
+			_mode = "_Rect";                      // same old "_Mode"
 		}
 		else if(_mode.equals("_Rect")) {          // same thing
 			_map.drawRect(p, _last, col);         // draw the rectangle between the current click and the last

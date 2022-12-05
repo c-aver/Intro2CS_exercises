@@ -11,7 +11,7 @@ import java.awt.Color;
  *
  */
 public class Ex3 {
-	private static Map2D _map = null;                        // the main logical representation of the map displayed on the screen
+	private static Map2D _map = null;                        // representation of the map displayed on the screen
 	private static Color _color = Color.black;               // the current brush color, default black
 	private static String _mode = "";                        // the current brush mode, default none (anything that is not a known mode is none)
 	private static Point2D _last = null;                     // the last clicked point, only used for 2-point brush modes (segment, rectangle, circle, shortest path)
@@ -19,37 +19,37 @@ public class Ex3 {
 	public static final int BLACK = Color.BLACK.getRGB();    // another one
 
 	public static void main(String[] args) {
-		int dim = 10;
-		init(dim);                  // init matrix (map) 10*10
+		int dim = 10;                                        // the default side length of the screen map
+		init(dim);                                           // initialize the program with the set side length
 	}
 	private static void init(int x) {
-		StdDraw_Ex3.clear();
-		_map = new MyMap2D(x);
-		StdDraw_Ex3.setScale(-0.5, _map.getHeight()-0.5);
-		StdDraw_Ex3.enableDoubleBuffering();
-		_map.fill(WHITE);
-		drawArray(_map);		
+		StdDraw_Ex3.clear();                                 // clear the buffer in preparation for the drawing
+		_map = new MyMap2D(x);                               // initialize a map with the new side length
+		StdDraw_Ex3.setScale(-0.5, _map.getHeight()-0.5);    // set the scale of the GUI, with a little of padding around the map edges
+		StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
+		_map.fill(WHITE);                                    // initialize the map with all white
+		drawArray(_map);		                             // draw the new map
 	}
 	
 	public static void drawGrid(Map2D map) {
-		 int w = map.getWidth();
-		 int h = map.getHeight();
-		 for(int i=0;i<w;i++) {
-			 StdDraw_Ex3.line(i, 0, i, h);
+		 int w = map.getWidth();                             // get the width of the map to determine the number of line in the grid
+		 int h = map.getHeight();                            // -"-     height -"-
+		 for(int i=0; i < w; i++) {                          // iterate up to the width
+			 StdDraw_Ex3.line(i, 0, i, h);                   // draw vertical lines across the screen
 		 }
-		 for(int i=0;i<h;i++) {
-			 StdDraw_Ex3.line(0, i, w, i);
+		 for(int i=0; i < h; i++) {                          // iterate up to the height
+			 StdDraw_Ex3.line(0, i, w, i);                   // draw horizontal lines across the screen
 		 }
 	}
 	static public void drawArray(Map2D a) {
-		StdDraw_Ex3.clear();
-		StdDraw_Ex3.setPenColor(Color.gray);
-		drawGrid(_map);
-		for(int y=0;y<a.getWidth();y++) {
-			for(int x=0;x<a.getHeight();x++) {
-				int c = a.getPixel(x, y);
-				StdDraw_Ex3.setPenColor(new Color(c));
-				drawPixel(x,y);
+		StdDraw_Ex3.clear();                                // clear the buffer to draw on a blank sheet
+		StdDraw_Ex3.setPenColor(Color.gray);                // set the pen to gray for the grid drawing
+		drawGrid(_map);                                     // draw the grid
+		for(int y = 0; y < a.getWidth(); y++) {             // iterate on the pixels in the map
+			for(int x = 0; x < a.getHeight(); x++) {        // -"-
+				int c = a.getPixel(x, y);                   // get the current pixel
+				StdDraw_Ex3.setPenColor(new Color(c));      // set the pen to the pixel color
+				drawPixel(x, y);                             // draw the pixel in the current x, y
 			}
 		}		
 		StdDraw_Ex3.show();
@@ -163,6 +163,6 @@ public class Ex3 {
 		drawArray(_map);                                 // redraw the map after the changes
 	}
 	static private void drawPixel(int x, int y) {
-		StdDraw_Ex3.filledCircle(x, y, 0.3);
+		StdDraw_Ex3.filledCircle(x, y, 0.3);             // draw a circle on the point (our best way to represent the pixel)
 	}
 }

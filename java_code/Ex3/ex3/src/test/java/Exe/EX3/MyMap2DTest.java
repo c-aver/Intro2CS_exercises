@@ -158,18 +158,23 @@ public class MyMap2DTest {
     }
     @Test
     public void testShortestPath() {
+        Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
+        Point2D[] path = map.shortestPath(p1, p2);
         String[] expected = {
             "WWWWWWWWLL",
             "WWWWBWWWRW",
             "WWWWWWWWWW",
             "WRRWWWWWBG",
-            "WWWWWWWWLL",
-            "WBRBRWWWYW",
-            "WWWYGWWWLY",
-            "WRLWWWWWGG",
-            "WWLLLWWWWW",
-            "WWWYGWBWWW",
+            "GGGGGGWWLL",
+            "GBRBRGWWYW",
+            "GWWYGGWWLY",
+            "GRLWWGGWGG",
+            "GGLLLWWWWW",
+            "WGGYGWBWWW",
         };
+        for (Point2D p : path)
+            map.setPixel(p, GREEN);
+        assertArrayEquals(expected, encodeMap(map));
     }
     @Test
     public void testShortestPathDist() {

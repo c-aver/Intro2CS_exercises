@@ -146,7 +146,7 @@ public class Ex3 {
 					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
 					StdDraw_Ex3.show();                      // show the red screen
 					try {                                    // we will try to sleep
-						Thread.sleep(100);                   // here
+						Thread.sleep(70);                   // here
 					} catch (InterruptedException e) {       // if we caught an InterruptedException
 						Thread.currentThread().interrupt();  // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
 					}

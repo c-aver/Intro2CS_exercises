@@ -185,6 +185,29 @@ public class MyMap2DTest {
     }
     @Test
     public void testNextGenGol() {
-        // TODO: implement test
+        map.nextGenGol();
+        String[] expected = new String[] {
+            "WWWWWWWWBB",
+            "WWWWWWWWBB",
+            "WWWWWWWWBB",
+            "WWWWWWWWBB",
+            "WWWWWWWBWW",
+            "WWBWBWWBWW",
+            "WWWWBWWBWW",
+            "WBWWWWWWBB",
+            "WBWWBBWWWW",
+            "WWBWBBWWWW",
+        };
+        assertArrayEquals(expected, encodeMap(map));
     }
 }
+/*"WWWWWWWWLL",
+  "WWWWBWWWRW",
+  "WWWWWWWWWW",
+  "WRRWWWWWBG",
+  "WWWWWWWWLL",
+  "WBRBRWWWYW",
+  "WWWYGWWWLY",
+  "WRLWWWWWGG",
+  "WWLLLWWWWW",
+  "WWWYGWBWWW",*/

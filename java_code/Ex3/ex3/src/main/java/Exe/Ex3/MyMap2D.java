@@ -19,6 +19,10 @@ public class MyMap2D implements Map2D {
 		this(data.length, data[0].length);
 		init(data);
 	}
+	public MyMap2D(MyMap2D original) {                   // copy constructor
+		this(original.getWidth(), original.getHeight());
+		init(original._map);
+	}
 
 	@Override
 	public void init(int w, int h) {

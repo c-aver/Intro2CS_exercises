@@ -103,6 +103,10 @@ public class MyMap2DTest {
         assertArrayEquals(originalEncodedMap, encodeMap(map)); // make sure encoding the decoded map gives the original decoded map
     }
     @Test
+    public void testDrawSegment() {
+        // TODO: implement test
+    }
+    @Test
     public void testDrawRect() {
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(7, 9);
         map.drawRect(p1, p2, BLACK);

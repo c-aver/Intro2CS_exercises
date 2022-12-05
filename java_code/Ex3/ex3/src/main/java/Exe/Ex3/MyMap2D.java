@@ -175,7 +175,8 @@ public class MyMap2D implements Map2D {
 	}
 	@Override
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
-		int dist = 0;                                    // initialize answer as 0
+		if (getPixel(p1) != getPixel(p2)) return null;  // if the origin and destination colors are different a path is impossible
+		int dist = 0;                                   // initialize answer as 0
 		int currentDistCount = 1;                       // initialize count of pixels in the current distance as 1 (the origin we are about to add)
 		int nextDistCount = 0;                          // initialize count of pixels in the next distance as 0
 		boolean foundPath = false;                      // assume we are not going to find a path
@@ -216,6 +217,7 @@ public class MyMap2D implements Map2D {
 	}
 	@Override
 	public int shortestPathDist(Point2D p1, Point2D p2) {
+		if (getPixel(p1) != getPixel(p2)) return -1;  // if the origin and destination colors are different a path is impossible
 		int ans = 0;                                    // initialize answer as 0
 		int currentDistCount = 1;                       // initialize count of pixels in the current distance as 1 (the origin we are about to add)
 		int nextDistCount = 0;                          // initialize count of pixels in the next distance as 0

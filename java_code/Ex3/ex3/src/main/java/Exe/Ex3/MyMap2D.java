@@ -80,7 +80,7 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows (Boaz said it's fine) TODO: 4, 5 creates elbow // IDEA: distance from actual line // IDEA: evaluate line function on ints
+	public void drawSegment(Point2D p1, Point2D p2, int v) {
 		Point2D ip1 = new Point2D(p1.ix(), p1.iy()), ip2 = new Point2D(p2.ix(), p2.iy());
 		double dx = ip2.x() - ip1.x(), dy = ip2.y() - ip1.y();   // find the delta in the axes
 		double dist = Math.sqrt(dx*dx + dy*dy);                  // find the distance between the points

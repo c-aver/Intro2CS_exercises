@@ -17,9 +17,12 @@ public class Ex3 {
 	private static Point2D _last = null;                     // the last clicked point, only used for 2-point brush modes (segment, rectangle, circle, shortest path)
 	public static final int WHITE = Color.WHITE.getRGB();    // a default color
 	public static final int BLACK = Color.BLACK.getRGB();    // another one
+	
+	// this boolean determines whether the UI acts like the given example or how I like, I take no responsibility on the effects of changing this value, however I will say that setting this to false makes it easier to use the UI to test the logical class
+	public static final boolean exercise = true;
 
 	public static void main(String[] args) {
-		int dim = 20;                                        // the default side length of the screen map
+		int dim = 10;                                        // the default side length of the screen map
 		init(dim);                                           // initialize the program with the set side length
 	}
 	private static void init(int x) {
@@ -55,6 +58,7 @@ public class Ex3 {
 		StdDraw_Ex3.show();
 	}
 	public static void actionPerformed(String p) {  // p is the selected option in the menus
+		if (exercise) _mode = p;           // in exercise mode, the mode always changes, meaning that choosing a color, new map size, or clearing overrides the current brush mode
 		switch (p) {                       // switch p to perform the action associated with the selected option
 			case "Clear":                  // option "Clear"
 				_map.fill(WHITE);          // we fill the map with white
@@ -73,7 +77,7 @@ public class Ex3 {
 			case "40x40":   init(40);  break;
 			case "80x80":   init(80);  break;
 			case "160x160":	init(160); break;
-			default:                       // this any mode which is not clear, brush color, or map size
+			default:                       // this is any mode which is not clear, brush color, or map size
 				_mode = p;                 // these are the brush modes, and they are represented in _mode
 				return;                    // in these cases no need to redraw the map
 		}
@@ -125,7 +129,7 @@ public class Ex3 {
 			if (path != null)                            // if we actually found a path
 				for (Point2D point : path)               // iterate on the points of the path
 					_map.setPixel(point, col);           // and color them in the current brush color
-			else {                                       // this is the case where no path was found, we want to flash the screen
+			else if (!exercise) {                            // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
 				Thread flasher = new Thread(() -> {          // we create a new thread (with a lambda) that will flash the screen
 					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
 					StdDraw_Ex3.show();                      // show the red screen

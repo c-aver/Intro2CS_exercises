@@ -38,10 +38,10 @@ public class Ex3 {
 		 int w = map.getWidth();                             // get the width of the map to determine the number of line in the grid
 		 int h = map.getHeight();                            // -"-     height -"-
 		 for(int i=0; i < w; i++) {                          // iterate up to the width
-			 StdDraw_Ex3.line(i, 0, i, h - 1);                   // draw vertical lines across the screen (only up to the highest point)
+			 StdDraw_Ex3.line(i, 0, i, h - (exercise ? 0 : 1));                   // draw vertical lines across the screen, outside exercise mode we only draw up to the last point
 		 }
 		 for(int i=0; i < h; i++) {                          // iterate up to the height
-			 StdDraw_Ex3.line(0, i, w - 1, i);                   // draw horizontal lines across the screen (only up to the rightmost point)
+			 StdDraw_Ex3.line(0, i, w - (exercise ? 0 : 1), i);                   // draw horizontal lines across the screen, outside exercise mode we only draw up to the last point
 		 }
 	}
 	static public void drawArray(Map2D a) {
@@ -92,7 +92,7 @@ public class Ex3 {
 		}
 		else if(_mode.equals("_Circle")) {  // if we are in the middle of drawing a circle (need else if to prevent instantly going here after changing mode)
 			_map.drawCircle(_last, p.distance(_last), col);  // we draw a circle (in the current brush color) with the center at the last click and radius as the distance between last and current click (this puts current click on the circuference)
-			_mode = "Circle";                     // we reset the mode to starting to draw a circle (in the original file this set the mode to none but I feel like my behavior is more intuitive for the user)
+			_mode = (exercise ? "none" : "Circle");                     // we reset the mode to starting to draw a circle, unless in exercise mode which means we go into no mode
 		}
 		if(_mode.equals("Segment")) {             // if the mode is circle drawing, we are clicking the first point in the segment
 			_last = p;                            // save the click location for the next click
@@ -100,7 +100,7 @@ public class Ex3 {
 		}
 		else if(_mode.equals("_Segment")) {       // similarly to circle drawing, this symbolises the middle of drawing a segment
 			_map.drawSegment(_last, p, col);      // we draw (in the current brush color) the segment from the last click to the current
-			_mode = "Segment";                    // and reset to the start of segment drawing
+			_mode = (exercise ? "none" : "Segment");                    // and reset to the start of segment drawing, unless in exercise mode which means we go into no mode
 		}
 		if(_mode.equals("Rect")) {                // basically same thing as the last two
 			_last = p;                            // yada yada
@@ -108,7 +108,7 @@ public class Ex3 {
 		}
 		else if(_mode.equals("_Rect")) {          // same thing
 			_map.drawRect(p, _last, col);         // draw the rectangle between the current click and the last
-			_mode = "Rect";                       // reset mode back
+			_mode = (exercise ? "none" : "Rect");                       // reset mode back, unless in exercise mode which means we go into no mode
 		}
 		if(_mode.equals("Point")) {               // if the mode is point drawing
 			_map.setPixel(p,col);                // we just need to set the specific clicked point to the brush color, no need to even pull this to a logical function
@@ -145,7 +145,7 @@ public class Ex3 {
 				 System.out.println("New mode: " + _mode);   // same reasoning
 				 return;                                     // exit the function to bypass the final drawArray which will draw on top of the red screen, it will be drawn later by the flasher
 			}
-			_mode = "ShortestPath";                      // reset mode
+			_mode = "ShortestPath";                      // reset mode, unless in exercise mode which means we go into no mode
 		}
 		System.out.println("New mode: " + _mode);        // for debug puposes (again, the user should not be looking at the console) print the new mode
 		drawArray(_map);                                 // redraw the map after the changes

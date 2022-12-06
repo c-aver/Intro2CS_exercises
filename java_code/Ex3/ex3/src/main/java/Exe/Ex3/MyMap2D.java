@@ -52,7 +52,10 @@ public class MyMap2D implements Map2D {
 		return this.getPixel(p.ix(),p.iy());
 	}
 	
-	public void setPixel(int x, int y, int v) { if (inBounds(x, y)) _map[x][y] = v; } // only set the pixel if it is within the map
+	public void setPixel(int x, int y, int v) {
+		if (inBounds(x, y))  // only set the pixel if it is within the map
+			_map[x][y] = v;
+	}
 	public void setPixel(Point2D p, int v) { 
 		setPixel(p.ix(), p.iy(), v);
 	}

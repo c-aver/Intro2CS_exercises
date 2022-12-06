@@ -98,18 +98,17 @@ public class MyMap2D implements Map2D {
 
 	@Override
 	public void drawSegment(Point2D p1, Point2D p2, int v) {
-		Point2D ip1 = new Point2D(p1.ix(), p1.iy()), ip2 = new Point2D(p2.ix(), p2.iy());
-		double dx = ip2.x() - ip1.x(), dy = ip2.y() - ip1.y();   // find the delta in the axes
-		double dist = Math.sqrt(dx*dx + dy*dy);                  // find the distance between the points
-		double xStep = dx / dist, yStep = dy / dist;             // calulate the required step distances by some expression I made up that seems to work fine
+		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();       // find the delta in the axes
+		double maxD = Math.max(Math.abs(dx), Math.abs(dy));      // the largest delta will normalize our step
+		double xStep = dx / maxD, yStep = dy / maxD;             // calulate the required step distances by some expression I made up that seems to work fine
 		Point2D step = new Point2D(xStep, yStep);                // create a step vector
-		double stepDist = step.distance();                       // calculate the distance of the step vector, hlaf of this is the closest we will ever get to the target
-		Point2D cursor = new Point2D(ip1);                       // start the cursor on p1
-		while (!cursor.close2equals(ip2, stepDist / 2)) {        // run the cursor through the segment as long as we are not within p2
+		double stepDist = step.distance();                       // calculate the distance of the step vector, half of this is the closest we will ever get to the target
+		Point2D cursor = new Point2D(p1);                        // start the cursor on p1
+		while (!cursor.close2equals(p2, stepDist / 2)) {         // run the cursor through the segment as long as we are not within p2
 			setPixel(cursor, v);                                 // set the pixel under the cursor to the required color
 			cursor = cursor.add(step);                           // step the cursor by the step vector
 		}    
-		setPixel(ip2, v);                                        // now we just need to set the target point (we close enough to reached it)
+		setPixel(p2, v);                                         // now we just need to set the target point (we close enough to reached it)
 	}
 
 	@Override

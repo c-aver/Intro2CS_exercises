@@ -11,8 +11,8 @@ public class MyMap2D implements Map2D {
 	private int[][] _map;                                     // the main data of the object
 
 	public static final int BACKGROUND = Ex3.BACKGROUND;      // the default background color, pulled from Ex3
-	public static final int ALIVE = Color.BLACK.getRGB();     // default colors for game of life
-	public static final int DEAD  = Color.WHITE.getRGB();     // -"-
+	public static final int ALIVE = Color.BLACK.getRGB();     // the alive color for GoL
+	public static final int DEAD  = Color.WHITE.getRGB();     // the dead color for GoL
 
 	public MyMap2D(int w, int h) { init(w,h); }     // constructor from side length
 	public MyMap2D(int size) { this(size,size); }   // constructor for square with one side length
@@ -126,7 +126,7 @@ public class MyMap2D implements Map2D {
 
 	@Override
 	public int fill(int x, int y, int new_v) {
-		int ans = 0;                                    // initialize answer as 0
+		int ans = 0;                                    // initialize answer (number of colored cells) as 0
 
 		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
 		Queue<Point2D> q = new LinkedList<Point2D>();                // the queue of points to check through
@@ -136,12 +136,12 @@ public class MyMap2D implements Map2D {
 			Point2D next = q.remove();                  // take the next point to be colored
 			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points, have to do this before coloring it to determine if they are the same color
 			setPixel(next, new_v);                      // color the current point in the required color
-			ans += 1;
+			ans += 1;                                   // increment the number of colored cells
 			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed
 			for (Point2D neighbor : legalNeighbors)           // iterate on the neighbors
 				visited[neighbor.ix()][neighbor.iy()] = true; // document that they have been visited and put into the queue so the next neighbor doesn't have to
 		}
-		return ans;
+		return ans;    // return the answer
 	}
 	
 	/**
@@ -247,49 +247,87 @@ public class MyMap2D implements Map2D {
 		}
 		return -1;      // if we finished processing all points and never found the destination, return -1 to signal no path found
 	}
+
+	/* This is the bit logic that dictates the cell's value depending on past and future states
+	 * Past  | Future | Number (binary)
+	 * ------+--------+----------------
+	 * Dead  | Dead   | 00
+	 * Dead  | Alive  | 01
+	 * Alive | Dead   | 10
+	 * Alive | Alive  | 11
+	 */
+	private static final int WAS_DEAD_WILL_DIE   = 0b00;
+	private static final int WAS_DEAD_WILL_LIVE  = 0b01;
+	private static final int WAS_ALIVE_WILL_DIE  = 0b10;
+	private static final int WAS_ALIVE_WILL_LIVE = 0b11;
+
 	/**
-	 * This functions decides whether a cell is alive for the purposes of GoL
+	 * This functions tells whether a cell was alive for the purposes of GoL using bit logic
 	 * @param x x coordinate of the cell
 	 * @param y y coordinate of the cell
-	 * @return true iff the cell is alive
+	 * @return true iff the cell was alive
 	 */
-	protected boolean isAlive(int x, int y) {     // we need to check 3 things
-		return    (x >= 0 && x < getWidth())      // x coord is within map
-		       && (y >= 0 && y < getWidth())      // AND y coord is within map
-			   && (getPixel(x, y) != DEAD);       // AND the cell is not dead (note that anything other than DEAD is considered alive, not just ALIVE)
+	private boolean wasAlive(int x, int y) {
+		int state = getPixel(x, y); // get the state
+		return (state == WAS_ALIVE_WILL_DIE) || (state == WAS_ALIVE_WILL_LIVE); // the cell was alive if it was alive and will die or if it was alive and will live
 	}
 	/**
-	 * This function computes the number of living neighbors of a cell for the purposes of GoL
+	 * This functions tells whether a cell will live for the purposes of GoL using bit logic
 	 * @param x x coordinate of the cell
 	 * @param y y coordinate of the cell
-	 * @return the number of living neighbors
+	 * @return true iff the cell will live
 	 */
-	protected int livingNeighbors(int x, int y) {
+	private boolean willLive(int x, int y) {
+		int state = getPixel(x, y); // get the state
+		return (state == WAS_DEAD_WILL_LIVE) || (state == WAS_ALIVE_WILL_LIVE); // the cell will live if it was dead and will live or if it was alive and will live
+	}
+	/**
+	 * This functions spare (or revives) a cell, essentially setting its future (without changing its past)
+	 * @param x x coordinate of the cell
+	 * @param y y coordinate of the cell
+	 */
+	private void spare(int x, int y) {
+		if (wasAlive(x, y)) setPixel(x, y, WAS_ALIVE_WILL_LIVE);  // if the cell was alive, we need to tell it it was alive and will live
+		else                setPixel(x, y, WAS_DEAD_WILL_LIVE);   // if the cell was dead, we need to tell it it was dead and will live
+	}
+	/**
+	 * This function computes the number of past living neighbors of a cell for the purposes of GoL using in-place logic
+	 * @param x x coordinate of the cell
+	 * @param y y coordinate of the cell
+	 * @return the number of past living neighbors
+	 */
+	private int pastLivingNeighbors(int x, int y) {
 		int res = 0;                                                   // initialize result as 0
 		for (int i = -1; i <= 1; ++i)                                  // iterate on offsets of absolute value up to 1 on the x axis
 			for (int j = -1; j <= 1; ++j)                              // iterate on offsets of absolute value up to 1 on the y axis
-				if (((i != 0) || (j != 0)) && isAlive(x + i, y + j))   // if one of the offset is not 0 the cell is in fact a neighbor and not the current one, then if it is alive
+				if (((i != 0) || (j != 0)) && wasAlive(x + i, y + j))  // if one of the offset is not 0 the cell is in fact a neighbor and not the current one, then if it was alive
 					++res;                                             // increment the result
 		return res;       // return the computed result
 	}
 	@Override
-	public void nextGenGol() { // TODO: idea: make this work in-place, without the need for a second array
-		int[][] ans = new int[getWidth()][getHeight()];                   // initialize answer matrix
-		
-		for (int x = 0; x < getWidth(); ++x)                              // iterate on matrix size
-			for (int y = 0; y < getHeight(); ++y) {                       // -"-
-				ans[x][y] = DEAD;                                         // assume cell is going to be dead, set it as such in answer matrix
-				int livingNeighbors = livingNeighbors(x, y);              // compute number of living neighbors from original matrix (values in answer matrix cannot be trusted, they are either from the next generation or some uninitialized garbage)
-				if (isAlive(x, y)) {                                      // if the cell is alive (in the original matrix)
-					if (livingNeighbors == 2 || livingNeighbors == 3)     // and it has 2 or 3 neighbors
-						ans[x][y] = ALIVE;                                // it stays alive (in the answer matrix, i.e. the next generation)
-				} else {                                                  // if the cell is dead (in the original matrix)
-					if (livingNeighbors == 3)                             // and it has 3 neighbors
-						ans[x][y] = ALIVE;                                // it comes to life (in the answer matrix, i.e. the next generation)
-				}
+	public void nextGenGol() {
+		for (int x = 0; x < getWidth(); ++x)       // iterate on the cells in the map to convert color logic to bit logic
+			for (int y = 0; y < getHeight(); ++y) {
+				boolean wasAlive = (getPixel(x, y) != DEAD);      // check whether the cell was alive according to color logic, that is if it is not DEAD
+				if (wasAlive) setPixel(x, y, WAS_ALIVE_WILL_DIE); // if it was, set it to was alive will die according to bit logic, yes, we assume it will die
+				else          setPixel(x, y, WAS_DEAD_WILL_DIE);  // if it wasn't, set it to was dead will die (technically will stay dead) according to bit logic, yes, we assume it will stay dead
 			}
 
-		_map = ans;              // we now change the map to be our copy, previous map will be lost to the GC
+		for (int x = 0; x < getWidth(); ++x)                           // iterate on the cells to set the future according to the past, using bit logic
+			for (int y = 0; y < getHeight(); ++y) {
+				int livingNeighbors = pastLivingNeighbors(x, y);       // calculate the number of past living neighbors, to determine future state
+				if (wasAlive(x, y)) {                                  // if the cell was alive
+					if (livingNeighbors == 2 || livingNeighbors == 3)  // and it had 2 or 3 neighbors
+						spare(x, y);                                   // we spare it
+				} else {                                               // if the cell was dead
+					if (livingNeighbors == 3)                          // and it had 3 neighbors
+						spare(x, y);                                   // we revive it
+				}
+			}
+		
+		for (int x = 0; x < getWidth(); ++x)             // iterate on the cells to convert bit logic back to color logic
+			for (int y = 0; y < getHeight(); ++y)
+				setPixel(x, y, (willLive(x, y) ? ALIVE : DEAD));  // set the pixel to ALIVE if it will live and to DEAD otherwise
 	}
 
 	@Override

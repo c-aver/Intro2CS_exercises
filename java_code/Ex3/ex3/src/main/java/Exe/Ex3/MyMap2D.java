@@ -65,6 +65,18 @@ public class MyMap2D implements Map2D {
 		setPixel(p.ix(), p.iy(), v);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof MyMap2D) || o == null) return false; // these conditions eliminate o from equaling to this
+		MyMap2D other = (MyMap2D) o;   // case o to MyMap2D to start logical comparison
+		if ((other.getWidth() != getWidth()) || (other.getHeight() != getHeight())) return false;  // if the size is not equal the maps are not equal
+		for (int x = 0; x < getWidth(); ++x)                 // iterate on the pixels
+			for (int y = 0; y < getHeight(); ++y)
+				if (getPixel(x, y) != other.getPixel(x, y))  // if this's pixel is different from other's pixel
+					return false;                            // the maps are not equal
+		return true;           // if we passed all tests without return false the maps are equal
+	}
+
 	/**
 	 * This function determines whether a given point is within the boundries of the map
 	 * @param x x coordinate of the point

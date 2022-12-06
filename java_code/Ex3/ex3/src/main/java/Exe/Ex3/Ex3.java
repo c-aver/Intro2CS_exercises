@@ -18,7 +18,7 @@ public class Ex3 {
 	public static final int WHITE = Color.WHITE.getRGB();    // a default color
 	public static final int BLACK = Color.BLACK.getRGB();    // another one
 	
-	// this boolean determines whether the UI acts like the given example or how I like, I take no responsibility on the effects of changing this value, however I will say that setting this to false makes it easier to use the UI to test the logical class
+	// this boolean determines whether the UI acts like the given example or how I like, I take no responsibility on the effects of changing this value, however I will say that setting this to false makes it easier to use the UI in order to test the logical class
 	public static final boolean exercise = true;
 
 	public static void main(String[] args) {

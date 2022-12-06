@@ -176,7 +176,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
     }
     @Test
     // @Timeout(value = 1, unit = TimeUnit.SECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit in the junit5 repo to find how to make this work
-    public void testDrawSegment() { // TODO: test no escapes with random triangles
+    public void testDrawSegment() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
             int size = rnd.nextInt(200) + 20;               // get a decent random size for the map

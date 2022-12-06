@@ -97,7 +97,7 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) {
+	public void drawSegment(Point2D p1, Point2D p2, int v) {  // TODO: can currently create holes
 		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();       // find the delta in the axes
 		double maxD = Math.max(Math.abs(dx), Math.abs(dy));      // the largest delta will normalize our step
 		double xStep = dx / maxD, yStep = dy / maxD;             // calulate the required step distances by some expression I made up that seems to work fine

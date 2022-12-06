@@ -7,12 +7,15 @@ package Exe.EX3;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Timeout.ThreadMode;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -141,6 +144,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
                 result.setPixel(x, y, decodePixel(rows[y].charAt(x)));  // set the current pixel as the x char of the y string (y string is the row, x char of it is the correct column)
         return result;                                  // return the decoded result
     }
+
     @BeforeEach
     public void setUp() {    // this functions set ups the tests by resetting the map
         map = decodeMap(originalEncodedMap.clone());  // decode the encoded original map to reset to it
@@ -160,6 +164,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
         }
     }
     @Test
+    @Timeout(value = 1, unit = TimeUnit.SECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit in the junit5 repo to find how to make this work
     public void testDrawSegment() { // TODO: test no escapes with random triangles
         Random rnd = new Random(System.nanoTime());  // create a new random generator and seed it with the time
         for (int i = 0; i < 1000000; ++i) {           // run the test according to required number of times
@@ -182,7 +187,14 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
                         double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
                         double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
                         double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
-                        assert distance <= 1 : "drawSegment colored point too far from segment";    // if the point is more than 1 far away from the theoretical segment it is not valid to be colored
+                        if (distance >= 1) {
+                            segmentMap.setPixel(x, y, RED);
+                            StdDraw_Ex3.clear();
+                            StdDraw_Ex3.setScale(-0.5, segmentMap.getHeight() - 0.5);
+                            StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
+    		                Ex3.drawArray(segmentMap);		                             // draw the new map
+                            System.out.println("drawSegment colored point too far from segment");    // if the point is more than 1 far away from the theoretical segment it is not valid to be colored
+                        }
                     }
             segmentMap.drawSegment(p1, p3, BLACK); // draw the other 2 sides of the triangle in black
             segmentMap.drawSegment(p2, p3, BLACK);

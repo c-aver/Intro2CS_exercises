@@ -50,7 +50,7 @@ public class Ex3 {
 	static public void drawArray(Map2D a) {
 		StdDraw_Ex3.clear();                                // clear the buffer to draw on a blank sheet
 		StdDraw_Ex3.setPenColor(Color.gray);                // set the pen to gray for the grid drawing
-		drawGrid(_map);                                     // draw the grid
+		drawGrid(a);                                        // draw the grid
 		for(int y = 0; y < a.getWidth(); y++) {             // iterate on the pixels in the map
 			for(int x = 0; x < a.getHeight(); x++) {        // -"-
 				int c = a.getPixel(x, y);                   // get the current pixel

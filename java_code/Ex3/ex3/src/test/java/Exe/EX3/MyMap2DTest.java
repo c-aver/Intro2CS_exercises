@@ -1,6 +1,5 @@
 package Exe.EX3;
 
-
 import java.awt.Color;
 import java.util.Arrays;
 

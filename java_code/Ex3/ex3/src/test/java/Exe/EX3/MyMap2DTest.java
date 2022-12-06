@@ -54,6 +54,9 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
     private static Point2D randPoint(double size, Random rnd) {
         return randPoint(size, size, rnd);
     }
+    private static Point2D randPoint(double size) {
+        return randPoint(size, size, new Random(System.nanoTime()));
+    }
     private static int[] allColors = { WHITE, BLACK, BLUE, RED, YELLOW, GREEN };
 
     /**
@@ -164,7 +167,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
         }
     }
     @Test
-    @Timeout(value = 1, unit = TimeUnit.SECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit in the junit5 repo to find how to make this work
+    // @Timeout(value = 1, unit = TimeUnit.SECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit in the junit5 repo to find how to make this work
     public void testDrawSegment() { // TODO: test no escapes with random triangles
         Random rnd = new Random(System.nanoTime());  // create a new random generator and seed it with the time
         for (int i = 0; i < 1000000; ++i) {           // run the test according to required number of times
@@ -172,7 +175,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
             int size = rnd.nextInt(200) + 20;               // get a decent random size for the map
             MyMap2D segmentMap = randMap(size); // set up a random map
             segmentMap.fill(WHITE);             // fill the map with white
-            Point2D p1 = randPoint(size, rnd), p2 = randPoint(size, rnd), p3 = randPoint(size, rnd);  // set up 3 random points to draw a triangle
+            Point2D p1 = randPoint(size, rnd), p2 = randPoint(size, rnd), p3 = randPoint(size, rnd);  // set up 3 random points to draw a triangle, we pass rnd to them because they might be initialized in the same nanosecond
             double d;
             {
                 double x0 = p3.ix(), y0 = p3.iy(), x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
@@ -187,14 +190,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
                         double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
                         double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
                         double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
-                        if (distance >= 1) {
-                            segmentMap.setPixel(x, y, RED);
-                            StdDraw_Ex3.clear();
-                            StdDraw_Ex3.setScale(-0.5, segmentMap.getHeight() - 0.5);
-                            StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
-    		                Ex3.drawArray(segmentMap);		                             // draw the new map
-                            System.out.println("drawSegment colored point too far from segment");    // if the point is more than 1 far away from the theoretical segment it is not valid to be colored
-                        }
+                        assert distance <= 1 : "drawSegment colored point too far from the segment";
                     }
             segmentMap.drawSegment(p1, p3, BLACK); // draw the other 2 sides of the triangle in black
             segmentMap.drawSegment(p2, p3, BLACK);

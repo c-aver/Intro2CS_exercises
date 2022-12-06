@@ -196,7 +196,7 @@ public class MyMap2DTest {
                         double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
                         double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
                         double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
-                        assert distance <= 1 : "drawSegment colored point too far from the line";
+                        assert distance < 1 : "drawSegment colored point too far from the line";
                         assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawSegment colored point outside of bounded array";
                     }
             if (isTriangleLine(p1, p2, p3)) continue;  // if the triangle is actually a line it is meaningless to try to fill it

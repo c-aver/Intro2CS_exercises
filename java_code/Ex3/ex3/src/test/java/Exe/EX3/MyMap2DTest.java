@@ -1,3 +1,7 @@
+/* Name: Chaim Averbach
+ * ID: 207486473
+ */
+
 package Exe.EX3;
 
 import java.awt.Color;
@@ -13,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class MyMap2DTest {
+public class MyMap2DTest { // TODO: funcs for random point, random map (with list of colors)
 	public static final int WHITE  = Color.WHITE.getRGB();
 	public static final int BLACK  = Color.BLACK.getRGB();
 	public static final int BLUE   = Color.BLUE.getRGB();
@@ -145,7 +149,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(map));
     }
     @Test
-    public void testDrawCircle() {
+    public void testDrawCircle() {   // TODO: make sure the circle has no holes
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(5, 9);
         map.drawCircle(p1, 4, BLUE);
         map.drawCircle(p2, 2, YELLOW);
@@ -164,7 +168,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(map));
     }
     @Test
-    public void testFill() {
+    public void testFill() {   // TODO: make sure all the points were originally the same color, make sure the return value is the number of colored points, make sure there are paths to all colored points
         Point2D p = new Point2D(0, 0);
         map.fill(p, BLACK);
         String[] expected = {
@@ -182,7 +186,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(map));
     }
     @Test
-    public void testShortestPath() {
+    public void testShortestPath() {    // TODO: make sure the length is the same (+1) as shortestPathDist, make sure all the points are the same color as the origin and destination, make sure the path is within the map
         Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
         Point2D[] path = map.shortestPath(p1, p2);
         for (Point2D p : path)
@@ -202,15 +206,15 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(map));
     }
     @Test
-    public void testShortestPathDist() {
+    public void testShortestPathDist() { // TODO: idea: make sure distance is the same from both directions, make sure there is no path to points outside, make sure there is no path between differently colored points
         Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
         int pathDist = map.shortestPathDist(p1, p2);
         assertEquals(16, pathDist);
     }
     @Test
     public void testNextGenGol() {
-        map.nextGenGol();
-        String[] expected = new String[] {
+        map.nextGenGol();                             // evolve the default map one generation
+        String[] expected = new String[] {            // the next generation from the default map
             "WWWWWWWWBB",
             "WWWWWWWWBB",
             "WWWWWWWWBB",
@@ -222,9 +226,9 @@ public class MyMap2DTest {
             "WBWWBBWWWW",
             "WWBWBBWWWW",
         };
-        assertArrayEquals(expected, encodeMap(map));
-        map.nextGenGol();
-        expected = new String[] {
+        assertArrayEquals(expected, encodeMap(map));  // make sure the evolved array is as expected
+        map.nextGenGol();                             // evolve another generation
+        expected = new String[] {                     // the next expected generation
             "WWWWWWWWBB",
             "WWWWWWWBWW",
             "WWWWWWWBWW",
@@ -236,9 +240,9 @@ public class MyMap2DTest {
             "WBBBBBWWWW",
             "WWWBBBWWWW",
         };
-        assertArrayEquals(expected, encodeMap(map));
+        assertArrayEquals(expected, encodeMap(map)); // make sure it is correct again
 
-        String[] stable = new String[] { // created using patterns from https://conwaylife.com/wiki/Still_life
+        String[] stable = new String[] {       // created using patterns from https://conwaylife.com/wiki/Still_life
             "BBWWBBWBBW",
             "BBWWWBWBWW",
             "WWWWWBWBWW",
@@ -250,8 +254,8 @@ public class MyMap2DTest {
             "WWWWBWWWWW",
             "WWWWBBWWWW",
         };
-        Map2D stableMap = decodeMap(stable);
-        for (int i = 0; i < 1000; ++i) stableMap.nextGenGol();
-        assertArrayEquals(stable, encodeMap(stableMap));
+        Map2D stableMap = decodeMap(stable);   // decode to start running GoL
+        for (int i = 0; i < 1000; ++i) stableMap.nextGenGol();  // evolve 1000 times
+        assertArrayEquals(stable, encodeMap(stableMap));  // make sure the stable patterns remain
     }
 }

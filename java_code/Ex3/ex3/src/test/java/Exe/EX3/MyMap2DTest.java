@@ -104,7 +104,21 @@ public class MyMap2DTest {
     }
     @Test
     public void testDrawSegment() {
-        // TODO: implement test
+        MyMap2D segmentMap = new MyMap2D(160); // set up a map
+        segmentMap.fill(WHITE);                // fill the map with white
+        Point2D p1 = new Point2D(22 , 125),     // set up 4 point to create a quadrilateral
+                p2 = new Point2D(143, 157),
+                p3 = new Point2D(9  , 47 ),
+                p4 = new Point2D(70 , 31 );
+        segmentMap.drawSegment(p1, p2, BLACK); // draw the 4 sides of the quadrilateral in black
+        segmentMap.drawSegment(p1, p3, BLACK);
+        segmentMap.drawSegment(p2, p4, BLACK);
+        segmentMap.drawSegment(p3, p4, BLACK);
+        segmentMap.fill(80, 100, BLUE);        // fill the inside of the quadrilateral with blue
+        assertEquals(WHITE, segmentMap.getPixel(0  , 0  )); // make sure the filling didn't escape the quadrilateral
+        assertEquals(WHITE, segmentMap.getPixel(0  , 159)); // this means our lines are without holes
+        assertEquals(WHITE, segmentMap.getPixel(159, 0  ));
+        assertEquals(WHITE, segmentMap.getPixel(159, 159));
     }
     @Test
     public void testDrawRect() {

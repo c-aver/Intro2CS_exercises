@@ -110,8 +110,16 @@ public class MyMap2DTest {
                 p2 = new Point2D(143, 157),
                 p3 = new Point2D(9  , 47 ),
                 p4 = new Point2D(70 , 31 );
-        segmentMap.drawSegment(p1, p2, BLACK); // draw the 4 sides of the quadrilateral in black
-        segmentMap.drawSegment(p1, p3, BLACK);
+        segmentMap.drawSegment(p1, p2, BLACK); // draw 1 line on the map, we will then test it for incorrect pixels
+        for (int x = 0; x < 160; ++x)          // iterate on all the pixels in the map
+            for (int y = 0; y < 160; ++y)
+                if (segmentMap.getPixel(x, y) == BLACK) { // if the pixel is black, it is part of our segment, we need to make sure that's correct
+                    double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
+                    double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
+                    double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
+                    assert distance <= 1 : "drawSegment colored point too far from segment";  // if the point is more than 1 far away from the theoretical segment it is not valid to be colored
+                }
+        segmentMap.drawSegment(p1, p3, BLACK); // draw the other 3 sides of the quadrilateral in black
         segmentMap.drawSegment(p2, p4, BLACK);
         segmentMap.drawSegment(p3, p4, BLACK);
         segmentMap.fill(80, 100, BLUE);        // fill the inside of the quadrilateral with blue

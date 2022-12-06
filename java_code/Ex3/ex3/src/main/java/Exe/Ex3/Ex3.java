@@ -38,14 +38,14 @@ public class Ex3 {
 	}
 	
 	public static void drawGrid(Map2D map) {
-		 int w = map.getWidth();                             // get the width of the map to determine the number of line in the grid
-		 int h = map.getHeight();                            // -"-     height -"-
-		 for(int i=0; i < w; i++) {                          // iterate up to the width
-			 StdDraw_Ex3.line(i, 0, i, h - (exercise ? 0 : 1));                   // draw vertical lines across the screen, outside exercise mode we only draw up to the last point
-		 }
-		 for(int i=0; i < h; i++) {                          // iterate up to the height
-			 StdDraw_Ex3.line(0, i, w - (exercise ? 0 : 1), i);                   // draw horizontal lines across the screen, outside exercise mode we only draw up to the last point
-		 }
+		int w = map.getWidth();                             // get the width of the map to determine the number of line in the grid
+		int h = map.getHeight();                            // -"-     height -"-
+		for(int i=0; i < w; i++) {                          // iterate up to the width
+		 StdDraw_Ex3.line(i, 0, i, h - (exercise ? 0 : 1));                   // draw vertical lines across the screen, outside exercise mode we only draw up to the last point
+		}
+		for(int i=0; i < h; i++) {                          // iterate up to the height
+		 StdDraw_Ex3.line(0, i, w - (exercise ? 0 : 1), i);                   // draw horizontal lines across the screen, outside exercise mode we only draw up to the last point
+		}
 	}
 	static public void drawArray(Map2D a) {
 		StdDraw_Ex3.clear();                                // clear the buffer to draw on a blank sheet

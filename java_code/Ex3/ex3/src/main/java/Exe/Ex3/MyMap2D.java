@@ -8,33 +8,33 @@ import java.util.Queue;
  * This class implements the Map2D interface.
  * You should change (implement) this class as part of Ex3. */
 public class MyMap2D implements Map2D {
-	private int[][] _map;
+	private int[][] _map;                                     // the main data of the object
 
-	public static final int BACKGROUND = Ex3.BACKGROUND;
-	public static final int ALIVE = Color.BLACK.getRGB();
-	public static final int DEAD  = Color.WHITE.getRGB();
+	public static final int BACKGROUND = Ex3.BACKGROUND;      // the default background color, pulled from Ex3
+	public static final int ALIVE = Color.BLACK.getRGB();     // default colors for game of life
+	public static final int DEAD  = Color.WHITE.getRGB();     // -"-
 
-	public MyMap2D(int w, int h) {init(w,h);}
-	public MyMap2D(int size) {this(size,size);}
-	public MyMap2D(int[][] data) { 
-		this(data.length, data[0].length);
-		init(data);
+	public MyMap2D(int w, int h) { init(w,h); }     // constructor from side length
+	public MyMap2D(int size) { this(size,size); }   // constructor for square with one side length
+	public MyMap2D(int[][] data) {                  // constructor from data
+		this(data.length, data[0].length);          // construct with side lengths
+		init(data);                                 // initialize with the data
 	}
 	public MyMap2D(MyMap2D original) {                   // copy constructor
-		this(original.getWidth(), original.getHeight());
-		init(original._map);
+		this(original.getWidth(), original.getHeight()); // construct using original size
+		init(original._map);                             // initialize with original data
 	}
 
 	@Override
-	public void init(int w, int h) {
-		_map = new int[w][h];
+	public void init(int w, int h) {  // initializer with side lengths
+		_map = new int[w][h];         // initialize map with required side lengths
 	}
 	@Override
-	public void init(int[][] arr) {
-		init(arr.length,arr[0].length);
-		for(int x = 0; x < this.getWidth() &&  x < arr.length; x++) {
+	public void init(int[][] arr) {   // initializer with data
+		init(arr.length,arr[0].length);  // initialize according to data size
+		for(int x = 0; x < this.getWidth() &&  x < arr.length; x++) {           // iterate on the pixels
 			for(int y = 0; y < this.getHeight() && y < arr[0].length; y++) {
-				this.setPixel(x, y, arr[x][y]);
+				this.setPixel(x, y, arr[x][y]);                                 // set the pixel according to the data
 			}
 		}
 	}
@@ -77,7 +77,7 @@ public class MyMap2D implements Map2D {
 	 * @return true iff the point is within the boundries of the map
 	 */
 	private boolean inBounds(Point2D p) {
-		return inBounds(p.ix(), p.iy());
+		return inBounds(p.ix(), p.iy());    // we simply use inBounds(int, int) with the point's coordinates rounded
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package Exe.EX3;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -9,9 +10,9 @@ import java.util.Queue;
 public class MyMap2D implements Map2D {
 	private int[][] _map;
 
-	public static final int BACKGROUND = Ex3.WHITE;
-	public static final int ALIVE = Ex3.BLACK;
-	public static final int DEAD  = Ex3.WHITE;
+	public static final int BACKGROUND = Ex3.BACKGROUND;
+	public static final int ALIVE = Color.BLACK.getRGB();
+	public static final int DEAD  = Color.WHITE.getRGB();
 
 	public MyMap2D(int w, int h) {init(w,h);}
 	public MyMap2D(int size) {this(size,size);}

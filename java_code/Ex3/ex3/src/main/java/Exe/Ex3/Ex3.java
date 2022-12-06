@@ -11,12 +11,11 @@ import java.awt.Color;
  *
  */
 public class Ex3 {
-	private static Map2D _map = null;                        // representation of the map displayed on the screen
-	private static Color _color = Color.black;               // the current brush color, default black
-	private static String _mode = "";                        // the current brush mode, default none (anything that is not a known mode is none)
-	private static Point2D _last = null;                     // the last clicked point, only used for 2-point brush modes (segment, rectangle, circle, shortest path)
-	public static final int WHITE = Color.WHITE.getRGB();    // a default color
-	public static final int BLACK = Color.BLACK.getRGB();    // another one
+	private static Map2D _map = null;                           // representation of the map displayed on the screen
+	private static Color _color = Color.black;                  // the current brush color, default black
+	private static String _mode = "";                           // the current brush mode, default none (anything that is not a known mode is none)
+	private static Point2D _last = null;                        // the last clicked point, only used for 2-point brush modes (segment, rectangle, circle, shortest path)
+	public static final int BACKGROUND = Color.WHITE.getRGB();  // the default background color
 	
 	// this boolean determines whether the UI acts like the given example or how I like, I take no responsibility on the effects of changing this value, however I will say that setting this to false makes it easier to use the UI in order to test the logical class
 	public static final boolean exercise = true;
@@ -30,7 +29,7 @@ public class Ex3 {
 		_map = new MyMap2D(x);                               // initialize a map with the new side length
 		StdDraw_Ex3.setScale(-0.5, _map.getHeight() - 0.5);  // set the scale of the GUI, with a little of padding around the map edges
 		StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
-		_map.fill(WHITE);                                    // initialize the map with all white
+		_map.fill(BACKGROUND);                                    // initialize the map with all white
 		drawArray(_map);		                             // draw the new map
 	}
 	
@@ -61,7 +60,7 @@ public class Ex3 {
 		if (exercise) _mode = p;           // in exercise mode, the mode always changes, meaning that choosing a color, new map size, or clearing overrides the current brush mode
 		switch (p) {                       // switch p to perform the action associated with the selected option
 			case "Clear":                  // option "Clear"
-				_map.fill(WHITE);          // we fill the map with white
+				_map.fill(BACKGROUND);          // we fill the map with white
 				break;                     // now we have to redraw the cleared map
 			case "White":                  // color option "white"
 				_color = Color.WHITE;      // change the brush color to white

@@ -33,7 +33,7 @@ public class Ex3 {
 		_map = new MyMap2D(x);                               // initialize a map with the new side length
 		StdDraw_Ex3.setScale(-0.5, _map.getHeight() - 0.5);  // set the scale of the GUI, with a little of padding around the map edges
 		StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
-		_map.fill(BACKGROUND);                                    // initialize the map with all white
+		_map.fill(BACKGROUND);                               // initialize the map with all white
 		drawArray(_map);		                             // draw the new map
 	}
 	

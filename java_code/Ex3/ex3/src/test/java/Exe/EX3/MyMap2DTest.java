@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class MyMap2DTest { // TODO: funcs for random point, random map (with list of colors)
+public class MyMap2DTest {
     public static final int WHITE  = Color.WHITE.getRGB();   // precalculated colors for our tests, these are all the legal colors
     public static final int BLACK  = Color.BLACK.getRGB();
     public static final int BLUE   = Color.BLUE.getRGB();
@@ -172,10 +172,10 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
         double d12_3 = (Math.abs(dx21 * dy13 - dx13 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the p3 and the line p1-p2 using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
         double d13_2 = (Math.abs(dx13 * dy21 - dx21 * dy13)) / (Math.sqrt(dx13 * dx13 + dy13 * dy13)); //
         double d32_1 = (Math.abs(dx23 * dy13 - dx13 * dy23)) / (Math.sqrt(dx23 * dx23 + dy23 * dy23));
-        return ((d12_3 <= 1.5) || (d13_2 <= 1.5) || (d32_1 <= 1.5));
+        return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));
     }
     @Test
-    // @Timeout(value = 1, unit = TimeUnit.SECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit in the junit5 repo to find how to make this work
+    @Timeout(value = 1, unit = TimeUnit.SECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implements this feature in the junit5 repo to find how to make this work
     public void testDrawSegment() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
@@ -197,23 +197,18 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
                         double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
                         double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
                         assert distance <= 1 : "drawSegment colored point too far from the line";
-                        if (!((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY))) {
-                            StdDraw_Ex3.clear();
-                            StdDraw_Ex3.setScale(-0.5, segmentMap.getHeight() - 0.5);
-                            StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
-    		                Ex3.drawArray(segmentMap);	
-                            System.err.println("drawSegment colored point outside of segment boundaries");
-                        }
+                        assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawSegment colored point outside of bounded array";
                     }
             if (isTriangleLine(p1, p2, p3)) continue;  // if the triangle is actually a line it is meaningless to try to fill it
             segmentMap.drawSegment(p1, p3, BLACK); // draw the other 2 sides of the triangle in black
             segmentMap.drawSegment(p2, p3, BLACK);
             Point2D midpoint = new Point2D((p1.x() + p2.x() + p3.x()) / 3, (p1.y() + p2.y() + p3.y()) / 3); // find the midpoint, guaranteed to be inside the triangle
             segmentMap.fill(midpoint, YELLOW);        // fill the inside of the triangle with blue
-            assertNotEquals(YELLOW, segmentMap.getPixel(0  , 0  ), "Filling escaped segments " + i); // make sure the filling didn't escape the triangle
-            assertNotEquals(YELLOW, segmentMap.getPixel(0  , (int) size - 1), "Filling escaped segments " + i); // this means our lines are without holes
-            assertNotEquals(YELLOW, segmentMap.getPixel((int) size - 1, 0  ), "Filling escaped segments " + i);
-            assertNotEquals(YELLOW, segmentMap.getPixel((int) size - 1, (int) size - 1), "Filling escaped segments " + i);
+            assert (segmentMap.getPixel(0, 0) == WHITE)                 // this asserts that the corners are not all colored
+                  || (segmentMap.getPixel(0, size - 1) == WHITE)        // if they are, the filling escaped the triangle
+                  || (segmentMap.getPixel(size - 1, 0) == WHITE)        // (they can't all be black because we drew a triangle)
+                  || (segmentMap.getPixel(size - 1, size - 1) == WHITE) // some might be black, some might even be yellow (if the filling was ON the triangle)
+                  : "Filling escaped segment triangle, segments are holey";      
         }
     }
     @Test

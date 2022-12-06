@@ -37,7 +37,26 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
         "WWLLLWWWWW",
         "WWWYGWBWWW",
     };
-    public Map2D map;
+    private Map2D map;
+    private static Point2D randPoint(double width, double height) {
+        // double minX = -0.5, maxX = width - 0.5, minY = -0.5, maxY = height - 0.5;  // the bounds, taken from the bounds created by the scale in the GUI, not actually used in code so commented out
+        double x = (Math.random() * width) - 0.5, y = (Math.random() * height) - 0.5;
+        return new Point2D(x, y);
+    }
+    private static int[] allColors = { WHITE, BLACK, BLUE, RED, YELLOW, GREEN };
+
+    private static MyMap2D randMap(int width, int height, int[] acceptedColors, double whitePercentage) {
+        return new MyMap2D(width, height); // TODO: implement
+    }
+    private static MyMap2D randMap(int width, int height, int[] acceptedColors) {
+        return randMap(width, height, acceptedColors, -1);
+    }
+    private static MyMap2D randMap(int width, int height, double whitePercentage) {
+        return randMap(width, height, allColors, whitePercentage);
+    }
+    private static MyMap2D randMap(int width, int height) {
+        return randMap(width, height, allColors, -1);
+    }
 
     static private char encodePixel(int pix) {   // this function encoded an int representing a color as a character
         if(pix == WHITE)     // this is essentially a mapping of colors (or rather their numeric RGB representation) to a character
@@ -101,11 +120,11 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
 
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
-    public void testEncodeDecode() { // this tests the encoding and decoding process
+    public void testEncodeDecode() { // this tests the encoding and decoding process // TODO: test on random maps
         assertArrayEquals(originalEncodedMap, encodeMap(map)); // make sure encoding the decoded map gives the original map
     }
     @Test
-    public void testDrawSegment() {
+    public void testDrawSegment() { // TODO: test no escapes with random triangles
         MyMap2D segmentMap = new MyMap2D(160); // set up a map
         segmentMap.fill(WHITE);                // fill the map with white
         Point2D p1 = new Point2D(22 , 125),     // set up 4 point to create a quadrilateral
@@ -119,7 +138,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
                     double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
                     double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
                     double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
-                    assert distance <= 1 : "drawSegment colored point too far from segment";  // if the point is more than 1 far away from the theoretical segment it is not valid to be colored
+                    assert distance <= 1 : "drawSegment colored point too far from segment";    // if the point is more than 1 far away from the theoretical segment it is not valid to be colored
                 }
         segmentMap.drawSegment(p1, p3, BLACK); // draw the other 3 sides of the quadrilateral in black
         segmentMap.drawSegment(p2, p4, BLACK);
@@ -131,7 +150,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
         assertEquals(WHITE, segmentMap.getPixel(159, 159));
     }
     @Test
-    public void testDrawRect() {
+    public void testDrawRect() {   // TODO: make sure the rectangle has no holes, make sure no (out of bounds) errors
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(7, 9);
         map.drawRect(p1, p2, BLACK);
         String[] expected = {
@@ -149,7 +168,7 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
         assertArrayEquals(expected, encodeMap(map));
     }
     @Test
-    public void testDrawCircle() {   // TODO: make sure the circle has no holes
+    public void testDrawCircle() {   // TODO: make sure the circle has no holes, make sure no (out of bounds) errors
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(5, 9);
         map.drawCircle(p1, 4, BLUE);
         map.drawCircle(p2, 2, YELLOW);

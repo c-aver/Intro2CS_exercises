@@ -166,54 +166,54 @@ public class MyMap2DTest { // TODO: funcs for random point, random map (with lis
             assertEquals(randMap, decodeMap(encoding));
         }
     }
+    private boolean isTriangleLine(Point2D p1, Point2D p2, Point2D p3) {  // this function checks if 3 points are very close to being on the same line
+        double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y(), x3 = p3.ix(), y3 = p3.iy();  // preparing the numbers for the formula
+        double dx13 = x1 - x3, dx21 = x2 - x1, dy13 = y1 - y3, dy21 = y2 - y1, dx23 = x2 - x3, dy23 = y2 - y3;      // some of the deltas we will need
+        double d12_3 = (Math.abs(dx21 * dy13 - dx13 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the p3 and the line p1-p2 using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
+        double d13_2 = (Math.abs(dx13 * dy21 - dx21 * dy13)) / (Math.sqrt(dx13 * dx13 + dy13 * dy13)); //
+        double d32_1 = (Math.abs(dx23 * dy13 - dx13 * dy23)) / (Math.sqrt(dx23 * dx23 + dy23 * dy23));
+        return ((d12_3 <= 1.5) || (d13_2 <= 1.5) || (d32_1 <= 1.5));
+    }
     @Test
     // @Timeout(value = 1, unit = TimeUnit.SECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit in the junit5 repo to find how to make this work
     public void testDrawSegment() { // TODO: test no escapes with random triangles
-        Random rnd = new Random(System.nanoTime());  // create a new random generator and seed it with the time
-        for (int i = 0; i < 1000000; ++i) {           // run the test according to required number of times
-            boolean line = false;
+        Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
+        for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
             int size = rnd.nextInt(200) + 20;               // get a decent random size for the map
             MyMap2D segmentMap = randMap(size); // set up a random map
             segmentMap.fill(WHITE);             // fill the map with white
             Point2D p1 = randPoint(size, rnd), p2 = randPoint(size, rnd), p3 = randPoint(size, rnd);  // set up 3 random points to draw a triangle, we pass rnd to them because they might be initialized in the same nanosecond
-            double d;
-            {
-                double x0 = p3.ix(), y0 = p3.iy(), x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
-                double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
-                d = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
-                line = (d <= 2);
-            }
             segmentMap.drawSegment(p1, p2, BLACK);  // draw 1 line on the map, we will now test it for incorrect pixels
+            assertEquals(BLACK, segmentMap.getPixel(p1), "p1 was not colored by drawSegment");     // make sure the actual points were colored
+            assertEquals(BLACK, segmentMap.getPixel(p2), "p2 was not colored by drawSegment");
+            long minX = Math.round(Math.min(p1.x(), p2.x())),
+                 minY = Math.round(Math.min(p1.y(), p2.y())),
+                 maxX = Math.round(Math.max(p1.x(), p2.x())),
+                 maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where our line is allowed to be
             for (int x = 0; x < size; ++x)          // iterate on all the pixels in the map
                 for (int y = 0; y < size; ++y)
                     if (segmentMap.getPixel(x, y) == BLACK) { // if the pixel is black, it is part of our segment, we need to make sure that's correct
                         double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
                         double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
                         double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
-                        assert distance <= 1 : "drawSegment colored point too far from the segment";
+                        assert distance <= 1 : "drawSegment colored point too far from the line";
+                        if (!((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY))) {
+                            StdDraw_Ex3.clear();
+                            StdDraw_Ex3.setScale(-0.5, segmentMap.getHeight() - 0.5);
+                            StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
+    		                Ex3.drawArray(segmentMap);	
+                            System.err.println("drawSegment colored point outside of segment boundaries");
+                        }
                     }
+            if (isTriangleLine(p1, p2, p3)) continue;  // if the triangle is actually a line it is meaningless to try to fill it
             segmentMap.drawSegment(p1, p3, BLACK); // draw the other 2 sides of the triangle in black
             segmentMap.drawSegment(p2, p3, BLACK);
             Point2D midpoint = new Point2D((p1.x() + p2.x() + p3.x()) / 3, (p1.y() + p2.y() + p3.y()) / 3); // find the midpoint, guaranteed to be inside the triangle
             segmentMap.fill(midpoint, YELLOW);        // fill the inside of the triangle with blue
-            try {
-                assertNotEquals(YELLOW, segmentMap.getPixel(0  , 0  ), "Filling escaped segments " + i); // make sure the filling didn't escape the triangle
-                assertNotEquals(YELLOW, segmentMap.getPixel(0  , (int) size - 1), "Filling escaped segments " + i); // this means our lines are without holes
-                assertNotEquals(YELLOW, segmentMap.getPixel((int) size - 1, 0  ), "Filling escaped segments " + i);
-                assertNotEquals(YELLOW, segmentMap.getPixel((int) size - 1, (int) size - 1), "Filling escaped segments " + i);
-            } catch (AssertionError e) {
-                StdDraw_Ex3.clear();
-                StdDraw_Ex3.setScale(-0.5, segmentMap.getHeight() - 0.5);
-                StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
-    		    Ex3.drawArray(segmentMap);		                             // draw the new map
-                // new java.util.Scanner(System.in).nextLine();
-                for (int x = 0; x < size; ++x)
-                    for (int y = 0; y < size; ++y)
-                        if (segmentMap.getPixel(x, y) == BLACK)
-                            if (!line)
-                                System.err.println();
-            }
-            if (i % 10 == 0) System.out.println("Finished " + (i + 1) + " tests");
+            assertNotEquals(YELLOW, segmentMap.getPixel(0  , 0  ), "Filling escaped segments " + i); // make sure the filling didn't escape the triangle
+            assertNotEquals(YELLOW, segmentMap.getPixel(0  , (int) size - 1), "Filling escaped segments " + i); // this means our lines are without holes
+            assertNotEquals(YELLOW, segmentMap.getPixel((int) size - 1, 0  ), "Filling escaped segments " + i);
+            assertNotEquals(YELLOW, segmentMap.getPixel((int) size - 1, (int) size - 1), "Filling escaped segments " + i);
         }
     }
     @Test

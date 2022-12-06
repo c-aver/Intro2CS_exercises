@@ -77,7 +77,7 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows TODO: 4, 5 creates elbow // IDEA: distance from actual line // IDEA: evaluate line function on ints
+	public void drawSegment(Point2D p1, Point2D p2, int v) { // TODO: can create elbows (Boaz said it's fine) TODO: 4, 5 creates elbow // IDEA: distance from actual line // IDEA: evaluate line function on ints
 		Point2D ip1 = new Point2D(p1.ix(), p1.iy()), ip2 = new Point2D(p2.ix(), p2.iy());
 		double dx = ip2.x() - ip1.x(), dy = ip2.y() - ip1.y();   // find the delta in the axes
 		double dist = Math.sqrt(dx*dx + dy*dy);                  // find the distance between the points
@@ -105,8 +105,8 @@ public class MyMap2D implements Map2D {
 
 	@Override
 	public void drawCircle(Point2D p, double rad, int col) {
-		int x1 = p.ix() - (int) rad, x2 = p.ix() + (int) rad;   // set the fartherstmost possible x values
-		int y1 = p.iy() - (int) rad, y2 = p.iy() + (int) rad;   // set the fartherstmost possible y values
+		int x1 = p.ix() - (int) rad - 1, x2 = p.ix() + (int) rad + 1;   // set the fartherstmost possible x values, add one to both sides in case the rounding cuts off a relevant pixel
+		int y1 = p.iy() - (int) rad - 1, y2 = p.iy() + (int) rad + 1;   // set the fartherstmost possible y values, add one to both sides in case the rounding cuts off a relevant pixel
 		for (int x = x1; x <= x2; ++x)                          // iterate on all points with x1 <= x <= x2
 			for (int y = y1; y <= y2; ++y) {                    // iterate on all points with y1 <= y <= y2
 				double dist = p.distance(new Point2D(x, y));    // compute the distance between the current point and the center
@@ -285,7 +285,7 @@ public class MyMap2D implements Map2D {
 				}
 			}
 
-		_map = ans;
+		_map = ans;              // we now change the map to be our copy, previous map will be lost to the GC
 	}
 
 	@Override

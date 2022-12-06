@@ -272,19 +272,19 @@ public class MyMap2D implements Map2D {
 		return res;       // return the computed result
 	}
 	@Override
-	public void nextGenGol() {
+	public void nextGenGol() { // TODO: idea: make this work in-place, without the need for a second array
 		int[][] ans = new int[getWidth()][getHeight()];                   // initialize answer matrix
 		
 		for (int x = 0; x < getWidth(); ++x)                              // iterate on matrix size
 			for (int y = 0; y < getHeight(); ++y) {                       // -"-
-				ans[x][y] = DEAD;                                         // assume cell is going to be dead, set it as such
-				int livingNeighbors = livingNeighbors(x, y);              // compute number of living neighbors
-				if (isAlive(x, y)) {                                      // if the cell is alive
+				ans[x][y] = DEAD;                                         // assume cell is going to be dead, set it as such in answer matrix
+				int livingNeighbors = livingNeighbors(x, y);              // compute number of living neighbors from original matrix (values in answer matrix cannot be trusted, they are either from the next generation or some uninitialized garbage)
+				if (isAlive(x, y)) {                                      // if the cell is alive (in the original matrix)
 					if (livingNeighbors == 2 || livingNeighbors == 3)     // and it has 2 or 3 neighbors
-						ans[x][y] = ALIVE;                                // it stays alive
-				} else {                                                  // if the cell is dead
+						ans[x][y] = ALIVE;                                // it stays alive (in the answer matrix, i.e. the next generation)
+				} else {                                                  // if the cell is dead (in the original matrix)
 					if (livingNeighbors == 3)                             // and it has 3 neighbors
-						ans[x][y] = ALIVE;                                // it comes to life
+						ans[x][y] = ALIVE;                                // it comes to life (in the answer matrix, i.e. the next generation)
 				}
 			}
 

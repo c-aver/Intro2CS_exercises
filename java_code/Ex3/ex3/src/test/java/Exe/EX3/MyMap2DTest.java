@@ -92,14 +92,14 @@ public class MyMap2DTest {
         return result;                                  // return the decoded result
     }
     @BeforeEach
-    public void setUp() { // this functions set ups the tests by resetting the map
+    public void setUp() {    // this functions set ups the tests by resetting the map
         map = decodeMap(originalEncodedMap.clone());  // decode the encoded original map to reset to it
     }
 
     @Test
-    @Order(1) // all other tests depend on the functionalities tested here, so we check them first
+    @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
     public void testEncodeDecode() { // this tests the encoding and decoding process
-        assertArrayEquals(originalEncodedMap, encodeMap(map)); // make sure encoding the decoded map gives the original decoded map
+        assertArrayEquals(originalEncodedMap, encodeMap(map)); // make sure encoding the decoded map gives the original map
     }
     @Test
     public void testDrawSegment() {

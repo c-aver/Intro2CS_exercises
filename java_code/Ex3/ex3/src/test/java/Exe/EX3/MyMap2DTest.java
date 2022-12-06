@@ -36,9 +36,9 @@ public class MyMap2DTest {
     };
     public Map2D map;
 
-    static private char encodePixel(int pix) {
+    static private char encodePixel(int pix) {   // this function encoded an int representing a color as a character
         if(pix == WHITE)     // this is essentially a mapping of colors (or rather their numeric RGB representation) to a character
-			return 'W';      // I would do this with a switch case
+			return 'W';      // I would do this with a switch case but the color constants are not computed in compile-time
 		if(pix == BLACK)
 			return 'B';
 		if(pix == BLUE)
@@ -49,48 +49,47 @@ public class MyMap2DTest {
 			return 'Y';
 		if(pix == GREEN)
 			return 'G';
-        assert false : "Illegal color in map";
-        return '\0';
+        assert false : "Illegal color in map";   // if we reached here and didn't return before the map had a color which is not allowed
+        return '\0';   // this is only required so Java doesn't think the function has a branch that does not return a result
     }
-    static private int decodePixel(char pix) {
-        if(pix == 'W')
-			return WHITE;
-		if(pix == 'B')
-			return BLACK;
-		if(pix == 'L')
-			return BLUE;
-		if(pix == 'R')
-			return RED;
-		if(pix == 'Y')
-			return YELLOW;
-		if(pix == 'G')
-			return GREEN;
-        assert false : "Illegal color encoding";
-        return 0;
+    static private int decodePixel(char pix) {   // this is the inverse of encodePixel
+        switch (pix) {            // we switch on the pixel character
+            case 'W':             // in each case (for a legal character encoding)
+		    	return WHITE;     // we return that number constant
+		    case 'B':
+		    	return BLACK;
+		    case 'L':
+		    	return BLUE;
+		    case 'R':
+		    	return RED;
+		    case 'Y':
+		    	return YELLOW;
+		    case 'G':
+		    	return GREEN;
+            default:              // the default means illegal character
+                assert false : "Illegal color encoding";
+                return 0;   // this is only required so Java doesn't think the function has a branch that does not return a result
+        }
     }
-    static private String[] encodeMap(Map2D map) {
-        int w = map.getWidth(), h = map.getHeight();
-        String[] result = new String[w];
-        Arrays.fill(result, "");
-        for (int x = 0; x < w; ++x)
+    static private String[] encodeMap(Map2D map) {      // this functions encodes a map into an array of strings, each representing a row, for easier comparison using JUnit methods
+        int w = map.getWidth(), h = map.getHeight();    // we get the map dimensions
+        String[] result = new String[w];                // initialize the result string array
+        Arrays.fill(result, "");                        // we fill the array with empty strings so that we can then concatenate on them (they are initialized null)
+        for (int x = 0; x < w; ++x)                     // iterate on the columns
+            for (int y = 0; y < h; ++y)                 // iterate on the rows
+                result[y] += encodePixel(map.getPixel(x, y));  // add the encoding of the current pixel to the correct row array
+        return result;                                  // return the encoded result
+    }
+    static private Map2D decodeMap(String[] rows) {     // this function is the inverse of encodeMap, for easier initialization of maps
+        int w = rows.length, h = rows[0].length();      // get the size of the array and the length of the first string (we are kind of treating it as a two-dimensional array of chars)
+        for (String row : rows)                         // iterate on the strings
+            assert row.length() == h : "Cannot decode strings of different lengths into a map"; // make sure it is the same length as the first string, a jagged array is not a legal map encoding
+        assert w == h : "Cannot decode non-square map"; // make sure the encoded map is square, otherwise it is not a legal map
+        Map2D result = new MyMap2D(w, h);               // initialize a result map
+        for (int x = 0; x < w; ++x)                     // iterate on the pixels
             for (int y = 0; y < h; ++y)
-            {
-                result[y] += encodePixel(map.getPixel(x, y));
-            }
-        return result;
-    }
-    static private Map2D decodeMap(String[] cols) {
-        int w = cols.length, h = cols[0].length();
-        assert w == h : "Cannot decode non-square map";
-        for (String col : cols)
-            assert col.length() == h : "Cannot decode strings of different lengths into a map";
-        Map2D result = new MyMap2D(w, h);
-        for (int x = 0; x < w; ++x)
-            for (int y = 0; y < h; ++y)
-            {
-                result.setPixel(x, y, decodePixel(cols[y].charAt(x)));;
-            }
-        return result;
+                result.setPixel(x, y, decodePixel(rows[y].charAt(x)));  // set the current pixel as the x char of the y string (y string is the row, x char of it is the correct column)
+        return result;                                  // return the decoded result
     }
     @BeforeEach
     public void setUp() { // this functions set ups the tests by resetting the map

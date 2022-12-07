@@ -262,22 +262,25 @@ public class MyMap2DTest {
             MyMap2D map = randMap(size);  // set up a random map
             map.fill(WHITE);              // fill the map with white
             Point2D center = randPoint(size);  // set up a random point as the center
-            double radius = rnd.nextDouble() * size + 1;   // get a random radius up to the size of the map
-            map.drawCircle(center, radius, YELLOW);         // draw the circle
-            map.fill(center, BLACK);                      // we fill the circle to make sure it is all connected
+            double radius = rnd.nextDouble() * size;   // get a random radius up to the size of the map
+            map.drawCircle(center, radius, YELLOW);        // draw the circle
+            map.fill(center, BLACK);                       // we fill the circle to make sure it is all connected
             long minX = (long) Math.floor(center.x() - radius),
                  minY = (long)  Math.ceil(center.y() - radius),
                  maxX = (long) Math.floor(center.x() + radius),
                  maxY = (long)  Math.ceil(center.y() + radius);  // these are the limits of where the rectangle should be is allowed to be
             for (int x = 0; x < size; ++x)               // iterate on the pixels to check no wrong pixels
                 for (int y = 0; y < size; ++y) {
-                    if ((map.getPixel(x, y) == BLACK)) {         // if the pixel is black and the radius is greater than
+                    int color = map.getPixel(x, y);
+                    if ((color == BLACK) && radius >= 1) {         // if the pixel is black and the radius is greater than 1 (otherwise could be a circle with no pixels)
                         assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawCircle colored point outside of bounded array";  // make sure we are within bound
                         assert center.distance(new Point2D(x, y)) < radius : "drawCircle colored point too far away from center"; // make sure the point is actually within the circle
-                    } else if (map.getPixel(x, y) == WHITE) {  // if it is white
+                    } else if (color == WHITE) {     // if it is white
                         assert center.distance(new Point2D(x, y)) > radius : "drawCircle didn't color point inside circle"; // make sure the point is actually outside the circle
-                    } else {
-                        assert false : "Found disconnected point in circle";  // if we found a point in a different color (can only be yellow), it means it was part of the circle but not orthogonally connected to the center
+                    } else if (color == YELLOW) {    // if we found yellow point, it means it was part of the circle (so drawn in yellow) but not orthogonally connected to the center (so wasn't filled in black)
+                        assert false : "Found disconnected point in circle";  
+                    } else {    // any other color
+                        assert false : "Unreachable"; // is impossible
                     }
                 }
         }

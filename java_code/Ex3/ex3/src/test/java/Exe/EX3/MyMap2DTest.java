@@ -33,6 +33,7 @@ public class MyMap2DTest {
     private static final int numberOfTests = 1000;   // a value to determine the number of random tests to perform in some functions
     private static final int timeoutFactor = 1;      // test time can depend on the machine, if they all timeout this number can be changed to allow more time on slower machines
     // default value was determined on my machine
+    // also add a factor to some of the slower test right in them
     // TODO; benchmark the machine and automatically set timeoutFactor?
     public final String[] originalEncodedMap = { 
         "WWWWWWWWLL",
@@ -304,37 +305,28 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
-    public void testFill() {   // TODO: make sure all the points were originally the same color, make sure the return value is the number of colored points, make sure there are paths to all colored points
+    @Timeout(value = timeoutFactor * numberOfTests * 4, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    public void testFill() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
             int size = rnd.nextInt(50) + 10;               // get a decent random size for the map
-            MyMap2D map = randMap(size, size, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.7);  // set up a random map
+            MyMap2D map = randMap(size, size, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.4);  // set up a random map without black and quite a bit of white (so we have something to fill)
             Point2D center = randPoint(size);  // set up a random point as the center
             int centerColor = map.getPixel(center);
             MyMap2D original = new MyMap2D(map);
-            long start = System.nanoTime();
             int returnValue = map.fill(center, BLACK);
-            long end = System.nanoTime();
             int colored = 0;
-            start = System.nanoTime();
             for (int x = 0; x < map.getWidth(); ++x)
                 for (int y = 0; y < map.getHeight(); ++y) {
                     int color = map.getPixel(x, y);
-                    if (original.shortestPathDist(center, new Point2D(x, y)) != -1) {  // TODO: switch order
-                        assertEquals(BLACK, color, "Pixel with path was not colored");
+                    if (color == BLACK) {
+                        assertNotEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");
                         assertEquals(centerColor, original.getPixel(x, y), "Colored point not in the original center color");
                         colored += 1;
                     } else {
-                        if (color == BLACK) {
-                            StdDraw_Ex3.setScale(-0.5, map.getHeight() - 0.5);
-		                    StdDraw_Ex3.enableDoubleBuffering();
-		                    Ex3.drawArray(map);
-                            System.err.println();
-                        }
-                        assertNotEquals(BLACK, color, "Pixel with no path got colored");
+                        assertEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");
                     }
                 }
-            end = System.nanoTime();
             assertEquals(colored, returnValue, "Return value was not number of colored points");
         }
 

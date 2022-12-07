@@ -26,11 +26,11 @@ public class Ex3 {
 	public static void main(String[] args) {
 		if (args.length > 0 && args[0].equals("Normal mode")) exercise = false;  // if we got the correct argument change to normal mode
 		int dim = 10;                                        // the default side length of the screen map
-		init(dim);                                           // initialize the program with the set side length
+		init(dim, dim);                                           // initialize the program with the set side length
 	}
-	private static void init(int x) {
+	private static void init(int w, int h) {
 		StdDraw_Ex3.clear();                                 // clear the buffer in preparation for the drawing
-		_map = new MyMap2D(x);                               // initialize a map with the new side length
+		_map = new MyMap2D(w, h);                            // initialize a map with the new side length
 		StdDraw_Ex3.setScale(-0.5, _map.getHeight() - 0.5);  // set the scale of the GUI, with a little of padding around the map edges
 		StdDraw_Ex3.enableDoubleBuffering();                 // enable double buffering to prevent map from being shown point by point
 		_map.fill(BACKGROUND);                               // initialize the map with all white
@@ -75,11 +75,11 @@ public class Ex3 {
 			case "Yellow":	_color = Color.YELLOW; return;
 			case "Green":	_color = Color.GREEN;  return;
 			case "20x20":                  // map option 20x20   
-				init(20);                  // reinitialize the map with side length 20
+				init(20, 20);                  // reinitialize the map with side length 20
 				break;                     // we have to redraw the new map, same thing for the next couple options
-			case "40x40":   init(40);  break;
-			case "80x80":   init(80);  break;
-			case "160x160":	init(160); break;
+			case "40x40":   init(40, 40);  break;
+			case "80x80":   init(80, 80);  break;
+			case "160x160":	init(160, 160); break;
 			default:                       // this is any mode which is not clear, brush color, or map size
 				_mode = p;                 // these are the brush modes, and they are represented in _mode
 				return;                    // in these cases no need to redraw the map

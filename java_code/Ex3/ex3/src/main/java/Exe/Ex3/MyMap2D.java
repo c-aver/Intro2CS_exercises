@@ -84,8 +84,8 @@ public class MyMap2D implements Map2D {
 	 * @return true iff the point is within the boundries of the map
 	 */
 	private boolean inBounds(int x, int y) {
-		return (x >= 0 && x < getWidth())         // x coord is within map
-		    && (y >= 0 && y < getWidth());        // AND y coord is within map
+		return (x >= 0 && x < getWidth())          // x coord is within map
+		    && (y >= 0 && y < getHeight());        // AND y coord is within map
 	}
 	/**
 	 * This function determines whether a given point is within the boundries of the map

@@ -98,13 +98,14 @@ public class MyMap2D implements Map2D {
 
 	@Override
 	public void drawSegment(Point2D p1, Point2D p2, int v) {     // TODO: can currently create holes near the end
+		setPixel(p1, v);                                         // we will start by coloring p1
 		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();       // find the delta in the axes
 		double maxD = Math.max(Math.abs(dx), Math.abs(dy));      // the largest delta will normalize our step
+		if (maxD == 0) return;                                   // if the two points are literally the same (can't happen with random doubles, but can happen with mouse clicks) we colored it already so return
 		double xStep = dx / maxD, yStep = dy / maxD;             // calulate the required step distances by some expression I made up that seems to work fine
 		Point2D step = new Point2D(xStep, yStep);                // create a step vector
 		double stepDist = step.distance();                       // calculate the distance of the step vector, half of this is the closest we will ever get to the target
 		Point2D cursor = new Point2D(p1);                        // start the cursor on p1
-		setPixel(p1, v);          // this is here in case p1 and p2 are already too close
 		while (!cursor.close2equals(p2, stepDist / 2)) {         // run the cursor through the segment as long as we are not within p2
 			setPixel(cursor, v);                                 // set the pixel under the cursor to the required color
 			cursor = cursor.add(step);                           // step the cursor by the step vector

@@ -279,7 +279,7 @@ public class MyMap2DTest {
                         assert center.distance(new Point2D(x, y)) > radius : "drawCircle didn't color point inside circle"; // make sure the point is actually outside the circle
                     } else if (color == YELLOW) {    // if we found yellow point, it means it was part of the circle (so drawn in yellow) but not orthogonally connected to the center (so wasn't filled in black)
                         assert false : "Found disconnected point in circle";  
-                    } else {    // any other color
+                    } else if (color != BLACK) {    // any other color (we need to check not black again because it might have skipped that if due to small radius)
                         assert false : "Unreachable"; // is impossible
                     }
                 }

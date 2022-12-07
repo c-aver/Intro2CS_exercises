@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Timeout.ThreadMode;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class MyMap2DTest {
@@ -304,6 +305,39 @@ public class MyMap2DTest {
     }
     @Test
     public void testFill() {   // TODO: make sure all the points were originally the same color, make sure the return value is the number of colored points, make sure there are paths to all colored points
+        Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
+        for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
+            int size = rnd.nextInt(50) + 10;               // get a decent random size for the map
+            MyMap2D map = randMap(size, size, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.7);  // set up a random map
+            Point2D center = randPoint(size);  // set up a random point as the center
+            int centerColor = map.getPixel(center);
+            MyMap2D original = new MyMap2D(map);
+            long start = System.nanoTime();
+            int returnValue = map.fill(center, BLACK);
+            long end = System.nanoTime();
+            int colored = 0;
+            start = System.nanoTime();
+            for (int x = 0; x < map.getWidth(); ++x)
+                for (int y = 0; y < map.getHeight(); ++y) {
+                    int color = map.getPixel(x, y);
+                    if (original.shortestPathDist(center, new Point2D(x, y)) != -1) {  // TODO: switch order
+                        assertEquals(BLACK, color, "Pixel with path was not colored");
+                        assertEquals(centerColor, original.getPixel(x, y), "Colored point not in the original center color");
+                        colored += 1;
+                    } else {
+                        if (color == BLACK) {
+                            StdDraw_Ex3.setScale(-0.5, map.getHeight() - 0.5);
+		                    StdDraw_Ex3.enableDoubleBuffering();
+		                    Ex3.drawArray(map);
+                            System.err.println();
+                        }
+                        assertNotEquals(BLACK, color, "Pixel with no path got colored");
+                    }
+                }
+            end = System.nanoTime();
+            assertEquals(colored, returnValue, "Return value was not number of colored points");
+        }
+
         Point2D p = new Point2D(0, 0);
         premadeMap.fill(p, BLACK);
         String[] expected = {

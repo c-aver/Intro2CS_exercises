@@ -32,11 +32,13 @@ public class MyMap2DTest {
     public static final int YELLOW = Color.YELLOW.getRGB();
     public static final int GREEN  = Color.GREEN.getRGB();
 
-    private static final int numberOfTests = 1000;   // a value to determine the number of random tests to perform in some functions, low number is more likely to miss fails but is faster
-    private static final int timeoutFactor = 1000;   // test time can depend on the machine, if they all timeout this number should be changed to allow more time on slower machines
-    // 1000 is a good value for my machine
+    private static final int numberOfTests = 10000;   // a value to determine the number of random tests to perform in some functions, low number is more likely to miss fails but is faster
+    // if you set this below about 200 you should increase timeoutFactor because overheads and linear times will make you timeout
+    private static final int timeoutFactor = 1000;  // test time can depend on the machine, if they all timeout this number should be changed to allow more time on slower machines
+    // running this file as a main class runs a benchmark and prints the result, this result can be used as a timeoutFactor (I can't guarantee that this timeoutFactor will not timeout, but it's a decent approximation)
+    // 1000 is set as default since it works well for my machine
     // some of the slower tests also have a constant factor on them
-    // TODO; benchmark the machine and automatically set timeoutFactor?
+
     public final String[] originalEncodedMap = { 
         "WWWWWWWWLL",
         "WWWWBWWWRW",
@@ -144,6 +146,20 @@ public class MyMap2DTest {
         return result;                                  // return the decoded result
     }
 
+    public static void main(String[] args) {
+        System.out.println("Benchmark result: " + benchmark());
+    }
+
+    public static long benchmark() {   // this function benchmarks your machine to determine an appropriate timeoutFactor
+        Random rnd = new Random(System.nanoTime());                        // initialize a randomizer
+        for (int i = 0; i < 1000; ++i) rnd.nextDouble();                   // run it a couple of times to warm up the Java compiler
+        long start = System.nanoTime();                                    // start the stopwatch
+        for (int i = 0; i < 5000000; ++i) rnd.nextDouble();                 // run the randomizer 5000000 times for each test
+        long end = System.nanoTime();                                      // stop the stopwatch
+        long duration = end - start;                                       // calculate the duration
+        return (duration / 100000);                                        // divide the duration by 10000 to determine timeoutFactor
+    }
+
     @BeforeEach
     public void setUp() {    // this functions set ups the tests by resetting the map
         premadeMap = decodeMap(originalEncodedMap.clone());  // decode the encoded original map to reset to it
@@ -249,7 +265,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));   // make sure we got what we expected
     }
     @Test
-    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests * 4, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawCircle() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
@@ -391,7 +407,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
-    public void testNextGenGol() {
+    public void testNextGenGol() { // TODO: random testing?
         premadeMap.nextGenGol();                      // evolve the default map one generation
         String[] expected = new String[] {            // the next generation from the default map
             "WWWWWWWWBB",

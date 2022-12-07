@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Timeout.ThreadMode;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class MyMap2DTest {
@@ -31,7 +30,9 @@ public class MyMap2DTest {
     public static final int GREEN  = Color.GREEN.getRGB();
 
     private static final int numberOfTests = 1000;   // a value to determine the number of random tests to perform in some functions
-
+    private static final int timeoutFactor = 1;      // test time can depend on the machine, if they all timeout this number can be changed to allow more time on slower machines
+    // default value was determined on my machine
+    // TODO; benchmark the machine and automatically set timeoutFactor?
     public final String[] originalEncodedMap = { 
         "WWWWWWWWLL",
         "WWWWBWWWRW",
@@ -155,7 +156,7 @@ public class MyMap2DTest {
 
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
-    @Timeout(value = numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
+    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
     public void testEncodeDecode() { // this tests the encoding and decoding process // TODO: test on random maps
         assertArrayEquals(originalEncodedMap, encodeMap(premadeMap));   // make sure encoding the decoded map gives the original map
 
@@ -176,7 +177,7 @@ public class MyMap2DTest {
         return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));
     }
     @Test
-    @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawSegment() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
@@ -213,7 +214,7 @@ public class MyMap2DTest {
         }
     }
     @Test
-    @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawRect() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
@@ -252,27 +253,31 @@ public class MyMap2DTest {
         };
         assertArrayEquals(expected, encodeMap(premadeMap));   // make sure we got what we expected
     }
-    /*@Test
+    @Test
+    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawCircle() {   // TODO: make sure the circle has no holes, make sure no (out of bounds) errors
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
             int size = rnd.nextInt(200) + 20;               // get a decent random size for the map
             MyMap2D map = randMap(size);  // set up a random map
             map.fill(WHITE);              // fill the map with white
-            Point2D p1 = randPoint(size);  // set up a random point as the center
-            double radius = rnd.nextDouble() * size;   // get a random radius up to the size of the map
-            map.drawCircle(p1, radius, BLACK);         // draw the circle
-            long minX = Math.round(p1.x(), p2.x())),
-                 minY = Math.round(Math.min(p1.y(), p2.y())),
-                 maxX = Math.round(Math.max(p1.x(), p2.x())),
-                 maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where the rectangle should be is allowed to be
+            Point2D center = randPoint(size);  // set up a random point as the center
+            double radius = rnd.nextDouble() * size + 1;   // get a random radius up to the size of the map
+            map.drawCircle(center, radius, YELLOW);         // draw the circle
+            map.fill(center, BLACK);                      // we fill the circle to make sure it is all connected
+            long minX = (long) Math.floor(center.x() - radius),
+                 minY = (long)  Math.ceil(center.y() - radius),
+                 maxX = (long) Math.floor(center.x() + radius),
+                 maxY = (long)  Math.ceil(center.y() + radius);  // these are the limits of where the rectangle should be is allowed to be
             for (int x = 0; x < size; ++x)               // iterate on the pixels to check no wrong pixels
                 for (int y = 0; y < size; ++y) {
-                    if (map.getPixel(x, y) == BLACK) {   // if the pixel is black
+                    if ((map.getPixel(x, y) == BLACK)) {         // if the pixel is black and the radius is greater than
                         assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawCircle colored point outside of bounded array";  // make sure we are within bound
-                        assert p1.distance()
-                    } else {                             // if it is not
-                        assert ((x < minX) || (x > maxX) || (y < minY) || (y > maxY)) : "drawRect left hole inside boundaries";   // make sure we are outside the bounds
+                        assert center.distance(new Point2D(x, y)) < radius : "drawCircle colored point too far away from center"; // make sure the point is actually within the circle
+                    } else if (map.getPixel(x, y) == WHITE) {  // if it is white
+                        assert center.distance(new Point2D(x, y)) > radius : "drawCircle didn't color point inside circle"; // make sure the point is actually outside the circle
+                    } else {
+                        assert false : "Found disconnected point in circle";  // if we found a point in a different color (can only be yellow), it means it was part of the circle but not orthogonally connected to the center
                     }
                 }
         }
@@ -293,7 +298,7 @@ public class MyMap2DTest {
             "WWWYYYYWWW",
         };
         assertArrayEquals(expected, encodeMap(premadeMap));
-    }*/
+    }
     @Test
     public void testFill() {   // TODO: make sure all the points were originally the same color, make sure the return value is the number of colored points, make sure there are paths to all colored points
         Point2D p = new Point2D(0, 0);

@@ -214,9 +214,9 @@ public class MyMap2DTest {
     }
     @Test
     @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
-    public void testDrawRect() {   // TODO: make sure the rectangle has no holes, make sure no (out of bounds) errors
+    public void testDrawRect() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
-        for (int i = 0; i < numberOfTests; ++i) {
+        for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
             int size = rnd.nextInt(200) + 20;               // get a decent random size for the map
             MyMap2D map = randMap(size);  // set up a random map
             map.fill(WHITE);              // fill the map with white
@@ -236,9 +236,9 @@ public class MyMap2DTest {
                 }
         }
 
-        Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(7, 9);
-        premadeMap.drawRect(p1, p2, BLACK);
-        String[] expected = {
+        Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(7, 9);    // set points for deterministic test
+        premadeMap.drawRect(p1, p2, BLACK);                // drawing the rectangle on the premade map
+        String[] expected = {           // this is what we expect after the drawing
             "WWWWWWWWLL",
             "WWWWBWWWRW",
             "WWWWWWWWWW",
@@ -250,10 +250,33 @@ public class MyMap2DTest {
             "WWLBBBBBWW",
             "WWWBBBBBWW",
         };
-        assertArrayEquals(expected, encodeMap(premadeMap));
+        assertArrayEquals(expected, encodeMap(premadeMap));   // make sure we got what we expected
     }
-    @Test
+    /*@Test
     public void testDrawCircle() {   // TODO: make sure the circle has no holes, make sure no (out of bounds) errors
+        Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
+        for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
+            int size = rnd.nextInt(200) + 20;               // get a decent random size for the map
+            MyMap2D map = randMap(size);  // set up a random map
+            map.fill(WHITE);              // fill the map with white
+            Point2D p1 = randPoint(size);  // set up a random point as the center
+            double radius = rnd.nextDouble() * size;   // get a random radius up to the size of the map
+            map.drawCircle(p1, radius, BLACK);         // draw the circle
+            long minX = Math.round(p1.x(), p2.x())),
+                 minY = Math.round(Math.min(p1.y(), p2.y())),
+                 maxX = Math.round(Math.max(p1.x(), p2.x())),
+                 maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where the rectangle should be is allowed to be
+            for (int x = 0; x < size; ++x)               // iterate on the pixels to check no wrong pixels
+                for (int y = 0; y < size; ++y) {
+                    if (map.getPixel(x, y) == BLACK) {   // if the pixel is black
+                        assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawCircle colored point outside of bounded array";  // make sure we are within bound
+                        assert p1.distance()
+                    } else {                             // if it is not
+                        assert ((x < minX) || (x > maxX) || (y < minY) || (y > maxY)) : "drawRect left hole inside boundaries";   // make sure we are outside the bounds
+                    }
+                }
+        }
+
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(5, 9);
         premadeMap.drawCircle(p1, 4, BLUE);
         premadeMap.drawCircle(p2, 2, YELLOW);
@@ -270,7 +293,7 @@ public class MyMap2DTest {
             "WWWYYYYWWW",
         };
         assertArrayEquals(expected, encodeMap(premadeMap));
-    }
+    }*/
     @Test
     public void testFill() {   // TODO: make sure all the points were originally the same color, make sure the return value is the number of colored points, make sure there are paths to all colored points
         Point2D p = new Point2D(0, 0);

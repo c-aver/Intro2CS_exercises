@@ -143,7 +143,7 @@ public class MyMap2D implements Map2D {
 
 	@Override
 	public int fill(Point2D p, int new_v) {
-		return fill(p.ix(), p.iy(), new_v);                  // send to the equivalent function with the coords as ints
+		return fill(p.ix(), p.iy(), new_v);                     // send to the equivalent function with the coords as ints
 	}
 
 	@Override
@@ -235,7 +235,7 @@ public class MyMap2D implements Map2D {
 		if (!foundPath) return null;                // if we finished processing all points and never found the destination, return null to signal no path found
 		Point2D[] path = new Point2D[dist + 1];     // initialize the array path one longer than the distance (since it is inclusive of origin and destination)
 		Point2D current = p2;                       // the first point in the path is the destination (it is reversed but that's meaningless)
-		for (int i = 0; i < path.length; ++i) {    // iterate on the elements of the path
+		for (int i = 0; i < path.length; ++i) {     // iterate on the elements of the path
 			path[i] = current;                      // set the point in the path to the current point
 			current = parent[current.ix()][current.iy()]; // set the next current point to the current's parent (to step back in the path)
 		}

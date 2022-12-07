@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Timeout.ThreadMode;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class MyMap2DTest {
@@ -286,7 +288,7 @@ public class MyMap2DTest {
                     }
                 }
         }
-
+        // next is a simple deterministic test on the premade map
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(5, 9);
         premadeMap.drawCircle(p1, 4, BLUE);
         premadeMap.drawCircle(p2, 2, YELLOW);
@@ -307,29 +309,29 @@ public class MyMap2DTest {
     @Test
     @Timeout(value = timeoutFactor * numberOfTests * 4, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testFill() {
-        Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
-        for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
-            int size = rnd.nextInt(50) + 10;               // get a decent random size for the map
+        Random rnd = new Random(System.nanoTime());              // create a new random generator and seed it with the time
+        for (int i = 0; i < numberOfTests; ++i) {                // we perform numberOfTests random tests
+            int size = rnd.nextInt(50) + 10;                     // get a decent random size for the map
             MyMap2D map = randMap(size, size, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.4);  // set up a random map without black and quite a bit of white (so we have something to fill)
-            Point2D center = randPoint(size);  // set up a random point as the center
-            int centerColor = map.getPixel(center);
-            MyMap2D original = new MyMap2D(map);
-            int returnValue = map.fill(center, BLACK);
-            int colored = 0;
-            for (int x = 0; x < map.getWidth(); ++x)
+            Point2D center = randPoint(size);                    // set up a random point as the fill origin
+            int centerColor = map.getPixel(center);              // remeber its color, this is the only color we are allwed to fill
+            MyMap2D original = new MyMap2D(map);                 // save the original map to cross-reference later
+            int returnValue = map.fill(center, BLACK);           // fill the map on the center and save return value
+            int colored = 0;                                     // initialize the number of colored points as 0
+            for (int x = 0; x < map.getWidth(); ++x)             // iterate on the pixels
                 for (int y = 0; y < map.getHeight(); ++y) {
-                    int color = map.getPixel(x, y);
-                    if (color == BLACK) {
-                        assertNotEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");
-                        assertEquals(centerColor, original.getPixel(x, y), "Colored point not in the original center color");
-                        colored += 1;
-                    } else {
-                        assertEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");
+                    int color = map.getPixel(x, y);              // check the pixel's color
+                    if (color == BLACK) {                        // if it is black (was filled) we need to check some stuff
+                        assertNotEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");  // make sure there was a path from the center to here in the original map
+                        assertEquals(centerColor, original.getPixel(x, y), "Colored point not in the original center color");     // make sure it was originally the same color as the center
+                        colored += 1;                            // incerement the number of colored points
+                    } else {                                     // otherwise (wasn't filled)
+                        assertEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");     // make sure there wasn't a path to this point
                     }
                 }
-            assertEquals(colored, returnValue, "Return value was not number of colored points");
+            assertEquals(colored, returnValue, "Return value was not number of colored points");   // make sure the return value is the actual number of colored points
         }
-
+        // next is a simple deterministic test on the premade map
         Point2D p = new Point2D(0, 0);
         premadeMap.fill(p, BLACK);
         String[] expected = {
@@ -347,9 +349,40 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
-    public void testShortestPath() {    // TODO: make sure the length is the same (+1) as shortestPathDist, make sure all the points are the same color as the origin and destination, make sure the path is within the map
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    public void testShortestPath() {    // TODO: make sure there is no path to points outside
+        Random rnd = new Random(System.nanoTime());              // create a new random generator and seed it with the time
+        for (int i = 0; i < numberOfTests; ++i) {                // we perform numberOfTests random tests
+            int size = rnd.nextInt(50) + 10;                     // get a decent random size for the map
+            MyMap2D map = randMap(size, size, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.9);  // set up a random map without black and quite a bit of white (so we have something to fill)
+            Point2D p1 = randPoint(size), p2 = randPoint(size + 1);  // set up 2 random points for the path (we allow p2 to be outside bounds for a test)
+            Point2D[] path = map.shortestPath(p1, p2);           // find the path
+            int distance = map.shortestPathDist(p1, p2);         // calculate the length
+            if (map.getPixel(p1) != map.getPixel(p2) || !map.inBounds(p2)) {          // if the points are differently colored or p2 was created outside there is no path
+                assertNull(path, "Created path between differently colored points");  // make sure the created path is null
+                assertEquals(-1, distance, "Calculated distance between differently colored points");  // make sure the distance is -1 (defined failure return value)
+                continue;  // we have no other tests to perform on this path (most of them will error out)
+            }
+            if (path == null) {  // if didn't find path (but they are the same color)
+                assertEquals(-1, distance, "Contradiction between shortestPath and shortestPathDist");  // make sure shortestPathDist agrees
+                continue;   // we have no other tests to perform on this path
+            }
+            assertEquals(distance, map.shortestPathDist(p2, p1), "Calculated different distance in the two directions");    // make sure the distance is the same backwards
+            assertEquals(distance, path.length - 1, "Path length was not equal to calculated distance");   // make the returned path's length is equal to the calculated length (-1 for the first point)
+            int originColor = map.getPixel(p1);                  // get the color of the origin pixel
+            for (int j = 0; j < path.length; ++j) {              // iterate on the path
+                Point2D p = path[j];                 // get the j-th point on the path
+                assertEquals(j, map.shortestPathDist(p, p2), "Path created in wrong order");   // make sure this point is j away from the destination (there is no definition for the direction of the path, in my implementation it is from p2 to p1)
+                assertEquals(originColor, map.getPixel(p), "Created path through different color pixel");  // make sure each point is the same color as the origin
+                assertTrue(map.inBounds(p), "Created path outside of map");     // make sure the point is within the map
+            }
+        }
+
+        // next is a simple deterministic test
         Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
         Point2D[] path = premadeMap.shortestPath(p1, p2);
+        int pathDistance = premadeMap.shortestPathDist(p1, p2);
+        assertEquals(16, pathDistance);
         for (Point2D p : path)
             premadeMap.setPixel(p, GREEN);
         String[] expected = {
@@ -365,12 +398,6 @@ public class MyMap2DTest {
             "WGGYGWBWWW",
         };
         assertArrayEquals(expected, encodeMap(premadeMap));
-    }
-    @Test
-    public void testShortestPathDist() { // TODO: idea: make sure distance is the same from both directions, make sure there is no path to points outside, make sure there is no path between differently colored points
-        Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
-        int pathDist = premadeMap.shortestPathDist(p1, p2);
-        assertEquals(16, pathDist);
     }
     @Test
     public void testNextGenGol() {

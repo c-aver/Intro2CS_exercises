@@ -32,10 +32,10 @@ public class MyMap2DTest {
     public static final int YELLOW = Color.YELLOW.getRGB();
     public static final int GREEN  = Color.GREEN.getRGB();
 
-    private static final int numberOfTests = 1000;   // a value to determine the number of random tests to perform in some functions
-    private static final int timeoutFactor = 1;      // test time can depend on the machine, if they all timeout this number can be changed to allow more time on slower machines
-    // default value was determined on my machine
-    // also add a factor to some of the slower test right in them
+    private static final int numberOfTests = 1000;   // a value to determine the number of random tests to perform in some functions, low number is more likely to miss fails but is faster
+    private static final int timeoutFactor = 1000;   // test time can depend on the machine, if they all timeout this number should be changed to allow more time on slower machines
+    // 1000 is a good value for my machine
+    // some of the slower tests also have a constant factor on them
     // TODO; benchmark the machine and automatically set timeoutFactor?
     public final String[] originalEncodedMap = { 
         "WWWWWWWWLL",
@@ -83,15 +83,6 @@ public class MyMap2DTest {
                 else result.setPixel(x, y, acceptableColors[rnd.nextInt(acceptableColors.length)]);  // otherwise, we set the pixel to a random color from acceptableColors
             }
         return result;   // return the result
-    }
-    private static MyMap2D randMap(int width, int height, int[] acceptableColors) {
-        return randMap(width, height, acceptableColors, 0);
-    }
-    private static MyMap2D randMap(int width, int height, double whitePercentage) {
-        return randMap(width, height, allColors, whitePercentage);
-    }
-    private static MyMap2D randMap(int width, int height) {
-        return randMap(width, height, allColors, 0);
     }
     private static MyMap2D randMap(int sideLength) {
         return randMap(sideLength, sideLength, allColors, 0);
@@ -160,7 +151,7 @@ public class MyMap2DTest {
 
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
-    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
+    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
     public void testEncodeDecode() { // this tests the encoding and decoding process
         assertArrayEquals(originalEncodedMap, encodeMap(premadeMap));   // make sure encoding the decoded map gives the original map
 
@@ -181,7 +172,7 @@ public class MyMap2DTest {
         return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));   // if a distance is less than 2 the triangle is too close to a line to try and fill
     }
     @Test
-    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawSegment() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
@@ -218,7 +209,7 @@ public class MyMap2DTest {
         }
     }
     @Test
-    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawRect() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
@@ -258,7 +249,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));   // make sure we got what we expected
     }
     @Test
-    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawCircle() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
@@ -307,7 +298,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
-    @Timeout(value = timeoutFactor * numberOfTests * 4, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests * 4, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testFill() {
         Random rnd = new Random(System.nanoTime());              // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {                // we perform numberOfTests random tests
@@ -349,7 +340,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
-    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testShortestPath() {
         Random rnd = new Random(System.nanoTime());              // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {                // we perform numberOfTests random tests

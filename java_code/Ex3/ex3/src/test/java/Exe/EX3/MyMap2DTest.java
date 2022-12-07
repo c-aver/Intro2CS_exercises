@@ -44,7 +44,7 @@ public class MyMap2DTest {
         "WWLLLWWWWW",
         "WWWYGWBWWW",
     };
-    private Map2D map;
+    private Map2D premadeMap;
 
     private static Point2D randPoint(double width, double height, Random rnd) {
         // double minX = -0.5, maxX = width - 0.5, minY = -0.5, maxY = height - 0.5;  // the bounds, taken from the bounds created by the scale in the GUI, not actually used in code so commented out
@@ -150,14 +150,14 @@ public class MyMap2DTest {
 
     @BeforeEach
     public void setUp() {    // this functions set ups the tests by resetting the map
-        map = decodeMap(originalEncodedMap.clone());  // decode the encoded original map to reset to it
+        premadeMap = decodeMap(originalEncodedMap.clone());  // decode the encoded original map to reset to it
     }
 
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
     @Timeout(value = numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testEncodeDecode() { // this tests the encoding and decoding process // TODO: test on random maps
-        assertArrayEquals(originalEncodedMap, encodeMap(map));   // make sure encoding the decoded map gives the original map
+        assertArrayEquals(originalEncodedMap, encodeMap(premadeMap));   // make sure encoding the decoded map gives the original map
 
         Random rnd = new Random(System.nanoTime());
         for (int i = 0; i < numberOfTests; ++i) {
@@ -214,8 +214,12 @@ public class MyMap2DTest {
     }
     @Test
     public void testDrawRect() {   // TODO: make sure the rectangle has no holes, make sure no (out of bounds) errors
+        for (int i = 0; i < numberOfTests; ++i) {
+
+        }
+
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(7, 9);
-        map.drawRect(p1, p2, BLACK);
+        premadeMap.drawRect(p1, p2, BLACK);
         String[] expected = {
             "WWWWWWWWLL",
             "WWWWBWWWRW",
@@ -228,13 +232,13 @@ public class MyMap2DTest {
             "WWLBBBBBWW",
             "WWWBBBBBWW",
         };
-        assertArrayEquals(expected, encodeMap(map));
+        assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
     public void testDrawCircle() {   // TODO: make sure the circle has no holes, make sure no (out of bounds) errors
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(5, 9);
-        map.drawCircle(p1, 4, BLUE);
-        map.drawCircle(p2, 2, YELLOW);
+        premadeMap.drawCircle(p1, 4, BLUE);
+        premadeMap.drawCircle(p2, 2, YELLOW);
         String[] expected = {
             "WWWWWWWWLL",
             "WWWLLWWWRW",
@@ -247,12 +251,12 @@ public class MyMap2DTest {
             "WLLLYYYWWW",
             "WWWYYYYWWW",
         };
-        assertArrayEquals(expected, encodeMap(map));
+        assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
     public void testFill() {   // TODO: make sure all the points were originally the same color, make sure the return value is the number of colored points, make sure there are paths to all colored points
         Point2D p = new Point2D(0, 0);
-        map.fill(p, BLACK);
+        premadeMap.fill(p, BLACK);
         String[] expected = {
             "BBBBBBBBLL",
             "BBBBBBBBRB",
@@ -265,14 +269,14 @@ public class MyMap2DTest {
             "BBLLLBBBBB",
             "BBBYGBBBBB",
         };
-        assertArrayEquals(expected, encodeMap(map));
+        assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
     public void testShortestPath() {    // TODO: make sure the length is the same (+1) as shortestPathDist, make sure all the points are the same color as the origin and destination, make sure the path is within the map
         Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
-        Point2D[] path = map.shortestPath(p1, p2);
+        Point2D[] path = premadeMap.shortestPath(p1, p2);
         for (Point2D p : path)
-            map.setPixel(p, GREEN);
+            premadeMap.setPixel(p, GREEN);
         String[] expected = {
             "WWWWWWWWLL",
             "WWWWBWWWRW",
@@ -285,17 +289,17 @@ public class MyMap2DTest {
             "GGLLLWWWWW",
             "WGGYGWBWWW",
         };
-        assertArrayEquals(expected, encodeMap(map));
+        assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
     public void testShortestPathDist() { // TODO: idea: make sure distance is the same from both directions, make sure there is no path to points outside, make sure there is no path between differently colored points
         Point2D p1 = new Point2D(2, 9), p2 = new Point2D(6, 7);
-        int pathDist = map.shortestPathDist(p1, p2);
+        int pathDist = premadeMap.shortestPathDist(p1, p2);
         assertEquals(16, pathDist);
     }
     @Test
     public void testNextGenGol() {
-        map.nextGenGol();                             // evolve the default map one generation
+        premadeMap.nextGenGol();                             // evolve the default map one generation
         String[] expected = new String[] {            // the next generation from the default map
             "WWWWWWWWBB",
             "WWWWWWWWBB",
@@ -308,8 +312,8 @@ public class MyMap2DTest {
             "WBWWBBWWWW",
             "WWBWBBWWWW",
         };
-        assertArrayEquals(expected, encodeMap(map));  // make sure the evolved array is as expected
-        map.nextGenGol();                             // evolve another generation
+        assertArrayEquals(expected, encodeMap(premadeMap));  // make sure the evolved array is as expected
+        premadeMap.nextGenGol();                             // evolve another generation
         expected = new String[] {                     // the next expected generation
             "WWWWWWWWBB",
             "WWWWWWWBWW",
@@ -322,7 +326,7 @@ public class MyMap2DTest {
             "WBBBBBWWWW",
             "WWWBBBWWWW",
         };
-        assertArrayEquals(expected, encodeMap(map)); // make sure it is correct again
+        assertArrayEquals(expected, encodeMap(premadeMap)); // make sure it is correct again
 
         String[] stable = new String[] {       // created using patterns from https://conwaylife.com/wiki/Still_life
             "BBWWBBWBBW",

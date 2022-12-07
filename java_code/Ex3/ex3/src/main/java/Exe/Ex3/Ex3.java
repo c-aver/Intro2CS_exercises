@@ -128,6 +128,7 @@ public class Ex3 {
 		else if(_mode.equals("_ShortestPath")) {  // if we just click the second point for the path
 			Point2D p1 = new Point2D(_last.ix(), _last.iy()), p2 = new Point2D(p.ix(), p.iy());  // we round the two points to facilitate shortestPath (it acts weird with non-natural)
 			Point2D[] path = _map.shortestPath(p1, p2);  // calculate the path between the points
+			System.out.println(_map.shortestPathDist(p1, p2));
 			if (path != null)                            // if we actually found a path
 				for (Point2D point : path)               // iterate on the points of the path
 					_map.setPixel(point, col);           // and color them in the current brush color
@@ -136,18 +137,18 @@ public class Ex3 {
 					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
 					StdDraw_Ex3.show();                      // show the red screen
 					try {                                    // we will try to sleep
-						Thread.sleep(70);                   //                       here
+						Thread.sleep(70);                    //                       here
 					} catch (InterruptedException e) {       // if we caught an InterruptedException
 						Thread.currentThread().interrupt();  // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
 					}
-					drawArray(_map);
+					drawArray(_map);                         // redraw the array over the red screen
 				 });
 				 flasher.start();                            // we now start the thread with the lambda
 				 _mode = "ShortestPath";                     // reset mode, we do this now because we are about to return
 				 System.out.println("New mode: " + _mode);   // same reasoning
 				 return;                                     // exit the function to bypass the final drawArray which will draw on top of the red screen, it will be drawn later by the flasher
 			}
-			_mode = "ShortestPath";                      // reset mode, unless in exercise mode which means we go into no mode
+			_mode = (exercise ? "None" : "ShortestPath");                      // reset mode, unless in exercise mode which means we go into no mode
 		}
 		System.out.println("New mode: " + _mode);        // for debug puposes (again, the user should not be looking at the console) print the new mode
 		drawArray(_map);                                 // redraw the map after the changes

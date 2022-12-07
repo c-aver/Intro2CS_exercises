@@ -350,7 +350,7 @@ public class MyMap2DTest {
     }
     @Test
     @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
-    public void testShortestPath() {    // TODO: make sure there is no path to points outside
+    public void testShortestPath() {
         Random rnd = new Random(System.nanoTime());              // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {                // we perform numberOfTests random tests
             int size = rnd.nextInt(50) + 10;                     // get a decent random size for the map
@@ -401,7 +401,7 @@ public class MyMap2DTest {
     }
     @Test
     public void testNextGenGol() {
-        premadeMap.nextGenGol();                             // evolve the default map one generation
+        premadeMap.nextGenGol();                      // evolve the default map one generation
         String[] expected = new String[] {            // the next generation from the default map
             "WWWWWWWWBB",
             "WWWWWWWWBB",

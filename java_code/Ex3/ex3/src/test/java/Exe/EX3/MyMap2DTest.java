@@ -157,7 +157,7 @@ public class MyMap2DTest {
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
     @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
-    public void testEncodeDecode() { // this tests the encoding and decoding process // TODO: test on random maps
+    public void testEncodeDecode() { // this tests the encoding and decoding process
         assertArrayEquals(originalEncodedMap, encodeMap(premadeMap));   // make sure encoding the decoded map gives the original map
 
         Random rnd = new Random(System.nanoTime());
@@ -174,7 +174,7 @@ public class MyMap2DTest {
         double d12_3 = (Math.abs(dx21 * dy13 - dx13 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the p3 and the line p1-p2 using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
         double d13_2 = (Math.abs(dx13 * dy21 - dx21 * dy13)) / (Math.sqrt(dx13 * dx13 + dy13 * dy13)); //
         double d32_1 = (Math.abs(dx23 * dy13 - dx13 * dy23)) / (Math.sqrt(dx23 * dx23 + dy23 * dy23));
-        return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));
+        return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));   // if a distance is less than 2 the triangle is too close to a line to try and fill
     }
     @Test
     @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
@@ -255,7 +255,7 @@ public class MyMap2DTest {
     }
     @Test
     @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
-    public void testDrawCircle() {   // TODO: make sure the circle has no holes, make sure no (out of bounds) errors
+    public void testDrawCircle() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
             int size = rnd.nextInt(200) + 20;               // get a decent random size for the map

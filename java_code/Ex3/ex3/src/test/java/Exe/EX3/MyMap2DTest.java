@@ -155,7 +155,7 @@ public class MyMap2DTest {
 
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
-    @Timeout(value = numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
     public void testEncodeDecode() { // this tests the encoding and decoding process // TODO: test on random maps
         assertArrayEquals(originalEncodedMap, encodeMap(premadeMap));   // make sure encoding the decoded map gives the original map
 
@@ -176,24 +176,24 @@ public class MyMap2DTest {
         return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));
     }
     @Test
-    @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
+    @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawSegment() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
             int size = rnd.nextInt(200) + 20;               // get a decent random size for the map
-            MyMap2D segmentMap = randMap(size); // set up a random map
-            segmentMap.fill(WHITE);             // fill the map with white
+            MyMap2D map = randMap(size); // set up a random map
+            map.fill(WHITE);             // fill the map with white
             Point2D p1 = randPoint(size, rnd), p2 = randPoint(size, rnd), p3 = randPoint(size, rnd);  // set up 3 random points to draw a triangle, we pass rnd to them because they might be initialized in the same nanosecond
-            segmentMap.drawSegment(p1, p2, BLACK);  // draw 1 line on the map, we will now test it for incorrect pixels
-            assertEquals(BLACK, segmentMap.getPixel(p1), "p1 was not colored by drawSegment");     // make sure the actual points were colored
-            assertEquals(BLACK, segmentMap.getPixel(p2), "p2 was not colored by drawSegment");
+            map.drawSegment(p1, p2, BLACK);  // draw 1 line on the map, we will now test it for incorrect pixels
+            assertEquals(BLACK, map.getPixel(p1), "p1 was not colored by drawSegment");     // make sure the actual points were colored
+            assertEquals(BLACK, map.getPixel(p2), "p2 was not colored by drawSegment");
             long minX = Math.round(Math.min(p1.x(), p2.x())),
                  minY = Math.round(Math.min(p1.y(), p2.y())),
                  maxX = Math.round(Math.max(p1.x(), p2.x())),
                  maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where our line is allowed to be
             for (int x = 0; x < size; ++x)          // iterate on all the pixels in the map
                 for (int y = 0; y < size; ++y)
-                    if (segmentMap.getPixel(x, y) == BLACK) { // if the pixel is black, it is part of our segment, we need to make sure that's correct
+                    if (map.getPixel(x, y) == BLACK) { // if the pixel is black, it is part of our segment, we need to make sure that's correct
                         double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
                         double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
                         double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
@@ -201,21 +201,39 @@ public class MyMap2DTest {
                         assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawSegment colored point outside of bounded array";
                     }
             if (isTriangleLine(p1, p2, p3)) continue;  // if the triangle is actually a line it is meaningless to try to fill it
-            segmentMap.drawSegment(p1, p3, BLACK); // draw the other 2 sides of the triangle in black
-            segmentMap.drawSegment(p2, p3, BLACK);
+            map.drawSegment(p1, p3, BLACK); // draw the other 2 sides of the triangle in black
+            map.drawSegment(p2, p3, BLACK);
             Point2D midpoint = new Point2D((p1.x() + p2.x() + p3.x()) / 3, (p1.y() + p2.y() + p3.y()) / 3); // find the midpoint, guaranteed to be inside the triangle
-            segmentMap.fill(midpoint, YELLOW);        // fill the inside of the triangle with blue
-            assert (segmentMap.getPixel(0, 0) == WHITE)                 // this asserts that the corners are not all colored
-                  || (segmentMap.getPixel(0, size - 1) == WHITE)        // if they are, the filling escaped the triangle
-                  || (segmentMap.getPixel(size - 1, 0) == WHITE)        // (they can't all be black because we drew a triangle)
-                  || (segmentMap.getPixel(size - 1, size - 1) == WHITE) // some might be black, some might even be yellow (if the filling was ON the triangle)
+            map.fill(midpoint, YELLOW);        // fill the inside of the triangle with blue
+            assert (map.getPixel(0, 0) == WHITE)                 // this asserts that the corners are not all colored
+                  || (map.getPixel(0, size - 1) == WHITE)        // if they are, the filling escaped the triangle
+                  || (map.getPixel(size - 1, 0) == WHITE)        // (they can't all be black because we drew a triangle)
+                  || (map.getPixel(size - 1, size - 1) == WHITE) // some might be black, some might even be yellow (if the filling was ON the triangle)
                   : "Filling escaped segment triangle, segments are holey";      
         }
     }
     @Test
+    @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawRect() {   // TODO: make sure the rectangle has no holes, make sure no (out of bounds) errors
+        Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {
-
+            int size = rnd.nextInt(200) + 20;               // get a decent random size for the map
+            MyMap2D map = randMap(size);  // set up a random map
+            map.fill(WHITE);              // fill the map with white
+            Point2D p1 = randPoint(size, rnd), p2 = randPoint(size, rnd);  // set up 2 random points to draw a rectangle, we pass rnd to them because they might be initialized in the same nanosecond
+            map.drawRect(p1, p2, BLACK);
+            long minX = Math.round(Math.min(p1.x(), p2.x())),
+                 minY = Math.round(Math.min(p1.y(), p2.y())),
+                 maxX = Math.round(Math.max(p1.x(), p2.x())),
+                 maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where the rectangle should be is allowed to be
+            for (int x = 0; x < size; ++x)               // iterate on the pixels to check no wrong pixels
+                for (int y = 0; y < size; ++y) {
+                    if (map.getPixel(x, y) == BLACK) {   // if the pixel is black
+                        assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawRect colored point outside of bounded array";  // make sure we are within bound
+                    } else {                             // if it is not
+                        assert ((x < minX) || (x > maxX) || (y < minY) || (y > maxY)) : "drawRect left hole inside boundaries";   // make sure we are outside the bounds
+                    }
+                }
         }
 
         Point2D p1 = new Point2D(3.3, 4.8), p2 = new Point2D(7, 9);

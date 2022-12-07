@@ -58,12 +58,6 @@ public class MyMap2DTest {
         double x = (rnd.nextDouble() * width) - 0.5, y = (rnd.nextDouble() * height) - 0.5;
         return new Point2D(x, y);
     }
-    private static Point2D randPoint(double size, Random rnd) {
-        return randPoint(size, size, rnd);
-    }
-    private static Point2D randPoint(double size) {
-        return randPoint(size, size, new Random(System.nanoTime()));
-    }
     private static int[] allColors = { WHITE, BLACK, BLUE, RED, YELLOW, GREEN };
 
     /**

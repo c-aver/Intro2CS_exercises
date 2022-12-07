@@ -155,6 +155,7 @@ public class MyMap2DTest {
 
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
+    @Timeout(value = numberOfTests * 2, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testEncodeDecode() { // this tests the encoding and decoding process // TODO: test on random maps
         assertArrayEquals(originalEncodedMap, encodeMap(map));   // make sure encoding the decoded map gives the original map
 
@@ -175,7 +176,7 @@ public class MyMap2DTest {
         return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));
     }
     @Test
-    @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implements this feature in the junit5 repo to find how to make this work
+    @Timeout(value = numberOfTests, unit = TimeUnit.MILLISECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
     public void testDrawSegment() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times

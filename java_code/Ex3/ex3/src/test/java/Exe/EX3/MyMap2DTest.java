@@ -32,14 +32,14 @@ public class MyMap2DTest {
     public static final int YELLOW = Color.YELLOW.getRGB();
     public static final int GREEN  = Color.GREEN.getRGB();
 
-    private static final int numberOfTests = 10000;   // a value to determine the number of random tests to perform in some functions, low number is more likely to miss fails but is faster
+    private static final int numberOfTests = 1000;   // a value to determine the number of random tests to perform in some functions, low number is more likely to miss fails but is faster
     // if you set this below about 200 you should increase timeoutFactor because overheads and linear times will make you timeout
     private static final int timeoutFactor = 1000;  // test time can depend on the machine, if they all timeout this number should be changed to allow more time on slower machines
     // running this file as a main class runs a benchmark and prints the result, this result can be used as a timeoutFactor (I can't guarantee that this timeoutFactor will not timeout, but it's a decent approximation)
     // 1000 is set as default since it works well for my machine
     // some of the slower tests also have a constant factor on them
 
-    public final String[] originalEncodedMap = { 
+    public final String[] originalEncodedMap = {  // a premade encoded map for deterministic tests
         "WWWWWWWWLL",
         "WWWWBWWWRW",
         "WWWWWWWWWW",
@@ -75,7 +75,7 @@ public class MyMap2DTest {
      * @return the generated map
      */
     private static MyMap2D randMap(int width, int height, int[] acceptableColors, double whitePercentage) {
-        Random rnd = new Random(System.nanoTime());
+        Random rnd = new Random(System.nanoTime());    // initialize the randomizer
         if (whitePercentage < 0 || whitePercentage > 1) whitePercentage = 0;  // if white percentage is an illegal number we default it to 0
         MyMap2D result = new MyMap2D(width, height);   // initialize the result map with the required side lengths
         for (int x = 0; x < width; ++x)                // iterate on the pixels

@@ -34,7 +34,7 @@ public class MyMap2DTest {
 
     private static final int numberOfTests = 1000;   // a value to determine the number of random tests to perform in some functions, low number is more likely to miss fails but is faster
     // if you set this below about 200 you should increase timeoutFactor because overheads and linear times will make you timeout
-    private static final int timeoutFactor = 1000;  // test time can depend on the machine, if they all timeout this number should be changed to allow more time on slower machines
+    private static final int timeoutFactor = 1000;   // test time can depend on the machine, if they all timeout this number should be changed to allow more time on slower machines
     // running this file as a main class runs a benchmark and prints the result, this result can be used as a timeoutFactor (I can't guarantee that this timeoutFactor will not timeout, but it's a decent approximation)
     // 1000 is set as default since it works well for my machine
     // some of the slower tests also have a constant factor on them

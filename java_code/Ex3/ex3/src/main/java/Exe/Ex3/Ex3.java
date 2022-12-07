@@ -21,9 +21,10 @@ public class Ex3 {
 	public static final int BACKGROUND = Color.WHITE.getRGB();  // the default background color
 	
 	// this boolean determines whether the UI acts like the given example or how I like, I take no responsibility on the effects of changing this value, however I will say that setting this to false makes it easier to use the UI in order to test the logical class
-	public static final boolean exercise = true;
+	public static boolean exercise = true;
 
 	public static void main(String[] args) {
+		if (args.length > 0 && args[0].equals("Normal mode")) exercise = false;  // if we got the correct argument change to normal mode
 		int dim = 10;                                        // the default side length of the screen map
 		init(dim);                                           // initialize the program with the set side length
 	}
@@ -126,13 +127,16 @@ public class Ex3 {
 			_mode = "_ShortestPath";              // set the mode to be in the middle of shortest path
 		}
 		else if(_mode.equals("_ShortestPath")) {  // if we just click the second point for the path
-			Point2D p1 = new Point2D(_last.ix(), _last.iy()), p2 = new Point2D(p.ix(), p.iy());  // we round the two points to facilitate shortestPath (it acts weird with non-natural)
+			Point2D p2 = new Point2D(_last.ix(), _last.iy()), p1 = new Point2D(p.ix(), p.iy());  // we round the two points to facilitate shortestPath (it acts weird with non-natural)
 			Point2D[] path = _map.shortestPath(p1, p2);  // calculate the path between the points
-			System.out.println(_map.shortestPathDist(p1, p2));
-			if (path != null)                            // if we actually found a path
-				for (Point2D point : path)               // iterate on the points of the path
-					_map.setPixel(point, col);           // and color them in the current brush color
-			else if (!exercise) {                            // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
+			if (path != null) {                          // if we actually found a path
+				System.out.println("ShortestPath: " + p2.toStringInt() + " --> " + p1.toStringInt() + "  length: " + path.length);  // print the path description
+				for (int i = 0; i < path.length; ++i) {   // iterate on the points of the path
+					Point2D point = path[i];              // set the current point
+					System.out.println(i + ") " + point.toStringInt());  // print the point
+					_map.setPixel(point, col);           // and color it in the current brush color
+				}
+			} else if (!exercise) {                            // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
 				Thread flasher = new Thread(() -> {          // we create a new thread (with a lambda) that will flash the screen
 					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
 					StdDraw_Ex3.show();                      // show the red screen

@@ -92,7 +92,7 @@ public class MyMap2D implements Map2D {
 	 * @param p the point to be checked
 	 * @return true iff the point is within the boundries of the map
 	 */
-	private boolean inBounds(Point2D p) {
+	public boolean inBounds(Point2D p) {
 		return inBounds(p.ix(), p.iy());    // we simply use inBounds(int, int) with the point's coordinates rounded
 	}
 

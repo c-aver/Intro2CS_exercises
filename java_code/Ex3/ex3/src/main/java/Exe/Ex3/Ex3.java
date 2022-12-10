@@ -126,17 +126,16 @@ public class Ex3 {
 			_last = p;                            // remeber this click
 			_mode = "_ShortestPath";              // set the mode to be in the middle of shortest path
 		}
-		else if(_mode.equals("_ShortestPath")) {  // if we just click the second point for the path
-			Point2D p2 = new Point2D(_last.ix(), _last.iy()), p1 = new Point2D(p.ix(), p.iy());  // we round the two points to facilitate shortestPath (it acts weird with non-natural)
-			Point2D[] path = _map.shortestPath(p1, p2);  // calculate the path between the points
-			if (path != null) {                          // if we actually found a path
-				System.out.println("ShortestPath: " + p2.toStringInt() + " --> " + p1.toStringInt() + "  length: " + path.length);  // print the path description
+		else if(_mode.equals("_ShortestPath")) {  // if we just clicked the second point for the path
+			Point2D[] path = _map.shortestPath(p, _last);  // calculate the path between the points
+			if (path != null) {                            // if we actually found a path
+				System.out.println("ShortestPath: " + _last.toStringInt() + " --> " + p.toStringInt() + "  length: " + path.length);  // print the path description
 				for (int i = 0; i < path.length; ++i) {   // iterate on the points of the path
 					Point2D point = path[i];              // set the current point
 					System.out.println(i + ") " + point.toStringInt());  // print the point
 					_map.setPixel(point, col);           // and color it in the current brush color
 				}
-			} else if (!exercise) {                            // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
+			} else if (!exercise) {                          // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
 				Thread flasher = new Thread(() -> {          // we create a new thread (with a lambda) that will flash the screen
 					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
 					StdDraw_Ex3.show();                      // show the red screen
@@ -152,7 +151,7 @@ public class Ex3 {
 				 System.out.println("New mode: " + _mode);   // same reasoning
 				 return;                                     // exit the function to bypass the final drawArray which will draw on top of the red screen, it will be drawn later by the flasher
 			}
-			_mode = (exercise ? "None" : "ShortestPath");                      // reset mode, unless in exercise mode which means we go into no mode
+			_mode = (exercise ? "None" : "ShortestPath");    // reset mode, unless in exercise mode which means we go into no mode
 		}
 		System.out.println("New mode: " + _mode);        // for debug puposes (again, the user should not be looking at the console) print the new mode
 		drawArray(_map);                                 // redraw the map after the changes

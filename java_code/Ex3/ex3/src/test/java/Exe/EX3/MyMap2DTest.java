@@ -53,12 +53,12 @@ public class MyMap2DTest {
     };
     private Map2D premadeMap;
 
-    private static Point2D randPoint(double width, double height, Random rnd) {
+    private static Point2D randPoint(double width, double height, Random rnd) {       // this function gives a random point, take a Random to make sure points which are generated one after another are not the same
         // double minX = -0.5, maxX = width - 0.5, minY = -0.5, maxY = height - 0.5;  // the bounds, taken from the bounds created by the scale in the GUI, not actually used in code so commented out
-        double x = (rnd.nextDouble() * width) - 0.5, y = (rnd.nextDouble() * height) - 0.5;
-        return new Point2D(x, y);
+        double x = (rnd.nextDouble() * width) - 0.5, y = (rnd.nextDouble() * height) - 0.5;  // the values of the point, after applying the bounds
+        return new Point2D(x, y);      // return the point with the randomized values
     }
-    private static int[] allColors = { WHITE, BLACK, BLUE, RED, YELLOW, GREEN };
+    private static final int[] allColors = { WHITE, BLACK, BLUE, RED, YELLOW, GREEN };      // literal array for all legal colors, to allow it as an implicit option when randomizing map
 
     /**
      * This function creates a random map
@@ -75,16 +75,13 @@ public class MyMap2DTest {
         for (int x = 0; x < width; ++x)                // iterate on the pixels
             for (int y= 0; y < height; ++y) {
                 if (rnd.nextDouble() < whitePercentage)   // the chance of  a random number in (0, 1) to be less than whitePercentage is exactly whitePercentage
-                    result.setPixel(x, y, WHITE);      // so we set the pixel to white
+                    result.setPixel(x, y, WHITE);         // so we set the pixel to white
                 else result.setPixel(x, y, acceptableColors[rnd.nextInt(acceptableColors.length)]);  // otherwise, we set the pixel to a random color from acceptableColors
             }
         return result;   // return the result
     }
-    private static MyMap2D randMap(int w, int h) {
+    private static MyMap2D randMap(int w, int h) {             // same function with implicit colors and white percentage
         return randMap(w, h, allColors, 0);
-    }
-    private static MyMap2D randMap(int sideLength) {
-        return randMap(sideLength, sideLength, allColors, 0);
     }
 
     static private char encodePixel(int pix) {   // this function encoded an int representing a color as a character
@@ -124,7 +121,7 @@ public class MyMap2DTest {
     }
     static private String[] encodeMap(Map2D map) {      // this functions encodes a map into an array of strings, each representing a row, for easier comparison using JUnit methods
         int w = map.getWidth(), h = map.getHeight();    // we get the map dimensions
-        String[] result = new String[w];                // initialize the result string array
+        String[] result = new String[h];                // initialize the result string array
         Arrays.fill(result, "");                        // we fill the array with empty strings so that we can then concatenate on them (they are initialized null)
         for (int x = 0; x < w; ++x)                     // iterate on the columns
             for (int y = 0; y < h; ++y)                 // iterate on the rows
@@ -132,10 +129,9 @@ public class MyMap2DTest {
         return result;                                  // return the encoded result
     }
     static private Map2D decodeMap(String[] rows) {     // this function is the inverse of encodeMap, for easier initialization of maps
-        int w = rows.length, h = rows[0].length();      // get the size of the array and the length of the first string (we are kind of treating it as a two-dimensional array of chars)
+        int w = rows[0].length(), h = rows.length ;      // get the size of the array and the length of the first string (we are kind of treating it as a two-dimensional array of chars)
         for (String row : rows)                         // iterate on the strings
-            assert row.length() == h : "Cannot decode strings of different lengths into a map"; // make sure it is the same length as the first string, a jagged array is not a legal map encoding
-        assert w == h : "Cannot decode non-square map"; // make sure the encoded map is square, otherwise it is not a legal map
+            assert row.length() == w : "Cannot decode strings of different lengths into a map"; // make sure it is the same length as the first string, a jagged array is not a legal map encoding
         Map2D result = new MyMap2D(w, h);               // initialize a result map
         for (int x = 0; x < w; ++x)                     // iterate on the pixels
             for (int y = 0; y < h; ++y)
@@ -170,8 +166,8 @@ public class MyMap2DTest {
 
         Random rnd = new Random(System.nanoTime());
         for (int i = 0; i < numberOfTests; ++i) {
-            int sideLength = rnd.nextInt(200) + 1;  // generate a random side length up to 200
-            MyMap2D randMap = randMap(sideLength);
+            int w = rnd.nextInt(200) + 1, h = rnd.nextInt(200) + 1;  // generate a random side length up to 200
+            MyMap2D randMap = randMap(w, h);
             String[] encoding = encodeMap(randMap);
             assertEquals(randMap, decodeMap(encoding));
         }

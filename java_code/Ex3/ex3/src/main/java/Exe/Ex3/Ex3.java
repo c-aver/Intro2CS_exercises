@@ -26,7 +26,7 @@ public class Ex3 {
 	public static void main(String[] args) {
 		if (args.length > 0 && args[0].equals("Normal mode")) exercise = false;  // if we got the correct argument change to normal mode
 		int dim = 10;                                        // the default side length of the screen map
-		init(dim, dim);                                           // initialize the program with the set side length
+		init(dim, dim);                                      // initialize the program with the set side length
 	}
 	private static void init(int w, int h) {
 		StdDraw_Ex3.clear();                                 // clear the buffer in preparation for the drawing
@@ -41,10 +41,10 @@ public class Ex3 {
 		int w = map.getWidth();                             // get the width of the map to determine the number of line in the grid
 		int h = map.getHeight();                            // -"-     height -"-
 		for(int i=0; i < w; i++) {                          // iterate up to the width
-		 StdDraw_Ex3.line(i, 0, i, h - (exercise ? 0 : 1));                   // draw vertical lines across the screen, outside exercise mode we only draw up to the last point
+		 StdDraw_Ex3.line(i, 0, i, h - (exercise ? 0 : 1));   // draw vertical lines across the screen, outside exercise mode we only draw up to the last point
 		}
 		for(int i=0; i < h; i++) {                          // iterate up to the height
-		 StdDraw_Ex3.line(0, i, w - (exercise ? 0 : 1), i);                   // draw horizontal lines across the screen, outside exercise mode we only draw up to the last point
+		 StdDraw_Ex3.line(0, i, w - (exercise ? 0 : 1), i);   // draw horizontal lines across the screen, outside exercise mode we only draw up to the last point
 		}
 	}
 	static public void drawArray(Map2D a) {
@@ -64,7 +64,7 @@ public class Ex3 {
 		if (exercise) _mode = p;           // in exercise mode, the mode always changes, meaning that choosing a color, new map size, or clearing overrides the current brush mode
 		switch (p) {                       // switch p to perform the action associated with the selected option
 			case "Clear":                  // option "Clear"
-				_map.fill(BACKGROUND);          // we fill the map with white
+				_map.fill(BACKGROUND);     // we fill the map with white
 				break;                     // now we have to redraw the cleared map
 			case "White":                  // color option "white"
 				_color = Color.WHITE;      // change the brush color to white

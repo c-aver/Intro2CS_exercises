@@ -57,24 +57,24 @@ public class MyMap2D implements Map2D {
 		return this.getPixel(p.ix(),p.iy());
 	}
 	
-	public void setPixel(int x, int y, int v) {
+	public void setPixel(int x, int y, int col) {
 		if (inBounds(x, y))  // only set the pixel if it is within the map
-			_map[x][y] = v;
+			_map[x][y] = col;
 	}
-	public void setPixel(Point2D p, int v) { 
-		setPixel(p.ix(), p.iy(), v);
+	public void setPixel(Point2D p, int col) { 
+		setPixel(p.ix(), p.iy(), col);
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof MyMap2D) || o == null) return false; // these conditions eliminate o from equaling to this
-		MyMap2D other = (MyMap2D) o;   // case o to MyMap2D to start logical comparison
-		if ((other.getWidth() != getWidth()) || (other.getHeight() != getHeight())) return false;  // if the size is not equal the maps are not equal
+		if (!(o instanceof MyMap2D) || o == null) return false; // if o is not a MyMap2D or is null it couldn't possibly equal to this
+		MyMap2D other = (MyMap2D) o;   // cast o to MyMap2D to start logical comparison
+		if ((other.getWidth() != this.getWidth()) || (other.getHeight() != this.getHeight())) return false;  // if the size is not equal the maps are not equal
 		for (int x = 0; x < getWidth(); ++x)                 // iterate on the pixels
 			for (int y = 0; y < getHeight(); ++y)
-				if (getPixel(x, y) != other.getPixel(x, y))  // if this's pixel is different from other's pixel
+				if (this.getPixel(x, y) != other.getPixel(x, y))  // if this's pixel is different from other's pixel
 					return false;                            // the maps are not equal
-		return true;           // if we passed all tests without return false the maps are equal
+		return true;           // if we passed all tests without fail the maps are equal
 	}
 
 	/**
@@ -97,8 +97,8 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public void drawSegment(Point2D p1, Point2D p2, int v) {
-		setPixel(p1, v);                                         // we will start by coloring p1
+	public void drawSegment(Point2D p1, Point2D p2, int col) {
+		setPixel(p1, col);                                         // we will start by coloring p1
 		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();       // find the delta in the axes
 		double maxD = Math.max(Math.abs(dx), Math.abs(dy));      // the largest delta will normalize our step
 		if (maxD == 0) return;                                   // if the two points are literally the same (can't happen with random doubles, but can happen with mouse clicks) we colored it already so return
@@ -107,15 +107,15 @@ public class MyMap2D implements Map2D {
 		double stepDist = step.distance();                       // calculate the distance of the step vector, half of this is the closest we will ever get to the target
 		Point2D cursor = new Point2D(p1);                        // start the cursor on p1
 		while (!cursor.close2equals(p2, stepDist / 2)) {         // run the cursor through the segment as long as we are not within p2
-			setPixel(cursor, v);                                 // set the pixel under the cursor to the required color
+			setPixel(cursor, col);                                 // set the pixel under the cursor to the required color
 			cursor = cursor.add(step);                           // step the cursor by the step vector
 		}
 		long minX = Math.round(Math.min(p1.x(), p2.x())),
 			 minY = Math.round(Math.min(p1.y(), p2.y())),
 			 maxX = Math.round(Math.max(p1.x(), p2.x())),
-			 maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where our line is allowed to be
-		if ((cursor.ix() >= minX) && (cursor.ix() <= maxX) && (cursor.iy() >= minY) && (cursor.iy() <= maxY)) setPixel(cursor, v);
-		setPixel(p2, v);                                         // now we just need to set the target point (we close enough to reached it)
+			 maxY = Math.round(Math.max(p1.y(), p2.y()));        // these are the limits of where our line is allowed to be
+		if ((cursor.ix() >= minX) && (cursor.ix() <= maxX) && (cursor.iy() >= minY) && (cursor.iy() <= maxY)) setPixel(cursor, col);  // if the cursor is still within allowed limits we color it as well
+		setPixel(p2, col);                                         // now we just need to set the target point (we close-enough-to reached it)
 	}
 
 	@Override
@@ -142,12 +142,12 @@ public class MyMap2D implements Map2D {
 	}
 
 	@Override
-	public int fill(Point2D p, int new_v) {
-		return fill(p.ix(), p.iy(), new_v);                     // send to the equivalent function with the coords as ints
+	public int fill(Point2D p, int new_col) {
+		return fill(p.ix(), p.iy(), new_col);                     // send to the equivalent function with the coords as ints
 	}
 
 	@Override
-	public int fill(int x, int y, int new_v) {
+	public int fill(int x, int y, int new_col) {
 		int ans = 0;                                    // initialize answer (number of colored cells) as 0
 
 		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
@@ -157,7 +157,7 @@ public class MyMap2D implements Map2D {
 		while (!q.isEmpty()) {                          // iterate as long as we have points to color
 			Point2D next = q.remove();                  // take the next point to be colored
 			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points, have to do this before coloring it to determine if they are the same color
-			setPixel(next, new_v);                      // color the current point in the required color
+			setPixel(next, new_col);                      // color the current point in the required color
 			ans += 1;                                   // increment the number of colored cells
 			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed
 			for (Point2D neighbor : legalNeighbors)           // iterate on the neighbors
@@ -215,8 +215,8 @@ public class MyMap2D implements Map2D {
 		visited[p1.ix()][p1.iy()] = true;               // document that the origin was visited (so we don't step back into it)
 		while (!q.isEmpty()) {                          // iterate as long as we have points to check
 			Point2D next = q.remove();                  // take the next point to be processed
-			--currentDistCount;                         // document the fact that the current distance from the origin has one less point in the queue
-			if (next.equals(ip2)) {                      // if the point is the destination
+			currentDistCount -= 1;                         // document the fact that the current distance from the origin has one less point in the queue
+			if (next.equals(ip2)) {                     // if the point is the destination
 				foundPath = true;                       // document that we found a path
 				break;                                  // exit the loop to start reconstructing the path
 			}

@@ -160,7 +160,7 @@ public class MyMap2DTest {
 
     @Test
     @Order(1)    // all other tests depend on the functionalities tested here, so we check them first
-    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)   // I had to read to read a long GitHub issue and look at the actual commit that implemented this feature in the junit5 repo to find how to make this work
     public void testEncodeDecode() { // this tests the encoding and decoding process
         assertArrayEquals(originalEncodedMap, encodeMap(premadeMap));   // make sure encoding the decoded map gives the original map
 

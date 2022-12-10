@@ -84,7 +84,7 @@ public class MyMap2DTest {
         return randMap(w, h, allColors, 0);
     }
 
-    static private char encodePixel(int pix) {   // this function encoded an int representing a color as a character
+    static private char encodePixel(int pix) {   // this function encodes an int representing a color as a character
         if(pix == WHITE)     // this is essentially a mapping of colors (or rather their numeric RGB representation) to a character
             return 'W';      // I would do this with a switch case but the color constants are not computed in compile-time
         if(pix == BLACK)
@@ -97,7 +97,7 @@ public class MyMap2DTest {
             return 'Y';
         if(pix == GREEN)
             return 'G';
-        assert false : "Illegal color in map";   // if we reached here and didn't return before the map had a color which is not allowed
+        assert false : "Illegal color in map";   // if we reached here and didn't return before the pixel was not a legal color
         return '\0';   // this is only required so Java doesn't think the function has a branch that does not return a result
     }
     static private int decodePixel(char pix) {   // this is the inverse of encodePixel
@@ -119,10 +119,10 @@ public class MyMap2DTest {
                 return 0;   // this is only required so Java doesn't think the function has a branch that does not return a result
         }
     }
-    static private String[] encodeMap(Map2D map) {      // this functions encodes a map into an array of strings, each representing a row, for easier comparison using JUnit methods
+    static private String[] encodeMap(Map2D map) {      // this function encodes a map into an array of strings, each representing a row, for easier comparison using JUnit methods
         int w = map.getWidth(), h = map.getHeight();    // we get the map dimensions
         String[] result = new String[h];                // initialize the result string array
-        Arrays.fill(result, "");                        // we fill the array with empty strings so that we can then concatenate on them (they are initialized null)
+        Arrays.fill(result, "");                        // we fill the array with empty strings so that we can then concatenate on them (they were initialized null)
         for (int x = 0; x < w; ++x)                     // iterate on the columns
             for (int y = 0; y < h; ++y)                 // iterate on the rows
                 result[y] += encodePixel(map.getPixel(x, y));  // add the encoding of the current pixel to the correct row array
@@ -147,11 +147,11 @@ public class MyMap2DTest {
         Random rnd = new Random(System.nanoTime());                        // initialize a randomizer
         for (int i = 0; i < 1000; ++i) rnd.nextDouble();                   // run it a couple of times to warm up the Java compiler
         long start = System.nanoTime();                                    // start the stopwatch
-        for (int i = 0; i < 5000000; ++i) rnd.nextDouble();                 // run the randomizer 5000000 times for each test
+        for (int i = 0; i < 5000000; ++i) rnd.nextDouble();                // run the randomizer 5000000 times for each test
         long end = System.nanoTime();                                      // stop the stopwatch
         long duration = end - start;                                       // calculate the duration
-        return (duration / 100000);                                        // divide the duration by 10000 to determine timeoutFactor
-    }
+        return (duration / 100000);                                        // divide the duration by 100000 to determine timeoutFactor
+    }   // the values in this function were determined in a way that makes my machine create the correct timeoutFactor
 
     @BeforeEach
     public void setUp() {    // this functions set ups the tests by resetting the map
@@ -165,27 +165,27 @@ public class MyMap2DTest {
         assertArrayEquals(originalEncodedMap, encodeMap(premadeMap));   // make sure encoding the decoded map gives the original map
 
         Random rnd = new Random(System.nanoTime());
-        for (int i = 0; i < numberOfTests; ++i) {
-            int w = rnd.nextInt(200) + 1, h = rnd.nextInt(200) + 1;  // generate a random side length up to 200
-            MyMap2D randMap = randMap(w, h);
-            String[] encoding = encodeMap(randMap);
-            assertEquals(randMap, decodeMap(encoding));
+        for (int i = 0; i < numberOfTests; ++i) {     // run random tests
+            int w = rnd.nextInt(160) + 1, h = rnd.nextInt(160) + 1;  // generate ranodm side lengths
+            MyMap2D randMap = randMap(w, h);                 // create a random map
+            String[] encoding = encodeMap(randMap);          // encode the map into a string array
+            assertEquals(randMap, decodeMap(encoding));      // make sure decoding the string array gives back the map, using MyMap2D.equals(Object o)
         }
     }
     private boolean isTriangleLine(Point2D p1, Point2D p2, Point2D p3) {  // this function checks if 3 points are very close to being on the same line
         double x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y(), x3 = p3.ix(), y3 = p3.iy();  // preparing the numbers for the formula
         double dx13 = x1 - x3, dx21 = x2 - x1, dy13 = y1 - y3, dy21 = y2 - y1, dx23 = x2 - x3, dy23 = y2 - y3;      // some of the deltas we will need
         double d12_3 = (Math.abs(dx21 * dy13 - dx13 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the p3 and the line p1-p2 using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
-        double d13_2 = (Math.abs(dx13 * dy21 - dx21 * dy13)) / (Math.sqrt(dx13 * dx13 + dy13 * dy13)); //
+        double d13_2 = (Math.abs(dx13 * dy21 - dx21 * dy13)) / (Math.sqrt(dx13 * dx13 + dy13 * dy13)); // same thing for the two other points and their appropriate lines
         double d32_1 = (Math.abs(dx23 * dy13 - dx13 * dy23)) / (Math.sqrt(dx23 * dx23 + dy23 * dy23));
-        return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));   // if a distance is less than 2 the triangle is too close to a line to try and fill
+        return ((d12_3 <= 2) || (d13_2 <= 2) || (d32_1 <= 2));   // if the distance from any point to the line of the two others is less than 2 the triangle is too close to a line to try and fill
     }
     @Test
-    //@Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawSegment() {
-        Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
+        Random rnd = new Random(System.nanoTime());         // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
-            int w = rnd.nextInt(200) + 20, h = rnd.nextInt(200) + 20;               // get a decent random size for the map
+            int w = rnd.nextInt(320) + 1, h = rnd.nextInt(320) + 1;  // get a random size for the map
             MyMap2D map = randMap(w, h); // set up a random map
             map.fill(WHITE);             // fill the map with white
             Point2D p1 = randPoint(w, h, rnd), p2 = randPoint(w, h, rnd), p3 = randPoint(w, h, rnd);  // set up 3 random points to draw a triangle, we pass rnd to them because they might be initialized in the same nanosecond
@@ -210,27 +210,26 @@ public class MyMap2DTest {
             map.drawSegment(p2, p3, BLACK);
             Point2D midpoint = new Point2D((p1.x() + p2.x() + p3.x()) / 3, (p1.y() + p2.y() + p3.y()) / 3); // find the midpoint, guaranteed to be inside the triangle
             map.fill(midpoint, YELLOW);        // fill the inside of the triangle with blue
-            assert (map.getPixel(0, 0) == WHITE)                 // this asserts that the corners are not all colored
+            assert (map.getPixel(0, 0) == WHITE)              // this asserts that the corners are not all colored
                   || (map.getPixel(0, h - 1) == WHITE)        // if they are, the filling escaped the triangle
                   || (map.getPixel(w - 1, 0) == WHITE)        // (they can't all be black because we drew a triangle)
-                  || (map.getPixel(w - 1, h - 1) == WHITE) // some might be black, some might even be yellow (if the filling was ON the triangle)
+                  || (map.getPixel(w - 1, h - 1) == WHITE)    // some might be black, some might even be yellow (if the filling was ON the triangle)
                   : "Filling escaped segment triangle, segments are holey";      
         }
     }
     @Test
     @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawRect() {
-        Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
+        Random rnd = new Random(System.nanoTime());      // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
-            int w = rnd.nextInt(200) + 20, h = rnd.nextInt(200) + 20;               // get a decent random size for the map
-            MyMap2D map = randMap(w, h); // set up a random map
-            map.fill(WHITE);              // fill the map with white
+            int w = rnd.nextInt(320) + 1, h = rnd.nextInt(320) + 1;               // get a decent random size for the map
+            MyMap2D map = randMap(w, h, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0);  // set up a random map without black
             Point2D p1 = randPoint(w, h, rnd), p2 = randPoint(w, h, rnd);  // set up 2 random points to draw a rectangle, we pass rnd to them because they might be initialized in the same nanosecond
-            map.drawRect(p1, p2, BLACK);
+            map.drawRect(p1, p2, BLACK);                       // draw a black rectangle
             long minX = Math.round(Math.min(p1.x(), p2.x())),
                  minY = Math.round(Math.min(p1.y(), p2.y())),
                  maxX = Math.round(Math.max(p1.x(), p2.x())),
-                 maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where the rectangle should be is allowed to be
+                 maxY = Math.round(Math.max(p1.y(), p2.y()));  // these are the limits of where the rectangle is allowed to be
             for (int x = 0; x < w; ++x)               // iterate on the pixels to check no wrong pixels
                 for (int y = 0; y < h; ++y) {
                     if (map.getPixel(x, y) == BLACK) {   // if the pixel is black
@@ -262,9 +261,8 @@ public class MyMap2DTest {
     public void testDrawCircle() {
         Random rnd = new Random(System.nanoTime());                // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests
-            int w = rnd.nextInt(200) + 20, h = rnd.nextInt(200) + 20;               // get a decent random size for the map
-            MyMap2D map = randMap(w, h);  // set up a random map
-            map.fill(WHITE);              // fill the map with white
+            int w = rnd.nextInt(320) + 1, h = rnd.nextInt(320) + 1;               // get a decent random size for the map
+            MyMap2D map = randMap(w, h, new int[] { WHITE, BLUE, RED, GREEN }, 0);  // set up a random map without black or yellow
             Point2D center = randPoint(w, h, rnd);  // set up a random point as the center
             double radius = rnd.nextDouble() * Math.max(w, h);   // get a random radius up to the size of the map
             map.drawCircle(center, radius, YELLOW);        // draw the circle
@@ -283,8 +281,6 @@ public class MyMap2DTest {
                         assert center.distance(new Point2D(x, y)) > radius : "drawCircle didn't color point inside circle"; // make sure the point is actually outside the circle
                     } else if (color == YELLOW) {    // if we found yellow point, it means it was part of the circle (so drawn in yellow) but not orthogonally connected to the center (so wasn't filled in black)
                         assert false : "Found disconnected point in circle";  
-                    } else if (color != BLACK) {    // any other color (we need to check not black again because it might have skipped that if due to small radius)
-                        assert false : "Unreachable"; // is impossible
                     }
                 }
         }
@@ -311,22 +307,22 @@ public class MyMap2DTest {
     public void testFill() {
         Random rnd = new Random(System.nanoTime());              // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {                // we perform numberOfTests random tests
-            int w = rnd.nextInt(50) + 10, h = rnd.nextInt(50) + 10;                     // get a decent random size for the map
-            MyMap2D map = randMap(w, h, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.4);  // set up a random map without black and quite a bit of white (so we have something to fill)
-            Point2D center = randPoint(w, h, rnd);                    // set up a random point as the fill origin
-            int centerColor = map.getPixel(center);              // remeber its color, this is the only color we are allwed to fill
+            int w = rnd.nextInt(80) + 1, h = rnd.nextInt(80) + 1;                     // get a decent random size for the map
+            MyMap2D map = randMap(w, h, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.4);  // set up a random map without black and a bit of white (so we have something to fill)
+            Point2D origin = randPoint(w, h, rnd);               // set up a random point as the fill origin
+            int originColor = map.getPixel(origin);              // remember its color, this is the only color we are allowed to fill
             MyMap2D original = new MyMap2D(map);                 // save the original map to cross-reference later
-            int returnValue = map.fill(center, BLACK);           // fill the map on the center and save return value
+            int returnValue = map.fill(origin, BLACK);           // fill the map on the origin and save return value
             int colored = 0;                                     // initialize the number of colored points as 0
             for (int x = 0; x < w; ++x)             // iterate on the pixels
                 for (int y = 0; y < h; ++y) {
                     int color = map.getPixel(x, y);              // check the pixel's color
                     if (color == BLACK) {                        // if it is black (was filled) we need to check some stuff
-                        assertNotEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");  // make sure there was a path from the center to here in the original map
-                        assertEquals(centerColor, original.getPixel(x, y), "Colored point not in the original center color");     // make sure it was originally the same color as the center
+                        assertNotEquals(-1, original.shortestPathDist(origin, new Point2D(x, y)), "Colored point with no path");  // make sure there was a path from the origin to here in the original map
+                        assertEquals(originColor, original.getPixel(x, y), "Colored point not in the origin color");              // make sure it was originally the same color as the origin
                         colored += 1;                            // incerement the number of colored points
                     } else {                                     // otherwise (wasn't filled)
-                        assertEquals(-1, original.shortestPathDist(center, new Point2D(x, y)), "Colored point with no path");     // make sure there wasn't a path to this point
+                        assertEquals(-1, original.shortestPathDist(origin, new Point2D(x, y)), "Colored point with no path");     // make sure there wasn't a path to this point
                     }
                 }
             assertEquals(colored, returnValue, "Return value was not number of colored points");   // make sure the return value is the actual number of colored points
@@ -354,13 +350,13 @@ public class MyMap2DTest {
         Random rnd = new Random(System.nanoTime());              // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {                // we perform numberOfTests random tests
             int w = rnd.nextInt(50) + 10, h = rnd.nextInt(50) + 10;                     // get a decent random size for the map
-            MyMap2D map = randMap(w, h, new int[] { WHITE, BLUE, RED, YELLOW, GREEN }, 0.9);  // set up a random map without black and quite a bit of white (so we have something to fill)
+            MyMap2D map = randMap(w, h, allColors, 0.9);  // set up a random map with a lot of white (so we are likely to find paths)
             Point2D p1 = randPoint(w, h, rnd), p2 = randPoint(w + 1, h + 1, rnd);  // set up 2 random points for the path (we allow p2 to be outside bounds for a test)
             Point2D[] path = map.shortestPath(p1, p2);           // find the path
             int distance = map.shortestPathDist(p1, p2);         // calculate the length
             if (map.getPixel(p1) != map.getPixel(p2) || !map.inBounds(p2)) {          // if the points are differently colored or p2 was created outside there is no path
                 assertNull(path, "Created path between differently colored points");  // make sure the created path is null
-                assertEquals(-1, distance, "Calculated distance between differently colored points");  // make sure the distance is -1 (defined failure return value)
+                assertEquals(-1, distance, "Found distance between differently colored points");  // make sure the distance is -1 (defined failure return value)
                 continue;  // we have no other tests to perform on this path (most of them will error out)
             }
             if (path == null) {  // if didn't find path (but they are the same color)
@@ -430,7 +426,7 @@ public class MyMap2DTest {
         };
         assertArrayEquals(expected, encodeMap(premadeMap)); // make sure it is correct again
 
-        String[] stable = new String[] {       // created using patterns from https://conwaylife.com/wiki/Still_life
+        String[] stable = new String[] {  // created using patterns from https://conwaylife.com/wiki/Still_life
             "BBWWBBWBBW",
             "BBWWWBWBWW",
             "WWWWWBWBWW",

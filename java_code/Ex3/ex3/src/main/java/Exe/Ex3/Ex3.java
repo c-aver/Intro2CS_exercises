@@ -24,7 +24,7 @@ public class Ex3 {
 	public static boolean exercise = true;
 
 	public static void main(String[] args) {
-		if (args.length > 0 && args[0].equals("Normal mode")) exercise = false;  // if we got the correct argument change to normal mode
+		if (args.length > 0 && args[0].equals("Normal")) exercise = false;  // if we got the correct argument change to normal mode
 		int dim = 10;                                        // the default side length of the screen map
 		init(dim, dim);                                      // initialize the program with the set side length
 	}

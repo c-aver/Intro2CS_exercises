@@ -186,8 +186,8 @@ public class MyMap2DTest {
         Random rnd = new Random(System.nanoTime());         // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
             int w = rnd.nextInt(320) + 1, h = rnd.nextInt(320) + 1;  // get a random size for the map
-            MyMap2D map = randMap(w, h); // set up a random map
-            map.fill(WHITE);             // fill the map with white
+            MyMap2D map = new MyMap2D(w, h); // set up a random map
+            map.fill(WHITE);                 // fill the map with white
             Point2D p1 = randPoint(w, h, rnd), p2 = randPoint(w, h, rnd), p3 = randPoint(w, h, rnd);  // set up 3 random points to draw a triangle, we pass rnd to them because they might be initialized in the same nanosecond
             map.drawSegment(p1, p2, BLACK);  // draw 1 line on the map, we will now test it for incorrect pixels
             assertEquals(BLACK, map.getPixel(p1), "p1 was not colored by drawSegment");     // make sure the actual points were colored
@@ -218,7 +218,7 @@ public class MyMap2DTest {
         }
     }
     @Test
-    @Timeout(value = timeoutFactor * numberOfTests, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
+    @Timeout(value = timeoutFactor * numberOfTests * 2, unit = TimeUnit.MICROSECONDS, threadMode = ThreadMode.SEPARATE_THREAD)
     public void testDrawRect() {
         Random rnd = new Random(System.nanoTime());      // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {        // we perform numberOfTests random tests

@@ -131,7 +131,7 @@ public class MyMap2DTest {
     static private Map2D decodeMap(String[] rows) {     // this function is the inverse of encodeMap, for easier initialization of maps
         int w = rows[0].length(), h = rows.length ;      // get the size of the array and the length of the first string (we are kind of treating it as a two-dimensional array of chars)
         for (String row : rows)                         // iterate on the strings
-            assert row.length() == w : "Cannot decode strings of different lengths into a map"; // make sure it is the same length as the first string, a jagged array is not a legal map encoding
+            assertEquals(w, row.length(), "Cannot decode strings of different lengths into a map"); // make sure it is the same length as the first string, a jagged array is not a legal map encoding
         Map2D result = new MyMap2D(w, h);               // initialize a result map
         for (int x = 0; x < w; ++x)                     // iterate on the pixels
             for (int y = 0; y < h; ++y)

@@ -36,7 +36,7 @@ public class MyMap2DTest {
     // if you set this below about 200 you should increase timeoutFactor because overheads and linear times will make you timeout
     private static final int timeoutFactor = 1000;   // test time can depend on the machine, if they all timeout this number should be changed to allow more time on slower machines
     // running this file as a main class runs a benchmark and prints the result, this result can be used as a timeoutFactor (I can't guarantee that this timeoutFactor will not timeout, but it's a decent approximation)
-    // 1000 is set as default since it works well for my machine
+    // 1000 is set as default since it works well for my machine in the nominal case (in battery saver mode it is about 1600)
     // some of the slower tests also have a constant factor on them
 
     public final String[] originalEncodedMap = {  // a premade encoded map for deterministic tests

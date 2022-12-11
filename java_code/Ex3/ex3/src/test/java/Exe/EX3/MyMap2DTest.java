@@ -396,7 +396,7 @@ public class MyMap2DTest {
         assertArrayEquals(expected, encodeMap(premadeMap));
     }
     @Test
-    public void testNextGenGol() { // TODO: random testing?
+    public void testNextGenGol() {
         premadeMap.nextGenGol();                      // evolve the default map one generation
         String[] expected = new String[] {            // the next generation from the default map
             "WWWWWWWWBB",
@@ -412,7 +412,7 @@ public class MyMap2DTest {
         };
         assertArrayEquals(expected, encodeMap(premadeMap));  // make sure the evolved array is as expected
         premadeMap.nextGenGol();                             // evolve another generation
-        expected = new String[] {                     // the next expected generation
+        expected = new String[] {                            // the next expected generation
             "WWWWWWWWBB",
             "WWWWWWWBWW",
             "WWWWWWWBWW",

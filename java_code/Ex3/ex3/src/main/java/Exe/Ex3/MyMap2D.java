@@ -34,7 +34,7 @@ public class MyMap2D implements Map2D {
 		_map = new int[w][h];         // initialize map with required side lengths
 	}
 	@Override
-	public void init(int[][] arr) {   // initializer with data
+	public void init(int[][] arr) {      // initializer with data
 		init(arr.length,arr[0].length);  // initialize according to data size
 		for(int x = 0; x < this.getWidth() &&  x < arr.length; x++) {           // iterate on the pixels
 			for(int y = 0; y < this.getHeight() && y < arr[0].length; y++) {
@@ -98,7 +98,7 @@ public class MyMap2D implements Map2D {
 
 	@Override
 	public void drawSegment(Point2D p1, Point2D p2, int col) {
-		setPixel(p1, col);                                         // we will start by coloring p1
+		setPixel(p1, col);                                       // we will start by coloring p1
 		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();       // find the delta in the axes
 		double maxD = Math.max(Math.abs(dx), Math.abs(dy));      // the largest delta will normalize our step
 		if (maxD == 0) return;                                   // if the two points are literally the same (can't happen with random doubles, but can happen with mouse clicks) we colored it already so return
@@ -107,7 +107,7 @@ public class MyMap2D implements Map2D {
 		double stepDist = step.distance();                       // calculate the distance of the step vector, half of this is the closest we will ever get to the target
 		Point2D cursor = new Point2D(p1);                        // start the cursor on p1
 		while (!cursor.close2equals(p2, stepDist / 2)) {         // run the cursor through the segment as long as we are not within p2
-			setPixel(cursor, col);                                 // set the pixel under the cursor to the required color
+			setPixel(cursor, col);                               // set the pixel under the cursor to the required color
 			cursor = cursor.add(step);                           // step the cursor by the step vector
 		}
 		long minX = Math.round(Math.min(p1.x(), p2.x())),
@@ -115,7 +115,7 @@ public class MyMap2D implements Map2D {
 			 maxX = Math.round(Math.max(p1.x(), p2.x())),
 			 maxY = Math.round(Math.max(p1.y(), p2.y()));        // these are the limits of where our line is allowed to be
 		if ((cursor.ix() >= minX) && (cursor.ix() <= maxX) && (cursor.iy() >= minY) && (cursor.iy() <= maxY)) setPixel(cursor, col);  // if the cursor is still within allowed limits we color it as well
-		setPixel(p2, col);                                         // now we just need to set the target point (we close-enough-to reached it)
+		setPixel(p2, col);                                       // now we just need to set the target point (we close-enough-to reached it)
 	}
 
 	@Override
@@ -152,14 +152,14 @@ public class MyMap2D implements Map2D {
 
 		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
 		Queue<Point2D> q = new LinkedList<Point2D>();                // the queue of points to check through
-		q.add(new Point2D(x, y));                                      // add the origin point as the first point to check
+		q.add(new Point2D(x, y));                                    // add the origin point as the first point to check
 		visited[x][y] = true;               // document that the origin was visited (so we don't step back into it)
-		while (!q.isEmpty()) {                          // iterate as long as we have points to color
-			Point2D next = q.remove();                  // take the next point to be colored
+		while (!q.isEmpty()) {                            // iterate as long as we have points to color
+			Point2D next = q.remove();                    // take the next point to be colored
 			LinkedList<Point2D> legalNeighbors = legalNeighbors(next, visited); // get the list of legal neighbors of the current point, in respect to the previously visited points, have to do this before coloring it to determine if they are the same color
 			setPixel(next, new_col);                      // color the current point in the required color
-			ans += 1;                                   // increment the number of colored cells
-			q.addAll(legalNeighbors);                   // add the legal neighbors to the queue to be processed
+			ans += 1;                                     // increment the number of colored cells
+			q.addAll(legalNeighbors);                     // add the legal neighbors to the queue to be processed
 			for (Point2D neighbor : legalNeighbors)           // iterate on the neighbors
 				visited[neighbor.ix()][neighbor.iy()] = true; // document that they have been visited and put into the queue so the next neighbor doesn't have to
 		}
@@ -203,19 +203,19 @@ public class MyMap2D implements Map2D {
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
 		Point2D ip1 = new Point2D(p1.ix(), p1.iy()), ip2 = new Point2D(p2.ix(), p2.iy());
 		if (getPixel(ip1) != getPixel(ip2)) return null;  // if the origin and destination colors are different a path is impossible
-		int dist = 0;                                   // initialize answer as 0
-		int currentDistCount = 1;                       // initialize count of pixels in the current distance as 1 (the origin we are about to add)
-		int nextDistCount = 0;                          // initialize count of pixels in the next distance as 0
-		boolean foundPath = false;                      // assume we are not going to find a path
+		int dist = 0;                                     // initialize answer as 0
+		int currentDistCount = 1;                         // initialize count of pixels in the current distance as 1 (the origin we are about to add)
+		int nextDistCount = 0;                            // initialize count of pixels in the next distance as 0
+		boolean foundPath = false;                        // assume we are not going to find a path
 
 		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
 		Point2D[][] parent = new Point2D[getWidth()][getHeight()];   // matrix to track which point led to each of the visited one, to reconstruct the path
 		Queue<Point2D> q = new LinkedList<Point2D>();                // the queue of points to check through
-		q.add(ip1);                                      // add the origin point as the first point to check
+		q.add(ip1);                                     // add the origin point as the first point to check
 		visited[p1.ix()][p1.iy()] = true;               // document that the origin was visited (so we don't step back into it)
 		while (!q.isEmpty()) {                          // iterate as long as we have points to check
 			Point2D next = q.remove();                  // take the next point to be processed
-			currentDistCount -= 1;                         // document the fact that the current distance from the origin has one less point in the queue
+			currentDistCount -= 1;                      // document the fact that the current distance from the origin has one less point in the queue
 			if (next.equals(ip2)) {                     // if the point is the destination
 				foundPath = true;                       // document that we found a path
 				break;                                  // exit the loop to start reconstructing the path
@@ -245,15 +245,15 @@ public class MyMap2D implements Map2D {
 	@Override
 	public int shortestPathDist(Point2D p1, Point2D p2) {
 		Point2D ip1 = new Point2D(p1.ix(), p1.iy()), ip2 = new Point2D(p2.ix(), p2.iy());
-		if (getPixel(ip1) != getPixel(ip2)) return -1;    // if the origin and destination colors are different a path is impossible
+		if (getPixel(ip1) != getPixel(ip2)) return -1;  // if the origin and destination colors are different a path is impossible
 		int ans = 0;                                    // initialize answer as 0
 		int currentDistCount = 1;                       // initialize count of pixels in the current distance as 1 (the origin we are about to add)
 		int nextDistCount = 0;                          // initialize count of pixels in the next distance as 0
 
 		boolean[][] visited = new boolean[getWidth()][getHeight()];  // matrix to track whether a pixel was visited
 		Queue<Point2D> q = new LinkedList<Point2D>();                // the queue of points to check through
-		q.add(ip1);                                      // add the origin point as the first point to check
-		visited[ip1.ix()][ip1.iy()] = true;               // document that the origin was visited (so we don't step back into it)
+		q.add(ip1);                                     // add the origin point as the first point to check
+		visited[ip1.ix()][ip1.iy()] = true;             // document that the origin was visited (so we don't step back into it)
 		while (!q.isEmpty()) {                          // iterate as long as we have points to check
 			Point2D next = q.remove();                  // take the next point to be processed
 			--currentDistCount;                         // document the fact that the current distance from the origin has one less point in the queue

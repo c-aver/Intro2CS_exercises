@@ -20,6 +20,17 @@ public class Ex3 {
 	private static Point2D _last = null;                        // the last clicked point, only used for 2-point brush modes (segment, rectangle, circle, shortest path)
 	public static final int BACKGROUND = Color.WHITE.getRGB();  // the default background color
 	
+	private static final Thread flasher = new Thread(() -> {          // this is a thread with a lambda that will flash the screen
+		StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
+		StdDraw_Ex3.show();                      // show the red screen
+		try {                                    // we will try to sleep
+			Thread.sleep(70);                //                 here
+		} catch (InterruptedException e) {       // if we caught an InterruptedException
+			Thread.currentThread().interrupt();  // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
+		}
+		drawArray(_map);                         // redraw the array over the red screen
+	 });
+
 	// this boolean determines whether the UI acts like the given example or how I like, I take no responsibility on the effects of changing this value, however I will say that setting this to false makes it easier to use the UI in order to test the logical class
 	public static boolean exercise = true;
 
@@ -77,8 +88,8 @@ public class Ex3 {
 			case "20x20":                  // map option 20x20   
 				init(20, 20);                  // reinitialize the map with side length 20
 				break;                     // we have to redraw the new map, same thing for the next couple options
-			case "40x40":   init(40, 40);  break;
-			case "80x80":   init(80, 80);  break;
+			case "40x40":   init(40, 40);   break;
+			case "80x80":   init(80, 80);   break;
 			case "160x160":	init(160, 160); break;
 			default:                       // this is any mode which is not clear, brush color, or map size
 				_mode = p;                 // these are the brush modes, and they are represented in _mode
@@ -89,44 +100,45 @@ public class Ex3 {
 	public static void mouseClicked(Point2D p) {  // p is the position of the mouse click
 		System.out.println(p);                    // we print p to stdout for debug reasons (user should not be looking at console)
 		int col = _color.getRGB();                // get the RGB value of the current brush color for drawing
-		if(_mode.equals("Circle")) {              // if the current mode is circle drawing, this is the first click (center of the circle)
+		switch (_mode) {
+		case "Circle":        // if the current mode is circle drawing, this is the first click (center of the circle)
 			_last = p;                            // we set the _last click as the current one
 			_mode = "_Circle";                    // we set the mode to "_Circle", this symbolises the middle of drawing a circle
-		}
-		else if(_mode.equals("_Circle")) {  // if we are in the middle of drawing a circle (need else if to prevent instantly going here after changing mode)
+			return;                               // we changed nothing about the grid so we can return right now
+		case "_Circle":       // if we are in the middle of drawing a circle
 			_map.drawCircle(_last, p.distance(_last), col);  // we draw a circle (in the current brush color) with the center at the last click and radius as the distance between last and current click (this puts current click on the circuference)
 			_mode = (exercise ? "none" : "Circle");                     // we reset the mode to starting to draw a circle, unless in exercise mode which means we go into no mode
-		}
-		if(_mode.equals("Segment")) {             // if the mode is circle drawing, we are clicking the first point in the segment
+			break;
+		case "Segment":             // if the mode is circle drawing, we are clicking the first point in the segment
 			_last = p;                            // save the click location for the next click
 			_mode = "_Segment";                   // set the mode to be in the middle of drawing a segment (similar to circle drawing)
-		}
-		else if(_mode.equals("_Segment")) {       // similarly to circle drawing, this symbolises the middle of drawing a segment
+			return;                // we changed nothing about the grid so we can return right now
+		case "_Segment":       // similarly to circle drawing, this symbolises the middle of drawing a segment
 			_map.drawSegment(_last, p, col);      // we draw (in the current brush color) the segment from the last click to the current
 			_mode = (exercise ? "none" : "Segment");                    // and reset to the start of segment drawing, unless in exercise mode which means we go into no mode
-		}
-		if(_mode.equals("Rect")) {                // basically same thing as the last two
+			break;
+		case "Rect":                // basically same thing as the last two
 			_last = p;                            // yada yada
 			_mode = "_Rect";                      // same old "_Mode"
-		}
-		else if(_mode.equals("_Rect")) {          // same thing
+			return;                // we changed nothing about the grid so we can return right now
+		case "_Rect":          // same thing
 			_map.drawRect(p, _last, col);         // draw the rectangle between the current click and the last
 			_mode = (exercise ? "none" : "Rect");                       // reset mode back, unless in exercise mode which means we go into no mode
-		}
-		if(_mode.equals("Point")) {               // if the mode is point drawing
+			break;
+		case "Point":               // if the mode is point drawing
 			_map.setPixel(p,col);                // we just need to set the specific clicked point to the brush color, no need to even pull this to a logical function
-		}
-		if(_mode.equals("Fill")) {                // if the mode is fill
+			break;
+		case "Fill":                // if the mode is fill
 			_map.fill(p, col);                    // we fill the map starting from the clicked point with the brush color (according to fill's logic)
-		}
-		if(_mode.equals("Gol")) {                 // if the mode is Game of Life
+			break;
+		case "Gol":                 // if the mode is Game of Life
 			_map.nextGenGol();	                  // we just need to compute the next generation, click location doesn't even matter
-		}
-		if(_mode.equals("ShortestPath")) {        // same thing as the 2D shape drawings
+			break;
+		case "ShortestPath":        // same thing as the 2D shape drawings
 			_last = p;                            // remeber this click
 			_mode = "_ShortestPath";              // set the mode to be in the middle of shortest path
-		}
-		else if(_mode.equals("_ShortestPath")) {  // if we just clicked the second point for the path
+			return;                // we changed nothing about the grid so we can return right now
+		case "_ShortestPath":  // if we just clicked the second point for the path
 			Point2D[] path = _map.shortestPath(p, _last);  // calculate the path between the points
 			if (path != null) {                            // if we actually found a path
 				System.out.println("ShortestPath: " + _last.toStringInt() + " --> " + p.toStringInt() + "  length: " + path.length);  // print the path description
@@ -135,23 +147,14 @@ public class Ex3 {
 					System.out.println(i + ") " + point.toStringInt());  // print the point
 					_map.setPixel(point, col);           // and color it in the current brush color
 				}
-			} else if (!exercise) {                          // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
-				Thread flasher = new Thread(() -> {          // we create a new thread (with a lambda) that will flash the screen
-					StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
-					StdDraw_Ex3.show();                      // show the red screen
-					try {                                    // we will try to sleep
-						Thread.sleep(70);                    //                       here
-					} catch (InterruptedException e) {       // if we caught an InterruptedException
-						Thread.currentThread().interrupt();  // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
-					}
-					drawArray(_map);                         // redraw the array over the red screen
-				 });
-				 flasher.start();                            // we now start the thread with the lambda
-				 _mode = "ShortestPath";                     // reset mode, we do this now because we are about to return
-				 System.out.println("New mode: " + _mode);   // same reasoning
-				 return;                                     // exit the function to bypass the final drawArray which will draw on top of the red screen, it will be drawn later by the flasher
+			} else if (!exercise) {                         // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
+				flasher.start();                            // flash the screen using the flasher thread
+				_mode = "ShortestPath";                     // reset mode, we do this now because we are about to return
+				System.out.println("New mode: " + _mode);   // same reasoning
+				return;                                     // exit the function to bypass the final drawArray which will draw on top of the red screen, it will be drawn later by the flasher
 			}
 			_mode = (exercise ? "None" : "ShortestPath");    // reset mode, unless in exercise mode which means we go into no mode
+			break;
 		}
 		System.out.println("New mode: " + _mode);        // for debug puposes (again, the user should not be looking at the console) print the new mode
 		drawArray(_map);                                 // redraw the map after the changes

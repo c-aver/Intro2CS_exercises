@@ -186,11 +186,11 @@ public class MyMap2DTest {
         Random rnd = new Random(System.nanoTime());         // create a new random generator and seed it with the time
         for (int i = 0; i < numberOfTests; ++i) {           // run the test according to required number of times
             int w = rnd.nextInt(320) + 1, h = rnd.nextInt(320) + 1;  // get a random size for the map
-            MyMap2D map = new MyMap2D(w, h); // set up a random map
+            MyMap2D map = new MyMap2D(w, h); // set up a map
             map.fill(WHITE);                 // fill the map with white
             Point2D p1 = randPoint(w, h, rnd), p2 = randPoint(w, h, rnd), p3 = randPoint(w, h, rnd);  // set up 3 random points to draw a triangle, we pass rnd to them because they might be initialized in the same nanosecond
             map.drawSegment(p1, p2, BLACK);  // draw 1 line on the map, we will now test it for incorrect pixels
-            assertEquals(BLACK, map.getPixel(p1), "p1 was not colored by drawSegment");     // make sure the actual points were colored
+            assertEquals(BLACK, map.getPixel(p1), "p1 was not colored by drawSegment");     // make sure the endpoints were colored
             assertEquals(BLACK, map.getPixel(p2), "p2 was not colored by drawSegment");
             long minX = Math.round(Math.min(p1.x(), p2.x())),
                  minY = Math.round(Math.min(p1.y(), p2.y())),
@@ -201,19 +201,19 @@ public class MyMap2DTest {
                     if (map.getPixel(x, y) == BLACK) { // if the pixel is black, it is part of our segment, we need to make sure that's correct
                         double x0 = x, y0 = y, x1 = p1.x(), y1 = p1.y(), x2 = p2.x(), y2 = p2.y();  // preparing the numbers for the formula
                         double dx10 = x1 - x0, dx21 = x2 - x1, dy10 = y1 - y0, dy21 = y2 - y1;      // some of the deltas we will need
-                        double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
+                        double distance = (Math.abs(dx21 * dy10 - dx10 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the pixel and the theoretical line using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
                         assert distance < 1 : "drawSegment colored point too far from the line";
-                        assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawSegment colored point outside of bounded array";
+                        assert ((x >= minX) && (x <= maxX) && (y >= minY) && (y <= maxY)) : "drawSegment colored point outside of bounded area";
                     }
             if (isTriangleLine(p1, p2, p3)) continue;  // if the triangle is actually a line it is meaningless to try to fill it
             map.drawSegment(p1, p3, BLACK); // draw the other 2 sides of the triangle in black
             map.drawSegment(p2, p3, BLACK);
             Point2D midpoint = new Point2D((p1.x() + p2.x() + p3.x()) / 3, (p1.y() + p2.y() + p3.y()) / 3); // find the midpoint, guaranteed to be inside the triangle
-            map.fill(midpoint, YELLOW);        // fill the inside of the triangle with blue
+            map.fill(midpoint, YELLOW);        // fill the inside of the triangle with yellow
             assert (map.getPixel(0, 0) == WHITE)              // this asserts that the corners are not all colored
                   || (map.getPixel(0, h - 1) == WHITE)        // if they are, the filling escaped the triangle
                   || (map.getPixel(w - 1, 0) == WHITE)        // (they can't all be black because we drew a triangle)
-                  || (map.getPixel(w - 1, h - 1) == WHITE)    // some might be black, some might even be yellow (if the filling was ON the triangle)
+                  || (map.getPixel(w - 1, h - 1) == WHITE)    // some might be black, some might even be yellow (if the filling was ON the triangle and on the points is in the corner)
                   : "Filling escaped segment triangle, segments are holey";      
         }
     }

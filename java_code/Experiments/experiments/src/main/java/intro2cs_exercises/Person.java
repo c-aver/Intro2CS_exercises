@@ -28,6 +28,13 @@ public class Person implements Comparable<Person> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof Person)) return false;
+        Person otherPerson = (Person) o;
+        return otherPerson.getID() == _ID;
+    }
+
+    @Override
     public int compareTo(Person otherP) {
         return new PersonComparator().compare(this, otherP);
     }

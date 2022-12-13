@@ -2,25 +2,36 @@ package intro2cs_exercises;
 
 import java.util.ArrayList;
 
-public class Person {
+import intro2cs_exercises.PersonComparator.PersonCompareType;
+
+public class Person implements Comparable<Person> {
     private int _ID;
-    private double _height;
+    private double _heightInMeters;
     private ArrayList<Person> _children;
 
     private static int runningID = 0;
 
-    Person(double height) {
+    Person(double heightInMeters) {
         _ID = runningID++;
-        _height = height;
+        _heightInMeters = heightInMeters;
+        _children = new ArrayList<Person>();
     }
 
     public int getID() { return _ID; }
 
-    public double getHeight() { return _height; }
+    public double getHeight() { return _heightInMeters; }
 
     public final ArrayList<Person> getChildren() { return _children; }
 
     public boolean addChild(Person child) {
         return _children.add(child);
+    }
+
+    @Override
+    public int compareTo(Person otherP) {
+        return new PersonComparator().compare(this, otherP);
+    }
+    public int compareTo(Person otherP, PersonCompareType compareType) {
+        return new PersonComparator(compareType).compare(this, otherP);
     }
 }

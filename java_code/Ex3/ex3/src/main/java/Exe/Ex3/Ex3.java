@@ -19,17 +19,6 @@ public class Ex3 {
 	private static String _mode = "";                           // the current brush mode, default none (anything that is not a known mode is none)
 	private static Point2D _last = null;                        // the last clicked point, only used for 2-point brush modes (segment, rectangle, circle, shortest path)
 	public static final int BACKGROUND = Color.WHITE.getRGB();  // the default background color
-	
-	private static final Thread flasher = new Thread(() -> {          // this is a thread with a lambda that will flash the screen
-		StdDraw_Ex3.clear(Color.RED);            // make the whole screen red
-		StdDraw_Ex3.show();                      // show the red screen
-		try {                                    // we will try to sleep
-			Thread.sleep(70);                //                 here
-		} catch (InterruptedException e) {       // if we caught an InterruptedException
-			Thread.currentThread().interrupt();  // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
-		}
-		drawArray(_map);                         // redraw the array over the red screen
-	 });
 
 	// this boolean determines whether the UI acts like the given example or how I like, I take no responsibility on the effects of changing this value, however I will say that setting this to false makes it easier to use the UI in order to test the logical class
 	public static boolean exercise = true;
@@ -148,6 +137,17 @@ public class Ex3 {
 					_map.setPixel(point, col);           // and color it in the current brush color
 				}
 			} else if (!exercise) {                         // this is the case where no path was found, we want to flash the screen (unless we are in exercise mode which doesn't do that)
+				Thread flasher = new Thread(() -> {         // create a thread with a lambda that will flash the screen
+					StdDraw_Ex3.clear(Color.RED);           // make the whole screen red
+					StdDraw_Ex3.show();                     // show the red screen
+					try {                                   // we will try to sleep
+						Thread.sleep(70);                   //                here
+					} catch (InterruptedException e) {      // if we caught an InterruptedException
+						Thread.currentThread().interrupt(); // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
+					}
+					drawArray(_map);                        // redraw the array over the red screen
+					Thread.currentThread().suspend();       // suspend the thread to allow it to run again next time
+				});
 				flasher.start();                            // flash the screen using the flasher thread
 				_mode = "ShortestPath";                     // reset mode, we do this now because we are about to return
 				System.out.println("New mode: " + _mode);   // same reasoning

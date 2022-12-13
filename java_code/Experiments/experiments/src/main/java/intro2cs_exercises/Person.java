@@ -11,10 +11,14 @@ public class Person implements Comparable<Person> {
 
     private static int runningID = 0;
 
-    Person(double heightInMeters) {
+    Person(double heightInMeters, Person[] parents) {
         _ID = runningID++;
         _heightInMeters = heightInMeters;
         _children = new ArrayList<Person>();
+        if (parents != null)
+            for (Person parent : parents) {
+                parent.addChild(this);
+            }
     }
 
     public int getID() { return _ID; }

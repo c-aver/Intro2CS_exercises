@@ -4,14 +4,8 @@ import intro2cs_exercises.PersonComparator.PersonCompareType;
 
 import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
 public class PersonTest 
 {
-    /**
-     * Rigorous Test :-)
-     */
     @Test
     public void testPersonComapre() {
         Person p1 = new Person(1.7);

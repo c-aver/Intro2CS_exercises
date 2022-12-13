@@ -1,5 +1,6 @@
 package intro2cs_exercises;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import intro2cs_exercises.PersonComparator.PersonCompareType;
@@ -10,6 +11,26 @@ public class Person implements Comparable<Person> {
     private ArrayList<Person> _children;
 
     private static int runningID = 0;
+
+    public static final double MIN_HEIGHT = 1.0;
+    public static final double MAX_HEIGHT = 2.5;
+
+    public static Person randPerson(ArrayList<Person> peopleSoFar) {
+        Person[] parents;
+        int numPeopleSoFar = peopleSoFar.size();
+        if (numPeopleSoFar == 0) {
+            parents = null;
+        } else if (numPeopleSoFar == 1) {
+            parents = new Person[] {peopleSoFar.get(0)};
+        } else {
+            int parent1Index = (int) (Math.random() * numPeopleSoFar);
+            int parent2Index = (int) (Math.random() * numPeopleSoFar);
+            if (parent2Index == parent1Index) parent2Index = (parent2Index + 1) % numPeopleSoFar;
+            parents = new Person[] { peopleSoFar.get(parent1Index), peopleSoFar.get(parent2Index) };
+        }
+        double height = Math.random() * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT;
+        return new Person(height, parents);
+    }
 
     Person(double heightInMeters, Person[] parents) {
         _ID = runningID++;
@@ -36,6 +57,19 @@ public class Person implements Comparable<Person> {
         if (o == null || !(o instanceof Person)) return false;
         Person otherPerson = (Person) o;
         return otherPerson.getID() == _ID;
+    }
+    @Override
+    public String toString() {
+        String result = "";
+        result += "ID: " + getID() + ". Height: " + new DecimalFormat("0.00").format(getHeight()) + "m.";
+        if (_children.size() > 0) {
+            result += " Children IDs: " + _children.get(0).getID();
+            for (Person child : getChildren().subList(1, getChildren().size())) {
+                result += ", " + child.getID();
+            }
+            result += ".";
+        }
+        return result;
     }
 
     @Override

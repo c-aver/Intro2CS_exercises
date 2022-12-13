@@ -4,6 +4,8 @@ import intro2cs_exercises.PersonComparator.PersonCompareType;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 public class PersonTest 
@@ -16,5 +18,15 @@ public class PersonTest
         assert p1.compareTo(p2, PersonCompareType.BY_HEIGHT) > 0;
         assert p1.compareTo(p2, PersonCompareType.BY_NUMBER_OF_CHILDREN) > 0;
         assertEquals(p2, p1.getChildren().get(0));
+    }
+    @Test
+    public void testRandPerson() {
+        ArrayList<Person> people = new ArrayList<Person>();
+        for (int i = 0; i < 10; ++i) {
+            people.add(Person.randPerson(people));
+        }
+        for (Person person : people) {
+            System.out.println(person);
+        }
     }
 }

@@ -32,6 +32,12 @@ public class Person implements Comparable<Person> {
         return new Person(height, parents);
     }
 
+    Person(Person orig) {
+        _ID = orig.getID();
+        _heightInMeters = orig.getHeight();
+        _children = orig.getChildren();
+    }
+
     Person(double heightInMeters, Person[] parents) {
         _ID = runningID++;
         _heightInMeters = heightInMeters;
@@ -53,10 +59,18 @@ public class Person implements Comparable<Person> {
     }
 
     @Override
+    public Person clone() {
+        return new Person(this);
+    }
+    @Override
     public boolean equals(Object o) {
         if (o == null || !(o instanceof Person)) return false;
         Person otherPerson = (Person) o;
         return otherPerson.getID() == _ID;
+    }
+    @Override
+    public int hashCode() {
+        return getID();
     }
     @Override
     public String toString() {

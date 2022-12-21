@@ -11,12 +11,12 @@ import Exe.Ex4.Ex4_Const;
  */
 
 
-public class Point2D{
+public class Point2D implements GeoShapeable {
     //public static final double EPS1 = 0.001, EPS2 = Math.pow(EPS1,2), EPS=EPS2;
     public static final Point2D ORIGIN = new Point2D(0,0);
-    private double _x,_y;
-    public Point2D(double x,double y) {
-    	_x=x; _y=y;
+    private double _x, _y;
+    public Point2D(double x, double y) {
+    	_x = x; _y = y;
     }
     public Point2D(Point2D p) {
        this(p.x(), p.y());
@@ -28,23 +28,23 @@ public class Point2D{
             _y = Double.parseDouble(a[1]);
         }
         catch(IllegalArgumentException e) {
-            System.err.println("ERR: got wrong format string for Point2D init, got:"+s+"  should be of format: x,y");
+            System.err.println("ERROR: Got wrongly formatted string for Point2D constructor. Got: \"" + s + "\", should be of format: \"x,y\"");
             throw(e);
         }
     }
-    public double x() {return _x;}
-    public double y() {return _y;}
+    public double x() { return _x; }
+    public double y() { return _y; }
  
-    public int ix() {return (int)_x;}
-    public int iy() {return (int)_y;}
+    public int ix() { return (int) _x; }
+    public int iy() { return (int) _y; }
   
     public Point2D add(Point2D p) {
-    	Point2D a = new Point2D(p.x()+x(),p.y()+y());
+    	Point2D a = new Point2D(p.x() + x(), p.y() + y());
     	return a;
     }
     public String toString()
     {
-        return _x+","+_y;
+        return _x + "," + _y;
     }
 
     public double distance()
@@ -55,50 +55,81 @@ public class Point2D{
     {
         double dx = this.x() - p2.x();
         double dy = this.y() - p2.y();
-        double t = (dx*dx+dy*dy);
+        double t = (dx*dx + dy*dy);
         return Math.sqrt(t);
     }
     @Override
-    public boolean equals(Object p)
+    public boolean equals(Object o)
     {
-        if(p==null || !(p instanceof Point2D)) {return false;}
-        Point2D p2 = (Point2D)p;
-        return ( (_x==p2._x) && (_y==p2._y));
+        if(o == null || !(o instanceof Point2D)) { return false; }  // these conditions will always stop an object from equaling to this
+        Point2D p = (Point2D) o;                 // cast the object to a Point2D for logical evaluation
+        return ((_x == p._x) && (_y == p._y));   // the points are equal if both their coordinated are equal
     }
-    public boolean close2equals(Point2D p2, double eps)
+    /**
+     * This function checks "close enough" equality.
+     * @param p2 the point to compare to
+     * @param eps the distance from which they are not considered equal
+     * @return whether the points are close enough to equal
+     */
+    public boolean closeToEquals(Point2D p2, double eps)
     {
-        return ( this.distance(p2) < eps );
+        return (this.distance(p2) < eps);        // the points are close enough to equal if their distance is less than the allowed epsilon
     }
-    public boolean close2equals(Point2D p2)
+    /**
+     * This function checks "close enough" equality.
+     * This function uses the built in Ex4 epsilon as the distance from which points are not equal.
+     * @param p2 the point to compare to
+     * @return whether the points are close enough to eqaul
+     */
+    public boolean closeToEquals(Point2D p2)
     {
-        return close2equals(p2, Ex4_Const.EPS);
+        return closeToEquals(p2, Ex4_Const.EPS);  // check the same thing with the constant epsilon 
     }
     /**
      * This method returns the vector between this point and the target point. The vector is represented as a Point2D.
-     * @param target
-     * @return
+     * Note that the tail is this point and the head is the target
+     * @param target the point to draw the vector to
+     * @return the vector from this point to the target
      */
     public Point2D vector(Point2D target) {
-    	double dx = target.x() - this.x();
-    	double dy = target.y() - this.y();
-    	return new Point2D(dx,dy);
+    	double dx = target.x() - this.x();  // the vector is computed by moving the target closer to the origin by this's coordinates
+    	double dy = target.y() - this.y();  // effectively, we move the target to the equivalent position in relation to the origin
+    	return new Point2D(dx, dy);
     }
 	
 	public void move(Point2D vec) {
 		this._x += vec.x();
 		this._y += vec.y();
 	}
-	
-	/////////////////////// You should implement the methods below ///////////////////////////
-	public void scale(Point2D cen, double ratio) {
-		//////////add your code below ///////////
+		public void scale(Point2D cen, double ratio) {
+		////////// TODO: add your code below ///////////
 		
 		/////////////////////////////////////////
 	}
 	public void rotate(Point2D cen, double angleDegrees) {
-		//////////add your code below ///////////
+		////////// TODO: add your code below ///////////
 		
 		/////////////////////////////////////////
 	}
+    @Override
+    public boolean contains(Point2D ot) {
+        return equals(ot);    // a point is considered to contain another point if they are equal
+    }
+    @Override
+    public double area() {
+        return 0;
+    }
+    @Override
+    public double perimeter() {
+        return 0;
+    }
+    @Override
+    public GeoShapeable copy() {
+        return new Point2D(this);
+    }
+    @Override
+    public Point2D[] getPoints() {
+        return new Point2D[] { this };
+    }
    
 }

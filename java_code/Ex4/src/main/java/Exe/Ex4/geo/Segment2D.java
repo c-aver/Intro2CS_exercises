@@ -8,6 +8,18 @@ package Exe.Ex4.geo;
  *
  */
 public class Segment2D implements GeoShapeable{
+	private Point2D _p1;   // the endpoints of the segment
+	private Point2D _p2;
+
+	public Segment2D(Point2D p1, Point2D p2) {
+		_p1 = new Point2D(p1); _p2 = new Point2D(p2);
+	}
+	public Segment2D(double x1, double y1, double x2, double y2) {
+		_p1 = new Point2D(x1, y1); _p2 = new Point2D(x2, y2);
+	}
+	public Segment2D(Segment2D seg) {
+		this(seg.getPoints()[0], seg.getPoints()[1]);
+	}
 
 	@Override
 	public boolean contains(Point2D ot) {
@@ -17,44 +29,39 @@ public class Segment2D implements GeoShapeable{
 
 	@Override
 	public double area() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double perimeter() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _p1.distance(_p2) * 2;      // the perimeter is twice the length of the segment, which is the distance between the points
 	}
 
 	@Override
 	public void move(Point2D vec) {
-		// TODO Auto-generated method stub
-		
+		_p1.move(vec);   // move each of the points by the vector
+		_p2.move(vec);
 	}
 
 	@Override
 	public GeoShapeable copy() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Segment2D(this);
 	}
 
 	@Override
 	public void scale(Point2D center, double ratio) {
-		// TODO Auto-generated method stub
-		
+		_p1.scale(center, ratio);   // scale each of the points by the parameters
+		_p2.scale(center, ratio);
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		// TODO Auto-generated method stub
-		
+		_p1.rotate(center, angleDegrees);   // rotate each of the points by the parameters
+		_p2.rotate(center, angleDegrees);
 	}
 
 	@Override
 	public Point2D[] getPoints() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Point2D[] { new Point2D(_p1), new Point2D(_p2) };
 	}
-	
 }

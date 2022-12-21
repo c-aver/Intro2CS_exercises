@@ -22,35 +22,35 @@ import Exe.Ex4.geo.Polygon2D;
  *
  */
 public class Ex4 implements Ex4_GUI{
-	private  ShapeCollectionable _shapes = new ShapeCollection();
-	private  GUI_Shapeable _gs;
-	private  Color _color = Color.blue;
-	private  boolean _fill = false;
-	private  String _mode = "";
-	private  Point2D _p1;
+	private ShapeCollectionable _shapes = new ShapeCollection();
+	private GUI_Shapeable _gs;
+	private Color _color = Color.blue;
+	private boolean _fill = false;
+	private String _mode = "";
+	private Point2D _p1;
 	
-	private  static Ex4 _winEx4 = null;
+	private static Ex4 _winEx4 = null;
 	
 	private Ex4() {
-			init(null);
+		init(null);
 	}
 	public void init(ShapeCollectionable s) {
-		if(s==null) {_shapes = new ShapeCollection();}
-		else {_shapes = s.copy();}
-		GUI_Shapeable _gs = null;
-		Polygon2D _pp = null;
+		if (s == null) { _shapes = new ShapeCollection(); }
+		else { _shapes = s.copy(); }
+		GUI_Shapeable _gs = null; // TODO: do all these variables need to be inside the function or the fields?
+		Polygon2D _pp = null; // TODO: what is this?
 		_color = Color.blue;
 		_fill = false;
 		_mode = "";
 		Point2D _p1 = null;
 	}
 	public void show(double d) {
-		StdDraw_Ex4.setScale(0,d);
+		StdDraw_Ex4.setScale(0, d);
 		StdDraw_Ex4.show();
 		drawShapes();
 	}
 	public static Ex4 getInstance() {
-		if(_winEx4 ==null) {
+		if(_winEx4 == null) {
 			_winEx4 = new Ex4();
 		}
 		return _winEx4;
@@ -58,24 +58,24 @@ public class Ex4 implements Ex4_GUI{
 	
 	public void drawShapes() {
 		StdDraw_Ex4.clear();
-			for(int i=0;i<_shapes.size();i++) {
-				GUI_Shapeable sh = _shapes.get(i);
-				
-				drawShape(sh);
-			}
-			if(_gs!=null) {drawShape(_gs);}
+		for (int i = 0; i < _shapes.size(); ++i) { // TODO: foreach?
+			GUI_Shapeable sh = _shapes.get(i);
+			
+			drawShape(sh);
+		}
+		if (_gs != null) { drawShape(_gs); }
 		StdDraw_Ex4.show();
 	}
 	private static void drawShape(GUI_Shapeable g) {
 		StdDraw_Ex4.setPenColor(g.getColor());
-		if(g.isSelected()) {StdDraw_Ex4.setPenColor(Color.gray);}
+		if (g.isSelected()) { StdDraw_Ex4.setPenColor(Color.gray); }
 		GeoShapeable gs = g.getShape();
 		boolean isFill = g.isFilled();
-		if(gs instanceof Circle2D) {
-			Circle2D c = (Circle2D)gs;
+		if (gs instanceof Circle2D) {
+			Circle2D c = (Circle2D) gs;
 			Point2D cen = c.getPoints()[0];
 			double rad = c.getRadius();
-			if(isFill) {
+			if (isFill) {
 				StdDraw_Ex4.filledCircle(cen.x(), cen.y(), rad);
 			}
 			else { 
@@ -84,18 +84,18 @@ public class Ex4 implements Ex4_GUI{
 		}
 		
 	}
-	private void setColor(Color c) {
-		for(int i=0;i<_shapes.size();i++) {
+	private void updateColor(Color c) {
+		for (int i = 0; i < _shapes.size(); ++i) {
 			GUI_Shapeable s = _shapes.get(i);
-			if(s.isSelected()) {
+			if (s.isSelected()) {
 				s.setColor(c);
 			}
 		}
 	}
-	private void setFill() {
-		for(int i=0;i<_shapes.size();i++) {
+	private void updateFill() {
+		for (int i = 0; i < _shapes.size(); ++i) {
 			GUI_Shapeable s = _shapes.get(i);
-			if(s.isSelected()) {
+			if (s.isSelected()) {
 				s.setFilled(_fill);
 			}
 		}
@@ -103,15 +103,15 @@ public class Ex4 implements Ex4_GUI{
 
 	public void actionPerformed(String p) {
 		_mode = p;
-		if(p.equals("Blue")) {_color = Color.BLUE; setColor(_color);}
-		if(p.equals("Red")) {_color = Color.RED; setColor(_color);}
-		if(p.equals("Green")) {_color = Color.GREEN; setColor(_color);}
-		if(p.equals("White")) {_color = Color.WHITE; setColor(_color);}
-		if(p.equals("Black")) {_color = Color.BLACK; setColor(_color);}
-		if(p.equals("Yellow")) {_color = Color.YELLOW; setColor(_color);}
-		if(p.equals("Fill")) {_fill = true; setFill();}
-		if(p.equals("Empty")) {_fill = false; setFill();}
-		if(p.equals("Clear")) {_shapes.removeAll();}
+		if (p.equals("Blue"))   { _color = Color.BLUE;   updateColor(_color); }
+		if (p.equals("Red"))    { _color = Color.RED;    updateColor(_color); }
+		if (p.equals("Green"))  { _color = Color.GREEN;  updateColor(_color); }
+		if (p.equals("White"))  { _color = Color.WHITE;  updateColor(_color); }
+		if (p.equals("Black"))  { _color = Color.BLACK;  updateColor(_color); }
+		if (p.equals("Yellow")) { _color = Color.YELLOW; updateColor(_color); }
+		if (p.equals("Fill"))   { _fill = true; updateFill(); }
+		if (p.equals("Empty"))  { _fill = false; updateFill(); }
+		if (p.equals("Clear"))  { _shapes.removeAll(); }
 	
 		
 		drawShapes();

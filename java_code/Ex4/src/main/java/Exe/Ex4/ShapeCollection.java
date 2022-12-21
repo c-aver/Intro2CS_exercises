@@ -13,64 +13,56 @@ import Exe.Ex4.GUI_Shapeable;
  *
  */
 public class ShapeCollection implements ShapeCollectionable{
-	private ArrayList<GUI_Shapeable> _shapes;
+	private ArrayList<GUI_Shapeable> _shapes;      // the collection of the shapes
 	
 	public ShapeCollection() {
-		_shapes = new ArrayList<GUI_Shapeable>();
+		_shapes = new ArrayList<GUI_Shapeable>();  // initialize the ArrayList
 	}
 	@Override
 	public GUI_Shapeable get(int i) {
-		return _shapes.get(i);
+		return _shapes.get(i);                     // call the ArrayList's function
 	}
 
 	@Override
 	public int size() {
-		return _shapes.size();
+		return _shapes.size();                     // call the ArrayList's function
 	}
 
 	@Override
 	public GUI_Shapeable removeElementAt(int i) {
-		//////////add your code below ///////////
-		
-		return null;
-		//////////////////////////////////////////
+		return _shapes.remove(i);                  // call the ArrayList's function
 	}
 
 	@Override
 	public void addAt(GUI_Shapeable s, int i) {
-		//////////add your code below ///////////
-		
-		
-		//////////////////////////////////////////
+		_shapes.add(i, s);                         // call the ArrayList's function
 	}
 	@Override
 	public void add(GUI_Shapeable s) {
-		if(s!=null && s.getShape()!=null) {
+		if(s != null && s.getShape() != null) {
 			_shapes.add(s);
+		}
+	}
+	public void addAll(ShapeCollectionable c) {
+		for (int i = 0; i < c.size(); ++i) {
+			_shapes.add(c.get(i));
 		}
 	}
 	@Override
 	public ShapeCollectionable copy() {
-		//////////add your code below ///////////
-		
-		return null;
-		//////////////////////////////////////////
+		ShapeCollection result = new ShapeCollection();
+		result.addAll(this);
+		return result;
 	}
 
 	@Override
 	public void sort(Comparator<GUI_Shapeable> comp) {
-		//////////add your code below ///////////
-		
-		
-		//////////////////////////////////////////
+		_shapes.sort(comp);
 	}
 
 	@Override
 	public void removeAll() {
-		//////////add your code below ///////////
-		
-		
-		//////////////////////////////////////////
+		_shapes.clear();
 	}
 
 	@Override
@@ -100,11 +92,9 @@ public class ShapeCollection implements ShapeCollectionable{
 	@Override
 	public String toString() {
 		String ans = "";
-		for(int i=0;i<size();i=i+1) {
-			ans += this.get(i);
+		for(int i = 0; i < size(); ++i) {
+			ans += this.get(i);   // TODO: add line breaks? are they already in the GUI_Shapeable's toString?
 		}
 		return ans;
 	}
-	
-
 }

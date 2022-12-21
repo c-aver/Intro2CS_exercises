@@ -2,7 +2,7 @@ package Exe.Ex4;
 import java.util.Comparator;
 
 import Exe.Ex4.geo.Rect2D;
-import Exe.Ex4.gui.GUI_Shapeable;
+import Exe.Ex4.GUI_Shapeable;
 
 /**
  * This interface represents a collection of gui_shapes with the following capabilities:

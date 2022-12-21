@@ -22,12 +22,12 @@ import Exe.Ex4.geo.Polygon2D;
  *
  */
 public class Ex4 implements Ex4_GUI{
-	private ShapeCollectionable _shapes = new ShapeCollection();
+	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
 	private GUI_Shapeable _gs;
-	private Color _color = Color.blue;
-	private boolean _fill = false;
-	private String _mode = "";
-	private Point2D _p1;
+	private Color _color = Color.blue;   // the current brush color
+	private boolean _fill = false;       // whether we are creating a filled shape
+	private String _mode = "";           // the current brush mode
+	private Point2D _lastClick;          // the last click location
 	
 	private static Ex4 _winEx4 = null;
 	
@@ -113,40 +113,41 @@ public class Ex4 implements Ex4_GUI{
 		if (p.equals("Empty"))  { _fill = false; updateFill(); }
 		if (p.equals("Clear"))  { _shapes.removeAll(); }
 	
-		
 		drawShapes();
 		
 	}
-
 	
 	public void mouseClicked(Point2D p) {
-		System.out.println("Mode: "+_mode+"  "+p);
+		System.out.println("Mode: " + _mode + ". Click location: " + p);
 		if(_mode.equals("Circle")) {
-			if(_gs==null) {
-				_p1 = new Point2D(p);
+			if(_gs == null) {
+				_lastClick = new Point2D(p);
 			}
 			else {
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
 				_gs = null;
-				_p1 = null;
+				_lastClick = null;
 			}
 		}
-			if(_mode.equals("Move")) {
-				if(_p1==null) {_p1 = new Point2D(p);}
-				else {
-					_p1 = new Point2D(p.x()-_p1.x(), p.y()-_p1.y());
-					move();
-					_p1 = null;
-				}
+		if(_mode.equals("Move")) {
+			if(_lastClick==null) {_lastClick = new Point2D(p);}
+			else {
+				_lastClick = new Point2D(p.x()-_lastClick.x(), p.y()-_lastClick.y());
+				move();
+				_lastClick = null;
 			}
-	
+		}
 		if(_mode.equals("Point")) {
 			select(p);
 		}
 	
 		drawShapes();
+	}
+	public void mouseRightClicked(Point2D p) {
+		System.out.println("right click!");
+	
 	}
 	
 	private void select(Point2D p) {
@@ -163,25 +164,21 @@ public class Ex4 implements Ex4_GUI{
 			GUI_Shapeable s = _shapes.get(i);
 			GeoShapeable g = s.getShape();
 			if(s.isSelected() && g!=null) {
-				g.move(_p1);
+				g.move(_lastClick);
 			}
 		}
 	}
 	
-	public void mouseRightClicked(Point2D p) {
-		System.out.println("right click!");
-	
-	}
 	public void mouseMoved(MouseEvent e) {
-		if(_p1!=null) {
+		if(_lastClick!=null) {
 			double x1 = StdDraw_Ex4.mouseX();
 			double y1 = StdDraw_Ex4.mouseY();
 			GeoShapeable gs = null;
 		//	System.out.println("M: "+x1+","+y1);
 			Point2D p = new Point2D(x1,y1);
 			if(_mode.equals("Circle")) {
-				double r = _p1.distance(p);
-				gs = new Circle2D(_p1,r);
+				double r = _lastClick.distance(p);
+				gs = new Circle2D(_lastClick,r);
 			}
 	
 			_gs = new GUIShape(gs,false, Color.pink, 0);

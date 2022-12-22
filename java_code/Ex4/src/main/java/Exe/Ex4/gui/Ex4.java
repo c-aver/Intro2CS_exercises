@@ -24,7 +24,7 @@ import Exe.Ex4.geo.Segment2D;
  */
 public class Ex4 implements Ex4_GUI{
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
-	private GUI_Shapeable _previewShape;           // TODO: what is this?
+	private GUI_Shapeable _previewShape = null;           // the shape currently being drawn
 	private Color _color = Color.blue;   // the current brush color
 	private boolean _fill = false;       // whether we are creating a filled shape
 	private String _mode = "";           // the current brush mode
@@ -60,7 +60,7 @@ public class Ex4 implements Ex4_GUI{
 	
 	public void drawShapes() {
 		StdDraw_Ex4.clear();
-		for (int i = 0; i < _shapes.size(); ++i) { // TODO: foreach?
+		for (int i = 0; i < _shapes.size(); ++i) {
 			GUI_Shapeable sh = _shapes.get(i);
 			
 			drawShape(sh);
@@ -111,15 +111,15 @@ public class Ex4 implements Ex4_GUI{
 	public void actionPerformed(String p) {
 		_mode = p;
 		_lastClick = null;      // nullify last click when mode changes since next click is the first
-		if (p.equals("Blue"))   { _color = Color.BLUE;   updateColor(_color); }
+		if (p.equals("Blue"))   { _color = Color.BLUE;   updateColor(_color); }  // if the option was a color, set the brush color to it and update selected shapes' color
 		if (p.equals("Red"))    { _color = Color.RED;    updateColor(_color); }
 		if (p.equals("Green"))  { _color = Color.GREEN;  updateColor(_color); }
 		if (p.equals("White"))  { _color = Color.WHITE;  updateColor(_color); }
 		if (p.equals("Black"))  { _color = Color.BLACK;  updateColor(_color); }
 		if (p.equals("Yellow")) { _color = Color.YELLOW; updateColor(_color); }
-		if (p.equals("Fill"))   { _fill = true; updateFill(); }
+		if (p.equals("Fill"))   { _fill = true;  updateFill(); }         // if the option was a filling option, set the brush filling and update selected
 		if (p.equals("Empty"))  { _fill = false; updateFill(); }
-		if (p.equals("Clear"))  { _shapes.removeAll(); }
+		if (p.equals("Clear"))  { _shapes.removeAll(); runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
 		
 		// TODO: add non-implemented actions
 
@@ -129,7 +129,7 @@ public class Ex4 implements Ex4_GUI{
 	public void mouseClicked(Point2D p) {
 		System.out.println("Mode: " + _mode + ". Click location: " + p);
 		if(_mode.equals("Circle")) {
-			if(_previewShape == null) {
+			if(_lastClick == null) {
 				_lastClick = new Point2D(p);
 			}
 			else {
@@ -147,7 +147,7 @@ public class Ex4 implements Ex4_GUI{
 		if(_mode.equals("Point")) {
 			selectUnderPoint(p);
 		}
-		if(_mode.equals("Segment")) {
+		if(_mode.equals("Segment")) {  // TODO: there is some bug here with null methods
 			if (_lastClick == null) {           // if we don't have a last click this is the first point of the segment
 				_lastClick = new Point2D(p);    // so we remember it for the next click
 			} else {                            // if we do have a last click this is the second point of the segment
@@ -181,24 +181,25 @@ public class Ex4 implements Ex4_GUI{
 		}
 	}
 	
-	public void mouseMoved(MouseEvent e) {    // TODO: change structure to if (_lastClick == null) return; ?
-		if (_lastClick != null) {                      // if we have a last click we are in the middle of drawing a shape, so we will preivew it onto the mouse position
-			double x = StdDraw_Ex4.mouseX();           // save mouse coordinates
-			double y = StdDraw_Ex4.mouseY();
-			GeoShapeable preview = null;                    // create a shape for preview
-		//	System.out.println("M: "+x1+","+y1);            // debug info, don't use unnecessarily as it creates a lot of trash in stdout
-			Point2D p = new Point2D(x, y);                  // create a point for the current mouse positioni
-			if (_mode.equals("Circle")) {
-				double r = _lastClick.distance(p);          // calculate the radius for preivewed circle
-				preview = new Circle2D(_lastClick, r);      // set the preview shape as a circle centered on last click with the radius
-			}
-			if (_mode.equals("Segment")) {
-				preview = new Segment2D(_lastClick, p);     // set the preview as a segment from last click to mouse position
-			}
-	
-			_previewShape = new GUIShape(preview,false, Color.pink, 0);  // set the preview shape to the constructed one, unfilled and in pink
-			drawShapes();                                   // update the screen
+	public void mouseMoved(MouseEvent e) {
+	//	System.out.println("M: "+x+","+y);              // debug info, don't use unnecessarily as it creates a lot of trash in stdout
+
+		if (_lastClick == null) return;                // if we are not currently drawing a shape nothing needs to be handled
+		
+		double x = StdDraw_Ex4.mouseX();                // save mouse coordinates
+		double y = StdDraw_Ex4.mouseY();
+		GeoShapeable preview = null;                    // create a shape for preview
+		Point2D p = new Point2D(x, y);                  // create a point for the current mouse positioni
+		if (_mode.equals("Circle")) {
+			double r = _lastClick.distance(p);          // calculate the radius for preivewed circle
+			preview = new Circle2D(_lastClick, r);      // set the preview shape as a circle centered on last click with the radius
 		}
+		if (_mode.equals("Segment")) {
+			preview = new Segment2D(_lastClick, p);     // set the preview as a segment from last click to mouse position
+		}
+
+		_previewShape = new GUIShape(preview,false, Color.pink, 0);  // set the preview shape to the constructed one, unfilled and in pink
+		drawShapes();                                   // update the screen
 	}
 	@Override
 	public ShapeCollectionable getShape_Collection() {
@@ -208,12 +209,7 @@ public class Ex4 implements Ex4_GUI{
 	public void show() { show(Ex4_Const.DIM_SIZE); }
 	@Override
 	public String getInfo() {
-		String ans = "";
-		for (int i = 0; i < _shapes.size(); ++i) {
-			GUI_Shapeable s = _shapes.get(i);
-			ans += s.toString() + "\n";
-		}
-		return ans;
+		return _shapes.toString();
 	}
 	/**
 	 * This function adds a GUI shape to the canvas's collection

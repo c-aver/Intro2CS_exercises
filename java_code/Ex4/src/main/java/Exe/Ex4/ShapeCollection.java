@@ -93,7 +93,7 @@ public class ShapeCollection implements ShapeCollectionable{
 	public String toString() {
 		String ans = "";
 		for(int i = 0; i < size(); ++i) {
-			ans += this.get(i);   // TODO: add line breaks? are they already in the GUI_Shapeable's toString?
+			ans += this.get(i).toString() + '\n';
 		}
 		return ans;
 	}

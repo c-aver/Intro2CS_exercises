@@ -131,8 +131,7 @@ public class Ex4 implements Ex4_GUI{
 		if(_mode.equals("Circle")) {
 			if(_lastClick == null) {
 				_lastClick = new Point2D(p);
-			}
-			else {
+			} else {
 				finalizeShape();
 			}
 		}
@@ -216,6 +215,7 @@ public class Ex4 implements Ex4_GUI{
 	 * @param g the Geo shape represented in the GUI shape
 	 */
 	private void finalizeShape() {
+		assert _previewShape != null : "Trying to finalize null shape";
 		_previewShape.setColor(_color);
 		_previewShape.setFilled(_fill);
 		_previewShape.setTag(runningTag++);

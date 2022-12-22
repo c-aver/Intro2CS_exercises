@@ -3,7 +3,6 @@ package intro2cs_exercises;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -27,7 +26,6 @@ public class Main {
     }
 
     public static int differentClasses(ArrayList<?> al) {
-        Stream<?> s = Stream.of(al).map((Object o) -> { return o.getClass(); });
         Set<Class<?>> found = new HashSet<Class<?>>();
         for (Object o : al) {
             found.add(o.getClass());

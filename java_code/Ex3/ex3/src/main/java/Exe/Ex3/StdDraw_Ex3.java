@@ -36,7 +36,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.RenderingHints;
-import java.awt.Toolkit;
+//import java.awt.Toolkit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,7 +73,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+//import javax.swing.KeyStroke;
 /**
  * Ex3: you should NOT update this class!
  */
@@ -592,7 +592,7 @@ public final class StdDraw_Ex3 implements ActionListener, MouseListener, MouseMo
 	private static double penRadius;
 
 	// show we draw immediately or wait until next show?
-	private static boolean defer = false;
+	//private static boolean defer = false;
 
 	// boundary of drawing canvas, 0% border
 	// private static final double BORDER = 0.05;
@@ -1648,7 +1648,7 @@ public final class StdDraw_Ex3 implements ActionListener, MouseListener, MouseMo
 	 * to show(). Useful for animations.
 	 */
 	public static void enableDoubleBuffering() {
-		defer = true;
+	//	defer = true;
 	}
 
 	/**
@@ -1658,7 +1658,7 @@ public final class StdDraw_Ex3 implements ActionListener, MouseListener, MouseMo
 	 * This is the default.
 	 */
 	public static void disableDoubleBuffering() {
-		defer = false;
+	//	defer = false;
 	}
 
 

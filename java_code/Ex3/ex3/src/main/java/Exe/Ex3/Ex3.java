@@ -146,7 +146,7 @@ public class Ex3 {
 						Thread.currentThread().interrupt(); // someone is trying to interrupt the thread so we interrupt it (we are polite and do as we are told)
 					}
 					drawArray(_map);                        // redraw the array over the red screen
-					Thread.currentThread().suspend();       // suspend the thread to allow it to run again next time
+					//Thread.currentThread().suspend();       // suspend the thread to allow it to run again next time
 				});
 				flasher.start();                            // flash the screen using the flasher thread
 				_mode = "ShortestPath";                     // reset mode, we do this now because we are about to return

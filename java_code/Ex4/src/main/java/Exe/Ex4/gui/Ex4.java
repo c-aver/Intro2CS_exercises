@@ -108,19 +108,20 @@ public class Ex4 implements Ex4_GUI{
 		}
 	}
 
-	public void actionPerformed(String p) {
-		_mode = p;
+	public void actionPerformed(String action) {
+		_mode = action;
 		_lastClick = null;      // nullify last click when mode changes since next click is the first
-		if (p.equals("Blue"))   { _color = Color.BLUE;   updateColor(_color); }  // if the option was a color, set the brush color to it and update selected shapes' color
-		if (p.equals("Red"))    { _color = Color.RED;    updateColor(_color); }
-		if (p.equals("Green"))  { _color = Color.GREEN;  updateColor(_color); }
-		if (p.equals("White"))  { _color = Color.WHITE;  updateColor(_color); }
-		if (p.equals("Black"))  { _color = Color.BLACK;  updateColor(_color); }
-		if (p.equals("Yellow")) { _color = Color.YELLOW; updateColor(_color); }
-		if (p.equals("Fill"))   { _fill = true;  updateFill(); }         // if the option was a filling option, set the brush filling and update selected
-		if (p.equals("Empty"))  { _fill = false; updateFill(); }
-		if (p.equals("Clear"))  { _shapes.removeAll(); runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
+		if (action.equals("Blue"))   { _color = Color.BLUE;   updateColor(_color); }  // if the option was a color, set the brush color to it and update selected shapes' color
+		if (action.equals("Red"))    { _color = Color.RED;    updateColor(_color); }
+		if (action.equals("Green"))  { _color = Color.GREEN;  updateColor(_color); }
+		if (action.equals("White"))  { _color = Color.WHITE;  updateColor(_color); }
+		if (action.equals("Black"))  { _color = Color.BLACK;  updateColor(_color); }
+		if (action.equals("Yellow")) { _color = Color.YELLOW; updateColor(_color); }
+		if (action.equals("Fill"))   { _fill = true;  updateFill(); }         // if the option was a filling option, set the brush filling and update selected
+		if (action.equals("Empty"))  { _fill = false; updateFill(); }
+		if (action.equals("Clear"))  { _shapes.removeAll(); runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
 		
+		if (action.equals("Remove")) { removeSelected(); }
 		// TODO: add non-implemented actions
 
 		drawShapes();
@@ -128,25 +129,32 @@ public class Ex4 implements Ex4_GUI{
 	
 	public void mouseClicked(Point2D p) {
 		System.out.println("Mode: " + _mode + ". Click location: " + p);
-		if(_mode.equals("Circle")) {
+		if (_mode.equals("Circle")) {
 			if(_lastClick == null) {
 				_lastClick = new Point2D(p);
 			} else {
 				finalizeShape();
 			}
 		}
-		if(_mode.equals("Move")) {
-			if (_lastClick == null) { _lastClick = new Point2D(p); }
-			else {
+		if (_mode.equals("Move")) {
+			if (_lastClick == null) {
+				_lastClick = new Point2D(p);
+			} else {
 				Point2D moveVec = new Point2D(p.x() - _lastClick.x(), p.y() - _lastClick.y());
 				moveSelected(moveVec);
 				_lastClick = null;
 			}
 		}
-		if(_mode.equals("Point")) {
+		if (_mode.equals("Scale_90%")) {
+			scaleSelected(p, 0.9);
+		}
+		if (_mode.equals("Scale_110%")) {
+			scaleSelected(p, 1.1);
+		}
+		if (_mode.equals("Point")) {
 			selectUnderPoint(p);
 		}
-		if(_mode.equals("Segment")) {  // TODO: there is some bug here with null methods
+		if (_mode.equals("Segment")) {  // TODO: there is some bug here with null methods
 			if (_lastClick == null) {           // if we don't have a last click this is the first point of the segment
 				_lastClick = new Point2D(p);    // so we remember it for the next click
 			} else {                            // if we do have a last click this is the second point of the segment
@@ -179,11 +187,28 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 	}
+	private void scaleSelected(Point2D center, double ratio) {
+		for (int i = 0; i < _shapes.size(); ++i) {
+			GUI_Shapeable s = _shapes.get(i);
+			GeoShapeable g = s.getShape();
+			if (s.isSelected() && g != null) {
+				g.scale(center, ratio);
+			}
+		}
+	}
+	private void removeSelected() {
+		for (int i = _shapes.size() - 1; i >= 0; --i) {  // iterate on the shapes backwards to make sure indexes don't change for shapes we didn't check yet
+			GUI_Shapeable s = _shapes.get(i);            // get the shape at the index
+			if (s.isSelected()) {                        // if it is selected
+				_shapes.removeElementAt(i);              // remove it from the canvas
+			}
+		}
+	}
 	
 	public void mouseMoved(MouseEvent e) {
 	//	System.out.println("M: "+x+","+y);              // debug info, don't use unnecessarily as it creates a lot of trash in stdout
 
-		if (_lastClick == null) return;                // if we are not currently drawing a shape nothing needs to be handled
+		if (_lastClick == null) return;                 // if we are not currently drawing a shape nothing needs to be handled
 		
 		double x = StdDraw_Ex4.mouseX();                // save mouse coordinates
 		double y = StdDraw_Ex4.mouseY();

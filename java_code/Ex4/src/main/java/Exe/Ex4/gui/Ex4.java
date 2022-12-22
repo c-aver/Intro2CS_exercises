@@ -156,6 +156,12 @@ public class Ex4 implements Ex4_GUI{
 	
 	public void mouseClicked(Point2D p) {
 		System.out.println("Mode: " + _mode + ". Click location: " + p);
+		// Select menu
+		if (_mode.equals("Point")) {
+			selectUnderPoint(p);
+		}
+
+		// Shape menu
 		if (_mode.equals("Circle")) {
 			if(_lastClick == null) {
 				_lastClick = new Point2D(p);
@@ -163,6 +169,16 @@ public class Ex4 implements Ex4_GUI{
 				finalizeShape();
 			}
 		}
+		if (_mode.equals("Segment")) {  // TODO: there is some bug here with null methods
+			if (_lastClick == null) {           // if we don't have a last click this is the first point of the segment
+				_lastClick = new Point2D(p);    // so we remember it for the next click
+			} else {                            // if we do have a last click this is the second point of the segment
+				finalizeShape();
+			}
+		}
+		// TODO: add support for Rect, Triangle, Polygon
+
+		// Edit menu
 		if (_mode.equals("Move")) {
 			if (_lastClick == null) {
 				_lastClick = new Point2D(p);
@@ -172,22 +188,18 @@ public class Ex4 implements Ex4_GUI{
 				_lastClick = null;
 			}
 		}
+		if (_mode.equals("Remove")) {
+			removeSelected();
+		}
+		// TODO: add support for Copy, Remove, Rotate
 		if (_mode.equals("Scale_90%")) {
 			scaleSelected(p, 0.9);
 		}
 		if (_mode.equals("Scale_110%")) {
 			scaleSelected(p, 1.1);
 		}
-		if (_mode.equals("Point")) {
-			selectUnderPoint(p);
-		}
-		if (_mode.equals("Segment")) {  // TODO: there is some bug here with null methods
-			if (_lastClick == null) {           // if we don't have a last click this is the first point of the segment
-				_lastClick = new Point2D(p);    // so we remember it for the next click
-			} else {                            // if we do have a last click this is the second point of the segment
-				finalizeShape();
-			}
-		}
+		
+		
 	
 		drawShapes();
 	}

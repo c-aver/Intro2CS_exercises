@@ -11,48 +11,56 @@ public class Rect2D implements GeoShapeable {
 	@Override
 	public boolean contains(Point2D ot) {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		return false;
 	}
 
 	@Override
 	public double area() {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		return 0;
 	}
 
 	@Override
 	public double perimeter() {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		return 0;
 	}
 
 	@Override
 	public void move(Point2D vec) {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		
 	}
 
 	@Override
 	public GeoShapeable copy() {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		return null;
 	}
 
 	@Override
 	public void scale(Point2D center, double ratio) {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		
 	}
 
 	@Override
 	public Point2D[] getPoints() {
 		// TODO Auto-generated method stub
+		assert false : "Rect2D is not implemented";
 		return null;
 	}
 

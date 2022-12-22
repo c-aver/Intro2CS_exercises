@@ -122,7 +122,7 @@ public class Point2D implements GeoShapeable {
     @Override
 	public void rotate(Point2D cen, double angleDegrees) {
 		////////// TODO: add your code below ///////////
-		
+		assert false : "Point rotate is not implemented";
 		/////////////////////////////////////////
 	}
     @Override

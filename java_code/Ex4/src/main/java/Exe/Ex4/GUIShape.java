@@ -22,12 +22,12 @@ public class GUIShape implements GUI_Shapeable{
 	private int _tag;
 	private boolean _isSelected;
 	
-	public GUIShape(GeoShapeable g, boolean f, Color c, int t) {
+	public GUIShape(GeoShapeable gs, boolean fill, Color color, int tag) {
 		_g = null;
-		if (g!=null) {_g = g.copy();}
-		_fill= f;
-		_color = c;
-		_tag = t;
+		if (gs != null) { _g = gs.copy(); }
+		_fill= fill;
+		_color = color;
+		_tag = tag;
 		_isSelected = false;
 	}
 	public GUIShape(GUIShape ot) {
@@ -75,9 +75,24 @@ public class GUIShape implements GUI_Shapeable{
 		GUI_Shapeable cp = new GUIShape(this);
 		return cp;
 	}
+	/**
+	 * This functions returns the name a Color object.
+	 * Only for the color options presented in the Ex4 GUI.
+	 * @param col the color to be named
+	 * @return a string containing the name of the color
+	 */
+	private String colorName(Color col) {
+		if (col.equals(Color.WHITE))  return "white";
+		if (col.equals(Color.BLACK))  return "black";
+		if (col.equals(Color.BLUE))   return "blue";
+		if (col.equals(Color.RED))    return "red";
+		if (col.equals(Color.YELLOW)) return "yellow";
+		if (col.equals(Color.GREEN))  return "green";
+		return "unknown color";
+	}
 	@Override
 	public String toString() {
-		return null;
+		return (_isSelected ? "*" : " ") + Integer.toString(_tag) + ": " + (_fill ? "Filled " : "Hollow ") + colorName(_color) + " " + _g.toString();
 	}
 	private void init(String[] ww) {
 

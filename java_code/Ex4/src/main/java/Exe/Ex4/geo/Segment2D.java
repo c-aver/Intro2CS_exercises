@@ -20,6 +20,10 @@ public class Segment2D implements GeoShapeable{
 	public Segment2D(Segment2D seg) {
 		this(seg.getPoints()[0], seg.getPoints()[1]);
 	}
+	@Override
+	public String toString() {
+		return "Segment: " + _p1 + " -- " + _p2;
+	}
 
 	@Override
 	public boolean contains(Point2D ot) {

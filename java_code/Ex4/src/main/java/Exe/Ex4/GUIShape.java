@@ -25,7 +25,7 @@ public class GUIShape implements GUI_Shapeable{
 		_isSelected = false;
 	}
 	public GUIShape(GUIShape ot) {
-		this(ot._g, ot._fill, ot._color, ot._tag);
+		this(ot._g.copy(), ot._fill, ot._color, ot._tag);
 	}
 	
 	@Override

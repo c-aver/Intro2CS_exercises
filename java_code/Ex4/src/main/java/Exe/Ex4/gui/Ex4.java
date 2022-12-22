@@ -188,10 +188,28 @@ public class Ex4 implements Ex4_GUI{
 				_lastClick = null;
 			}
 		}
+		if (_mode.equals("Copy")) {
+			if (_lastClick == null) {
+				_lastClick = new Point2D(p);
+			} else {
+				Point2D moveVec = new Point2D(p.x() - _lastClick.x(), p.y() - _lastClick.y());
+				copySelected(moveVec);
+				_lastClick = null;
+			}
+		}
 		if (_mode.equals("Remove")) {
 			removeSelected();
 		}
-		// TODO: add support for Copy, Remove, Rotate
+		if (_mode.equals("Rotate")) {
+			if (_lastClick == null) {
+				_lastClick = new Point2D(p);
+			} else {
+				Point2D rotateVector = _lastClick.vector(p);
+				double rotateAngleDegrees = rotateVector.angleDegrees();
+				rotateSelected(_lastClick, rotateAngleDegrees);
+				_lastClick = null;
+			}
+		}
 		if (_mode.equals("Scale_90%")) {
 			scaleSelected(p, 0.9);
 		}
@@ -235,11 +253,31 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 	}
+	private void rotateSelected(Point2D center, double angleDegrees) {
+		for (int i = 0; i < _shapes.size(); ++i) {
+			GUI_Shapeable s = _shapes.get(i);
+			GeoShapeable g = s.getShape();
+			if (s.isSelected() && g != null) {
+				g.rotate(center, angleDegrees);
+			}
+		}
+	}
 	private void removeSelected() {
 		for (int i = _shapes.size() - 1; i >= 0; --i) {  // iterate on the shapes backwards to make sure indexes don't change for shapes we didn't check yet
 			GUI_Shapeable s = _shapes.get(i);            // get the shape at the index
 			if (s.isSelected()) {                        // if it is selected
 				_shapes.removeElementAt(i);              // remove it from the canvas
+			}
+		}
+	}
+	private void copySelected(Point2D moveVec) {
+		for (int i = 0; i < _shapes.size(); ++i) {
+			GUI_Shapeable s = _shapes.get(i);
+			GeoShapeable g = s.getShape();
+			if (s.isSelected() && g != null) {
+				GUI_Shapeable copy = s.copy();
+				copy.getShape().move(moveVec);
+				_shapes.add(copy);
 			}
 		}
 	}

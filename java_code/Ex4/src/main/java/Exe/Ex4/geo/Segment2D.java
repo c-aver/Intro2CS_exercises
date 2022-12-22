@@ -27,7 +27,7 @@ public class Segment2D implements GeoShapeable{
 
 	@Override
 	public boolean contains(Point2D ot) {
-		// TODO Auto-generated method stub
+		// TODO: what is the logic of this?
 		return false;
 	}
 

@@ -58,9 +58,7 @@ public class Circle2D implements GeoShapeable{
 	}
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		//////////add your code below ///////////
-		
-		//////////////////////////////////////////
+		_center.rotate(center, angleDegrees);  // rotate the center point, radius does not change
 	}
 
 }

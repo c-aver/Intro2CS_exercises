@@ -102,10 +102,10 @@ public class Point2D implements GeoShapeable {
 		this._y += vec.y();
 	}
     /**
-     * This method scales the point by the ration, in realtion to the origin
+     * This method scales the point by the ratio, in relation to the origin
      * This is very useful for points which represent a vector
      * Note: this method changes the inner state of the object
-     * @param ratio
+     * @param ratio the ration by which to scale the point
      */
     public void scale(double ratio) {
         this._x *= ratio;
@@ -114,17 +114,42 @@ public class Point2D implements GeoShapeable {
     @Override
 	public void scale(Point2D cen, double ratio) {
 		Point2D directionVec = cen.vector(this);   // the vector pointing from the center to here, to be scaled be the ratio
-        directionVec.scale(ratio);                 // scale the vector by the ratio, it now represents the vector from the center where the point needs to be
+        directionVec.scale(ratio);                 // scale the vector by the ratio, it now represents the vector from the center to where the point needs to be
         Point2D newPoint = cen.add(directionVec);  // the new point's location is the center moved by the scaled direction vector
-        this._x = newPoint._x;
+        this._x = newPoint._x;  // set the point's coordinates to the new location
         this._y = newPoint._y;
 	}
+    /**
+     * This method rotates the point by the angle provided, in relation to the origin
+     * This is very useful for points which represent a vector
+     * Note: this method changes the inner state of the object
+     * @param angleDegrees the angle by which to rotate the point, in degrees
+     */
+    public void rotate(double angleDegrees) {
+        double mag = this.distance();
+        double oldAngleRadians = Math.atan2(_y, _x);
+        double oldAngleDegrees = Math.toDegrees(oldAngleRadians);
+        double newAngleDegrees = oldAngleDegrees + angleDegrees;
+        double newAngleRadians = Math.toRadians(newAngleDegrees);
+        _x = mag * Math.cos(newAngleRadians);
+        _y = mag * Math.sin(newAngleRadians);
+    }
     @Override
 	public void rotate(Point2D cen, double angleDegrees) {
-		////////// TODO: add your code below ///////////
-		assert false : "Point rotate is not implemented";
-		/////////////////////////////////////////
+		Point2D directionVec = cen.vector(this);   // the vector pointing from the center to here, to be rotated
+        directionVec.rotate(angleDegrees);         // rotate the vector by the angle, it now represents the vector from the center to where the point needs to be
+        Point2D newPoint = cen.add(directionVec);  // the new point's location is the center moved by the scaled direction vector
+        this._x = newPoint._x;  // set the point's coordinates to the new location
+        this._y = newPoint._y;
 	}
+    /**
+     * This method return the angle in degrees of the vector pointing at the point, in relation to the x axis
+     * @return the angle in degrees
+     */
+    public double angleDegrees() {
+        double angleRadians = Math.atan2(_y, _x);
+        return Math.toDegrees(angleRadians);
+    }
     @Override
     public boolean contains(Point2D ot) {
         return equals(ot);    // a point is considered to contain another point if they are equal

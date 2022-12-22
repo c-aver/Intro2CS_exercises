@@ -101,11 +101,25 @@ public class Point2D implements GeoShapeable {
 		this._x += vec.x();
 		this._y += vec.y();
 	}
-		public void scale(Point2D cen, double ratio) {
-		////////// TODO: add your code below ///////////
-		
-		/////////////////////////////////////////
+    /**
+     * This method scales the point by the ration, in realtion to the origin
+     * This is very useful for points which represent a vector
+     * Note: this method changes the inner state of the object
+     * @param ratio
+     */
+    public void scale(double ratio) {
+        this._x *= ratio;
+        this._y *= ratio;
+    }
+    @Override
+	public void scale(Point2D cen, double ratio) {
+		Point2D directionVec = cen.vector(this);   // the vector pointing from the center to here, to be scaled be the ratio
+        directionVec.scale(ratio);                 // scale the vector by the ratio, it now represents the vector from the center where the point needs to be
+        Point2D newPoint = cen.add(directionVec);  // the new point's location is the center moved by the scaled direction vector
+        this._x = newPoint._x;
+        this._y = newPoint._y;
 	}
+    @Override
 	public void rotate(Point2D cen, double angleDegrees) {
 		////////// TODO: add your code below ///////////
 		

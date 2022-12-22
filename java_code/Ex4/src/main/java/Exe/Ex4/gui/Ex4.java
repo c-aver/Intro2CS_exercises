@@ -111,6 +111,32 @@ public class Ex4 implements Ex4_GUI{
 	public void actionPerformed(String action) {
 		_mode = action;
 		_lastClick = null;      // nullify last click when mode changes since next click is the first
+
+		// Select menu
+		if (action.equals("All")) {
+			for (int i = 0; i < _shapes.size(); ++i) {  // iterate on all shapes
+				_shapes.get(i).setSelected(true);       // set selected to true
+			}
+		}
+		if (action.equals("Anti")) {
+			for (int i = 0; i < _shapes.size(); ++i) {  // iterate on all shapes
+				GUI_Shapeable shape = _shapes.get(i);   // get the shape at the index
+				shape.setSelected(!shape.isSelected()); // set its selected field to the inverse of the current value
+			}
+		}
+		if (action.equals("None")) {
+			for (int i = 0; i < _shapes.size(); ++i) {  // iterate on all shapes
+				_shapes.get(i).setSelected(false);      // set selected to false
+			}
+		}
+		if (action.equals("Info")) {
+			for (int i = 0; i < _shapes.size(); ++i) {  // iterate on the shapes
+				GUI_Shapeable shape = _shapes.get(i);
+				if (shape.isSelected()) System.out.println(shape); // if the shape is selected print its info
+			}
+		}
+
+		// Color menu
 		if (action.equals("Blue"))   { _color = Color.BLUE;   updateColor(_color); }  // if the option was a color, set the brush color to it and update selected shapes' color
 		if (action.equals("Red"))    { _color = Color.RED;    updateColor(_color); }
 		if (action.equals("Green"))  { _color = Color.GREEN;  updateColor(_color); }
@@ -121,6 +147,7 @@ public class Ex4 implements Ex4_GUI{
 		if (action.equals("Empty"))  { _fill = false; updateFill(); }
 		if (action.equals("Clear"))  { _shapes.removeAll(); runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
 		
+		// Edit menu
 		if (action.equals("Remove")) { removeSelected(); }
 		// TODO: add non-implemented actions
 

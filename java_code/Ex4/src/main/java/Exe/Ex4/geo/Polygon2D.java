@@ -17,7 +17,7 @@ public class Polygon2D implements GeoShapeable{
 		_points = new ArrayList<Point2D>();
 	}
 	public Polygon2D(ArrayList<Point2D> points) {
-		_points = points;
+		_points = new ArrayList<Point2D>(points);
 	}
 	public void addPoint(Point2D p) {
 		_points.add(p);

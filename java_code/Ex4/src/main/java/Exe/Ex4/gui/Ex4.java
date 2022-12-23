@@ -1,6 +1,7 @@
 package Exe.Ex4.gui;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import Exe.Ex4.Ex4_Const;
 import Exe.Ex4.GUIShape;
@@ -24,12 +25,13 @@ import Exe.Ex4.geo.Segment2D;
  */
 public class Ex4 implements Ex4_GUI{
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
-	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn
+	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn, the only field that should be changed is its GeoShapeable
+	private ArrayList<Point2D> _polyPoints = null;  // the list of points in the polygon being drawn
 	private Color _color = Color.blue;   // the current brush color
 	private boolean _fill = false;       // whether we are creating a filled shape
 	private String _mode = "";           // the current brush mode
-	private Point2D _lastClick;          // the last click location
-	private int _runningTag = 1;          // this is the tag to be provided for the next added shape, make sure to increment it when you add a shape, starts as 1 since 0 is reserved for preview
+	private Point2D _lastClick = null;   // the last click location this should be null if and only if we are not currently drawing a shape
+	private int _runningTag = 1;         // this is the tag to be provided for the next added shape, make sure to increment it when you add a shape, starts as 1 since 0 is reserved for preview
 	
 	private static Ex4 _winEx4 = null;
 	
@@ -64,7 +66,7 @@ public class Ex4 implements Ex4_GUI{
 			GUI_Shapeable sh = _shapes.get(i);
 			drawShape(sh);
 		}
-		if (_previewShape != null) { drawShape(_previewShape); }
+		if (_lastClick != null) { drawShape(_previewShape); }
 		StdDraw_Ex4.show();
 	}
 	private static void drawShape(GUI_Shapeable g) {
@@ -175,6 +177,7 @@ public class Ex4 implements Ex4_GUI{
 		if (_mode.equals("Circle")) {
 			if(_lastClick == null) {
 				_lastClick = new Point2D(p);
+				return;
 			} else {
 				finalizeShape();
 			}
@@ -182,25 +185,26 @@ public class Ex4 implements Ex4_GUI{
 		if (_mode.equals("Segment")) {  // TODO: there is some bug here with null methods
 			if (_lastClick == null) {           // if we don't have a last click this is the first point of the segment
 				_lastClick = new Point2D(p);    // so we remember it for the next click
+				return;
 			} else {                            // if we do have a last click this is the second point of the segment
 				finalizeShape();
 			}
 		}
 		// TODO: add support for Rect, Triangle, Polygon
 		if (_mode.equals("Polygon")) {
-			GeoShapeable shape = _previewShape.getShape();
-			if (shape == null) {
-				shape = new Polygon2D();
+			if (_lastClick == null) {                    // if this is the first click of the polygon
+				_polyPoints = new ArrayList<Point2D>();  // initialize the point list
+				_previewShape.setShape(new Polygon2D()); // set the preview shape as an empty polygon
 			}
-			assert shape instanceof Polygon2D : "Preview shape is not polygon in Polygon mode";
-			Polygon2D poly = (Polygon2D) shape;
-			poly.addPoint(p);
+			_polyPoints.add(p);               // add the clicked point to the point list
+			_lastClick = new Point2D(p);
 		}
 
 		// Edit menu
 		if (_mode.equals("Move")) {
 			if (_lastClick == null) {
 				_lastClick = new Point2D(p);
+				return;
 			} else {
 				Point2D moveVec = new Point2D(p.x() - _lastClick.x(), p.y() - _lastClick.y());
 				moveSelected(moveVec);
@@ -210,6 +214,7 @@ public class Ex4 implements Ex4_GUI{
 		if (_mode.equals("Copy")) {
 			if (_lastClick == null) {
 				_lastClick = new Point2D(p);
+				return;
 			} else {
 				Point2D moveVec = new Point2D(p.x() - _lastClick.x(), p.y() - _lastClick.y());
 				copySelected(moveVec);
@@ -222,6 +227,7 @@ public class Ex4 implements Ex4_GUI{
 		if (_mode.equals("Rotate")) {
 			if (_lastClick == null) {
 				_lastClick = new Point2D(p);
+				return;
 			} else {
 				Point2D rotateVector = _lastClick.vector(p);
 				double rotateAngleDegrees = rotateVector.angleDegrees();
@@ -235,15 +241,14 @@ public class Ex4 implements Ex4_GUI{
 		if (_mode.equals("Scale_110%")) {
 			scaleSelected(p, 1.1);
 		}
-		
-		
-	
+
 		drawShapes();
 	}
 	public void mouseRightClicked(Point2D p) {
-		if (!_mode.equals("Polygon")) return;
-		finalizeShape();
-		drawShapes();
+		_previewShape.setShape(new Polygon2D(_polyPoints));   // set the preview shape as a new polygon with the point list, this removes the current mouse position since it is not needed
+		_polyPoints = null;          // nullify the list after it has been used
+		finalizeShape();             // finalize the shape
+		drawShapes();                // update the screen
 	}
 	
 	private void selectUnderPoint(Point2D p) {
@@ -305,7 +310,7 @@ public class Ex4 implements Ex4_GUI{
 	public void mouseMoved(MouseEvent e) {
 	//	System.out.println("M: "+x+","+y);              // debug info, don't use unnecessarily as it creates a lot of trash in stdout
 
-		if (_lastClick == null && !_mode.equals("Polygon")) return;                 // if we are not currently drawing a shape nothing needs to be handled
+		if (_lastClick == null) return;                 // if we are not currently drawing a shape nothing needs to be handled
 		double x = StdDraw_Ex4.mouseX();                // save mouse coordinates
 		double y = StdDraw_Ex4.mouseY();
 		Point2D p = new Point2D(x, y);                  // create a point for the current mouse positioni
@@ -317,15 +322,10 @@ public class Ex4 implements Ex4_GUI{
 			_previewShape.setShape(new Segment2D(_lastClick, p));     // set the preview as a segment from last click to mouse position
 		}
 		if (_mode.equals("Polygon")) {
-			if (_previewShape.getShape() == null) {
-				_previewShape.setShape(new Polygon2D());
-			}
-			GeoShapeable shape = _previewShape.getShape();
-			assert shape instanceof Polygon2D : "Preview shape is not a polygon in Polygon mode";
-			Polygon2D poly = (Polygon2D) shape;
-			poly.addPoint(p);
-			drawShapes();
-			poly.removePoint(p);
+			assert _previewShape instanceof Polygon2D : "Preview shape is not polygon in mode Polygon";    
+			Polygon2D previewPoly = new Polygon2D(_polyPoints);       // set the preview polygon as a polygon with the list of points
+			previewPoly.addPoint(p);                                  // add the current mouse position, note that inside previewPoly is a shallow copy of _polyPoints, so the point is not added to the list
+			_previewShape.setShape(previewPoly);                      // set the preview shape as the preview poly
 		}
 
 		drawShapes();                                   // update the screen
@@ -346,11 +346,11 @@ public class Ex4 implements Ex4_GUI{
 	 */
 	private void finalizeShape() {
 		assert _previewShape != null : "Trying to finalize null shape";
-		_previewShape.setColor(_color);
-		_previewShape.setFilled(_fill);
-		_previewShape.setTag(_runningTag++);
-		_shapes.add(_previewShape);
-		_previewShape = null;
+		GUI_Shapeable newShape = _previewShape.copy();
+		newShape.setColor(_color);
+		newShape.setFilled(_fill);
+		newShape.setTag(_runningTag++);
+		_shapes.add(newShape);
 		_lastClick = null;
 	}
 }

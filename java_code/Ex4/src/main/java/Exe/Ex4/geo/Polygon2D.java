@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Polygon2D implements GeoShapeable{
 	private ArrayList<Point2D> _points;
 
-	public Polygon2D() { //TODO: do we want this?
+	public Polygon2D() {
 		_points = new ArrayList<Point2D>();
 	}
 	public Polygon2D(ArrayList<Point2D> points) {

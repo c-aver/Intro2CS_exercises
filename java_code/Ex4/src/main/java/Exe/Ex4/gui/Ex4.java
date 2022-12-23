@@ -190,7 +190,7 @@ public class Ex4 implements Ex4_GUI{
 				finalizeShape();
 			}
 		}
-		// TODO: add support for Rect, Triangle, Polygon
+		// TODO: add support for Rect, Triangle
 		if (_mode.equals("Polygon")) {
 			if (_lastClick == null) {                    // if this is the first click of the polygon
 				_polyPoints = new ArrayList<Point2D>();  // initialize the point list

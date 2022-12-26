@@ -42,21 +42,32 @@ public class Point2D implements GeoShapeable {
     	Point2D a = new Point2D(p.x() + x(), p.y() + y());
     	return a;
     }
-    public String toString()
-    {
+    public String toString() {
         return _x + "," + _y;
     }
 
-    public double distance()
-    {
+    public double distance() {
         return this.distance(ORIGIN);
     }
-    public double distance(Point2D p2)
-    {
+    public double distance(Point2D p2) {
         double dx = this.x() - p2.x();
         double dy = this.y() - p2.y();
         double t = (dx*dx + dy*dy);
         return Math.sqrt(t);
+    }
+    /**
+     * This function finds the point's distance from a line, represeneted as a Segment2D.
+     * Note that this treats the Segment2D as an infinite line.
+     * @param line the line to find the distance from, represented as a Segment2D
+     * @return the distance of the point from the line
+     */
+    public double distance(Segment2D line) {
+        // the next section is basically pulled directly from my Ex3 test (isTriangleLine)
+        Point2D[] ps = line.getPoints();
+		double x1 = ps[0].x(), y1 = ps[0].y(), x2 = ps[1].x(), y2 = ps[1].y();  // preparing the numbers for the formula
+		double dx1 = x1 - _x, dx21 = x2 - x1, dy1 = y1 - _y, dy21 = y2 - y1;      // some of the deltas we will need
+		double dist = (Math.abs(dx21 * dy1 - dx1 * dy21)) / (Math.sqrt(dx21 * dx21 + dy21 * dy21)); // caluculate the distance between the p3 and the line p1-p2 using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Line_defined_by_two_points
+        return dist;
     }
     @Override
     public boolean equals(Object o)

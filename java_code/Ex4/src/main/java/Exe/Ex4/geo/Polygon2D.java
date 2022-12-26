@@ -49,30 +49,32 @@ public class Polygon2D implements GeoShapeable{
 
 	@Override
 	public void move(Point2D vec) {
-		// TODO Auto-generated method stub
-		assert false : "Polygon2D is not implemented";
-		
+		for (Point2D point : _points) {
+			point.move(vec);
+		}
 	}
 
 	@Override
 	public GeoShapeable copy() {
 		ArrayList<Point2D> copy = new ArrayList<Point2D>();
-		copy.addAll(_points);
+		for (Point2D point : _points) {
+			copy.add(new Point2D(point));
+		}
 		return new Polygon2D(copy);
 	}
 
 	@Override
 	public void scale(Point2D center, double ratio) {
-		// TODO Auto-generated method stub
-		assert false : "Polygon2D is not implemented";
-		
+		for (Point2D point : _points) {
+			point.scale(center, ratio);
+		}
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		// TODO Auto-generated method stub
-		assert false : "Polygon2D is not implemented";
-		
+		for (Point2D point : _points) {
+			point.rotate(center, angleDegrees);
+		}
 	}
 
 	@Override

@@ -7,6 +7,13 @@ package Exe.Ex4.geo;
  *
  */
 public class Triangle2D implements GeoShapeable{
+	Point2D _p1, _p2, _p3;
+
+	public Triangle2D(Point2D p1, Point2D p2, Point2D p3) {
+		_p1 = new Point2D(p1);
+		_p1 = new Point2D(p2);
+		_p1 = new Point2D(p3);
+	}
 
 	@Override
 	public boolean contains(Point2D ot) {
@@ -16,52 +23,45 @@ public class Triangle2D implements GeoShapeable{
 	}
 
 	@Override
-	public double area() {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		return 0;
+	public double area() { // TODO: this function is untested and unverified
+		double base = _p1.distance(_p2);    // calculate the length of the triangle's base
+		double height = _p3.distance(new Segment2D(_p1, _p2));   // the triangle's height is the distance of p3 from the line p1 -- p2
+		return (base * height) / 2; // the formula for a traingle's area
 	}
 
 	@Override
 	public double perimeter() {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		return 0;
+		return _p1.distance(_p2) + _p2.distance(_p3) + _p3.distance(_p1);
 	}
 
 	@Override
 	public void move(Point2D vec) {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		
+		_p1.move(vec);
+		_p2.move(vec);
+		_p3.move(vec);
 	}
 
 	@Override
 	public GeoShapeable copy() {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		return null;
+		return new Triangle2D(_p1, _p2, _p3);
 	}
 
 	@Override
 	public void scale(Point2D center, double ratio) {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		
+		_p1.scale(center, ratio);
+		_p2.scale(center, ratio);
+		_p3.scale(center, ratio);
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		
+		_p1.rotate(center, angleDegrees);
+		_p2.rotate(center, angleDegrees);
+		_p3.rotate(center, angleDegrees);
 	}
 
 	@Override
 	public Point2D[] getPoints() {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		return null;
+		return new Point2D[] { _p1, _p2, _p3 };
 	}
-	
 }

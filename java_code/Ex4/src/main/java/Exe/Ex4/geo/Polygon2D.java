@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  */
 public class Polygon2D implements GeoShapeable{
-	private ArrayList<Point2D> _points;
+	private ArrayList<Point2D> _points;   // TODO: this doesn't change often, array instead?
 
 	public Polygon2D() {
 		_points = new ArrayList<Point2D>();
@@ -41,10 +41,13 @@ public class Polygon2D implements GeoShapeable{
 	}
 
 	@Override
-	public double perimeter() {
-		// TODO Auto-generated method stub
-		assert false : "Polygon2D is not implemented";
-		return 0;
+	public double perimeter() { // TODO: this function is untested
+		double answer = 0;
+		int numPoints = _points.size();
+		for (int i = 0; i < numPoints; ++i) { // iterate on the points
+			answer += _points.get(i).distance(_points.get((i + 1) % numPoints));  // add to the perimter the edge between current point and next one, wraping back to 0 for the last one
+		}
+		return answer;
 	}
 
 	@Override

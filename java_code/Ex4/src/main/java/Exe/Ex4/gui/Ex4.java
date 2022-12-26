@@ -13,6 +13,7 @@ import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Polygon2D;
 import Exe.Ex4.geo.Segment2D;
+import Exe.Ex4.geo.Triangle2D;
 
 /**
  * 
@@ -66,7 +67,7 @@ public class Ex4 implements Ex4_GUI{
 			GUI_Shapeable sh = _shapes.get(i);
 			drawShape(sh);
 		}
-		if (_lastClick != null) { drawShape(_previewShape); }
+		if (_previewShape.getShape() != null) { drawShape(_previewShape); }
 		StdDraw_Ex4.show();
 	}
 	private static void drawShape(GUI_Shapeable g) {
@@ -101,7 +102,19 @@ public class Ex4 implements Ex4_GUI{
 				StdDraw_Ex4.polygon(xs, ys);
 			}
 		}
-		
+		if (gs instanceof Triangle2D) {
+			Point2D[] ps = gs.getPoints();
+			double[] xs = new double[ps.length], ys = new double[ps.length];
+			for (int i = 0; i < ps.length; ++i) {
+				xs[i] = ps[i].x();
+				ys[i] = ps[i].y();
+			}
+			if (g.isFilled()) {
+				StdDraw_Ex4.filledPolygon(xs, ys);
+			} else {
+				StdDraw_Ex4.polygon(xs, ys);
+			}
+		}
 	}
 	private void updateColor(Color c) {
 		for (int i = 0; i < _shapes.size(); ++i) {
@@ -191,6 +204,19 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 		// TODO: add support for Rect, Triangle
+		if (_mode.equals("Triangle")) {
+			if (_lastClick == null) {           // if we don't have a last click this is the first point of the triangle
+				_polyPoints = new ArrayList<Point2D>();  // initialize the point list
+				_lastClick = new Point2D(p);    // so we remember it
+				_polyPoints.add(p);
+				return;
+			} else if (_polyPoints.size() == 1) { // if we have a last click but only one point in the list
+				_polyPoints.add(p);               // we add the current point as well
+				return;
+			} else {                              // otherwise we have enough points
+				finalizeShape();                  // so we finalize the shape
+			}
+		}
 		if (_mode.equals("Polygon")) {
 			if (_lastClick == null) {                    // if this is the first click of the polygon
 				_polyPoints = new ArrayList<Point2D>();  // initialize the point list
@@ -327,6 +353,13 @@ public class Ex4 implements Ex4_GUI{
 			previewPoly.addPoint(p);                                  // add the current mouse position, note that inside previewPoly is a shallow copy of _polyPoints, so the point is not added to the list
 			_previewShape.setShape(previewPoly);                      // set the preview shape as the preview poly
 		}
+		if (_mode.equals("Triangle")) {                               // if we are drawing a triangle
+			if (_polyPoints.size() == 1) {                            // and have only one point so far
+				_previewShape.setShape(new Segment2D(_lastClick, p)); // set the preview as a segment from last click to mouse position, indicating the first line of the triangle
+			} else if (_polyPoints.size() > 1) {                      // otherwise (and if we have more than one poitn) we have enough points to preview a triangle (including the current mouse position)
+				_previewShape.setShape(new Triangle2D(_polyPoints.get(0), _polyPoints.get(1), p));  
+			}
+		}
 
 		drawShapes();                                   // update the screen
 	}
@@ -352,5 +385,6 @@ public class Ex4 implements Ex4_GUI{
 		newShape.setTag(_runningTag++);
 		_shapes.add(newShape);
 		_lastClick = null;
+		_previewShape.setShape(null);
 	}
 }

@@ -16,10 +16,13 @@ public class Triangle2D implements GeoShapeable{
 	}
 
 	@Override
-	public boolean contains(Point2D ot) {
-		// TODO Auto-generated method stub
-		assert false : " Triangle2D is not implemented";
-		return false;
+	public boolean contains(Point2D ot) { // TODO: this implementation is initial and untested
+		// concept: make sure the point is closer to each of the triangle's point then the line opposite it
+		boolean closerToP1 = ot.distance(_p1) < ot.distance(new Segment2D(_p2, _p3));
+		boolean closerToP2 = ot.distance(_p2) < ot.distance(new Segment2D(_p1, _p3));
+		boolean closerToP3 = ot.distance(_p3) < ot.distance(new Segment2D(_p1, _p2));
+
+		return closerToP1 && closerToP2 && closerToP3;
 	}
 
 	@Override

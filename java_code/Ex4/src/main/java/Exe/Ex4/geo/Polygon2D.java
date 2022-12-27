@@ -9,7 +9,7 @@ package Exe.Ex4.geo;
  *
  */
 public class Polygon2D implements GeoShapeable {
-	private Point2D[] _points;   // TODO: this doesn't change often, array instead?
+	private Point2D[] _points;
 	private Triangle2D[] _mesh = null;
 
 	public Polygon2D(Point2D[] points) {
@@ -83,7 +83,7 @@ public class Polygon2D implements GeoShapeable {
 		return _points;  // return the points arraylist converted to an array, the paramter is provided to determine the type of the array
 	}
 	
-	public Triangle2D[] triangleMesh() {  // TODO: precalculate mesh on creation?
+	public Triangle2D[] triangleMesh() {
 		assert _points.length > 2;
 		int numTriangles = _points.length - 2;
 		Triangle2D[] result = new Triangle2D[numTriangles];

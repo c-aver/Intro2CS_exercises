@@ -36,19 +36,19 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 			return Integer.compare(o1.getTag(), o2.getTag());
 		}
 		if (_flag == Ex4_Const.Sort_By_Anti_Tag) {
-			return -Integer.compare(o1.getTag(), o2.getTag());
+			return Integer.compare(o2.getTag(), o1.getTag());
 		}
 		if (_flag == Ex4_Const.Sort_By_Area) {
 			return Double.compare(o1.getShape().area(), o2.getShape().area());
 		}
 		if (_flag == Ex4_Const.Sort_By_Anti_Area) {
-			return -Double.compare(o2.getShape().area(), o1.getShape().area());
+			return Double.compare(o2.getShape().area(), o1.getShape().area());
 		}
 		if (_flag == Ex4_Const.Sort_By_Perimeter) {
 			return Double.compare(o1.getShape().perimeter(), o2.getShape().perimeter());
 		}
 		if (_flag == Ex4_Const.Sort_By_Anti_Perimeter) {
-			return -Double.compare(o2.getShape().perimeter(), o1.getShape().perimeter());
+			return Double.compare(o2.getShape().perimeter(), o1.getShape().perimeter());
 		}
 		if (_flag == Ex4_Const.Sort_By_toString) {
 			return o1.toString().compareTo(o2.toString());

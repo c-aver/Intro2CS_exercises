@@ -14,6 +14,7 @@ import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Polygon2D;
 import Exe.Ex4.geo.Rect2D;
 import Exe.Ex4.geo.Segment2D;
+import Exe.Ex4.geo.ShapeComp;
 import Exe.Ex4.geo.Triangle2D;
 
 /**
@@ -26,7 +27,7 @@ import Exe.Ex4.geo.Triangle2D;
  *
  */
 public class Ex4 implements Ex4_GUI{
-	private final boolean DEBUG = true;  // debug mode
+	private final boolean DEBUG = false;  // debug mode
 
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
 	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn, the only field that should be changed is its GeoShapeable
@@ -127,6 +128,10 @@ public class Ex4 implements Ex4_GUI{
 		_mode = action;
 		_lastClick = null;      // nullify last click when mode changes since next click is the first
 
+		// File menu
+		if (action.equals("Clear"))  { _shapes.removeAll(); _runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
+		// TODO: add Load, Save
+
 		// Select menu
 		if (action.equals("All")) {
 			for (int i = 0; i < _shapes.size(); ++i) {  // iterate on all shapes
@@ -160,11 +165,20 @@ public class Ex4 implements Ex4_GUI{
 		if (action.equals("Yellow")) { _color = Color.YELLOW; updateColor(_color); }
 		if (action.equals("Fill"))   { _fill = true;  updateFill(); }         // if the option was a filling option, set the brush filling and update selected
 		if (action.equals("Empty"))  { _fill = false; updateFill(); }
-		if (action.equals("Clear"))  { _shapes.removeAll(); _runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
 		
 		// Edit menu
 		if (action.equals("Remove")) { removeSelected(); }
 		// TODO: add non-implemented actions
+
+		// Sort menu
+		if (action.equals("ByArea")) { _shapes.sort(ShapeComp.CompByArea); }
+		if (action.equals("ByAntiArea")) { _shapes.sort(ShapeComp.CompByAntiArea); }
+		if (action.equals("ByPerimeter")) { _shapes.sort(ShapeComp.CompByPerimter); }
+		if (action.equals("ByAntiPerimeter")) { _shapes.sort(ShapeComp.CompByAntiPerimter); }
+		if (action.equals("ByToString")) { _shapes.sort(ShapeComp.CompByToString); }
+		if (action.equals("ByAntiToString")) { _shapes.sort(ShapeComp.CompByAntiToString); }
+		if (action.equals("ByTag")) { _shapes.sort(ShapeComp.CompByTag); }
+		if (action.equals("ByAntiTag")) { _shapes.sort(ShapeComp.CompByAntiTag); }
 
 		drawShapes();
 	}
@@ -253,6 +267,7 @@ public class Ex4 implements Ex4_GUI{
 		drawShapes();
 	}
 	public void mouseRightClicked(Point2D p) {
+		if (_polyPoints == null) return; // TODO: is this correct?
 		int numPoints = _polyPoints.size();
 		if (numPoints < 2) {
 			cancelShape();

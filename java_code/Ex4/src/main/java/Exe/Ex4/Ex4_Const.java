@@ -6,7 +6,7 @@ package Exe.Ex4;
  * @author boaz.benmoshe
  */
 public class Ex4_Const {
-	public static final double EPS1 = 0.001, EPS2=Math.pow(EPS1, 2), EPS = EPS2;
+	public static final double EPS1 = 0.001, EPS2 = Math.pow(EPS1, 2), EPS = EPS2;
 	// Constant flags for sorting. 
 	public static int sortTypeCount = 0;
 	public static final int Sort_By_Tag = sortTypeCount++, Sort_By_Anti_Tag=sortTypeCount++, 

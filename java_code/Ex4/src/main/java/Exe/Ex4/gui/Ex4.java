@@ -25,6 +25,8 @@ import Exe.Ex4.geo.Triangle2D;
  *
  */
 public class Ex4 implements Ex4_GUI{
+	private final boolean DEBUG = true;  // debug mode
+
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
 	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn, the only field that should be changed is its GeoShapeable
 	private ArrayList<Point2D> _polyPoints = null;  // the list of points in the polygon being drawn
@@ -336,10 +338,19 @@ public class Ex4 implements Ex4_GUI{
 	public void mouseMoved(MouseEvent e) {
 	//	System.out.println("M: "+x+","+y);              // debug info, don't use unnecessarily as it creates a lot of trash in stdout
 
-		if (_lastClick == null) return;                 // if we are not currently drawing a shape nothing needs to be handled
 		double x = StdDraw_Ex4.mouseX();                // save mouse coordinates
 		double y = StdDraw_Ex4.mouseY();
-		Point2D p = new Point2D(x, y);                  // create a point for the current mouse positioni
+		Point2D p = new Point2D(x, y);                  // create a point for the current mouse position
+
+		if (DEBUG) {                                    // debug mode operations
+			for (int i = 0; i < _shapes.size(); ++i) {  // fill shapes with mouse on them
+				GUI_Shapeable gs = _shapes.get(i);
+				gs.setFilled(gs.getShape().contains(p));
+			}
+			drawShapes();
+		}
+
+		if (_lastClick == null) return;                 // if we are not currently drawing a shape nothing needs to be handled
 		if (_mode.equals("Circle")) {
 			double r = _lastClick.distance(p);          // calculate the radius for preivewed circle
 			_previewShape.setShape(new Circle2D(_lastClick, r));      // set the preview shape as a circle centered on last click with the radius

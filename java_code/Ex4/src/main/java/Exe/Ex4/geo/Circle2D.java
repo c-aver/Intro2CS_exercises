@@ -33,8 +33,7 @@ public class Circle2D implements GeoShapeable{
 	}
 	@Override
 	public double perimeter() {
-		double ans = Math.PI * 2 * this._radius;
-		return ans;
+		return Math.PI * 2 * this._radius;
 	}
 	@Override
 	public void move(Point2D vec) {

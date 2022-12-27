@@ -12,6 +12,7 @@ import Exe.Ex4.geo.Circle2D;
 import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Polygon2D;
+import Exe.Ex4.geo.Rect2D;
 import Exe.Ex4.geo.Segment2D;
 import Exe.Ex4.geo.Triangle2D;
 
@@ -91,20 +92,7 @@ public class Ex4 implements Ex4_GUI{
 			Point2D[] ps = gs.getPoints();
 			StdDraw_Ex4.line(ps[0].x(), ps[0].y(), ps[1].x(), ps[1].y());
 		}
-		if (gs instanceof Polygon2D) {
-			Point2D[] ps = gs.getPoints();
-			double[] xs = new double[ps.length], ys = new double[ps.length];
-			for (int i = 0; i < ps.length; ++i) {
-				xs[i] = ps[i].x();
-				ys[i] = ps[i].y();
-			}
-			if (g.isFilled()) {
-				StdDraw_Ex4.filledPolygon(xs, ys);
-			} else {
-				StdDraw_Ex4.polygon(xs, ys);
-			}
-		}
-		if (gs instanceof Triangle2D) {
+		if (gs instanceof Polygon2D || gs instanceof Triangle2D || gs instanceof Rect2D) {
 			Point2D[] ps = gs.getPoints();
 			double[] xs = new double[ps.length], ys = new double[ps.length];
 			for (int i = 0; i < ps.length; ++i) {
@@ -189,19 +177,11 @@ public class Ex4 implements Ex4_GUI{
 		}
 
 		// Shape menu
-		if (_mode.equals("Circle")) {
+		if (_mode.equals("Circle") || _mode.equals("Segment") || _mode.equals("Rect")) {
 			if(_lastClick == null) {
 				_lastClick = new Point2D(p);
 				return;
 			} else {
-				finalizeShape();
-			}
-		}
-		if (_mode.equals("Segment")) {  // TODO: there is some bug here with null methods
-			if (_lastClick == null) {           // if we don't have a last click this is the first point of the segment
-				_lastClick = new Point2D(p);    // so we remember it for the next click
-				return;
-			} else {                            // if we do have a last click this is the second point of the segment
 				finalizeShape();
 			}
 		}
@@ -367,6 +347,9 @@ public class Ex4 implements Ex4_GUI{
 		}
 		if (_mode.equals("Segment")) {
 			_previewShape.setShape(new Segment2D(_lastClick, p));     // set the preview as a segment from last click to mouse position
+		}
+		if (_mode.equals("Rect")) {
+			_previewShape.setShape(new Rect2D(_lastClick, p));
 		}
 		if (_mode.equals("Polygon")) {
 			assert _previewShape instanceof Polygon2D : "Preview shape is not polygon in mode Polygon";    

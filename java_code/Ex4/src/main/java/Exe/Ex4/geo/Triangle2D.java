@@ -16,13 +16,27 @@ public class Triangle2D implements GeoShapeable{
 	}
 
 	@Override
-	public boolean contains(Point2D ot) { // TODO: this implementation is initial and untested
-		// concept: make sure the point is closer to each of the triangle's points than the line opposite it
-		boolean closerToP1 = ot.distance(_p1) < _p1.distance(new Segment2D(_p2, _p3));
-		boolean closerToP2 = ot.distance(_p2) < _p2.distance(new Segment2D(_p1, _p3));
-		boolean closerToP3 = ot.distance(_p3) < _p3.distance(new Segment2D(_p1, _p2));
+	public boolean contains(Point2D ot) { // TODO: can return true for points outside the triangle
+		// concept: make sure the point is close to each vertex's parallel line than the vertex is to the opposite line
+		double dy3 = (_p1.y() - _p2.y()) / (_p1.x() - _p2.x());   // we calculate the line slopes to create a parallel line
+		double dy2 = (_p1.y() - _p3.y()) / (_p1.x() - _p3.x());   // the slope is the default for dy
+		double dy1 = (_p2.y() - _p3.y()) / (_p2.x() - _p3.x());
+		int dx3 = 1;    // these are the x delta that will be added to create the lines
+		int dx2 = 1;    // they are 1 by default to match with dy being the slope
+		int dx1 = 1;
+		if (Double.isInfinite(dy3)) { dy3 = 1; dx3 = 0; }  // for each of the dys, if they are infinite we need to change them to 1
+		if (Double.isInfinite(dy2)) { dy2 = 1; dx2 = 0; }  // we also set dx to 0 to make the point directly above
+		if (Double.isInfinite(dy1)) { dy1 = 1; dx1 = 0; }  // this will give a line with infinite slope
+		
+		Segment2D line3 = new Segment2D(_p3, new Point2D(_p3.x() + dx3, _p3.y() + dy3));   // create a new line, with the opposite point and a point on the same sloped line
+		Segment2D line2 = new Segment2D(_p2, new Point2D(_p2.x() + dx2, _p2.y() + dy2));   // we create the point on the sloped line by adding 1 to x and k (AKA dy/dx) to y
+		Segment2D line1 = new Segment2D(_p1, new Point2D(_p1.x() + dx1, _p1.y() + dy1));
 
-		return closerToP1 && closerToP2 && closerToP3;
+		boolean closerToP1 = ot.distance(line1) < _p1.distance(new Segment2D(_p2, _p3));  // check that the point is closer to the parallel line that the point to its opposite line
+		boolean closerToP2 = ot.distance(line2) < _p2.distance(new Segment2D(_p1, _p3));  // this means the point is not beyond the line
+		boolean closerToP3 = ot.distance(line3) < _p3.distance(new Segment2D(_p1, _p2));
+
+		return closerToP1 && closerToP2 && closerToP3;   // the point is contained if all 3 conditions are true
 	}
 
 	@Override

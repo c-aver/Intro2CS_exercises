@@ -13,10 +13,9 @@ import java.util.ArrayList;
 public class Polygon2D implements GeoShapeable{
 	private ArrayList<Point2D> _points;   // TODO: this doesn't change often, array instead?
 
-	public Polygon2D() {
-		_points = new ArrayList<Point2D>();
-	}
 	public Polygon2D(ArrayList<Point2D> points) {
+		// TODO: fix this line
+		//if (_points.size() < 3) throw new IllegalArgumentException("Cannot create polygon with less than 3 points");
 		_points = new ArrayList<Point2D>(points);
 	}
 	public void addPoint(Point2D p) {
@@ -28,9 +27,14 @@ public class Polygon2D implements GeoShapeable{
 	
 	@Override
 	public boolean contains(Point2D ot) {
-		// TODO Auto-generated method stub
-		assert false : "Polygon2D is not implemented";
-		return false;
+		// concept: check if the point hits an odd number of triangle from the mesh
+		// TODO: problem: sometimes an even number is correct, e.g. middle of a pentagram
+		Triangle2D[] mesh = triangleMesh();
+		int hits = 0;
+		for (Triangle2D tri : mesh) {
+			if (tri.contains(ot)) hits += 1;
+		}
+		return hits % 2 == 1;
 	}
 
 	@Override
@@ -85,4 +89,14 @@ public class Polygon2D implements GeoShapeable{
 		return _points.toArray(new Point2D[0]);  // return the points arraylist converted to an array, the paramter is provided to determine the type of the array
 	}
 	
+	public Triangle2D[] triangleMesh() {  // TODO: precalculate mesh on creation?
+		int numTriangles = _points.size() - 2;
+		Triangle2D[] result = new Triangle2D[numTriangles];
+		Point2D origin = _points.get(_points.size() - 1); // get the last point as the "origin" for each triangle
+		for (int i = 0; i < numTriangles; ++i) {
+			// create a triangle between the origin, current point, and next point, on the last iteration next point will be the one before the origin
+			result[i] = new Triangle2D(origin, _points.get(i), _points.get(i + 1));
+		}
+		return result;
+	}
 }

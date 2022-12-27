@@ -46,12 +46,9 @@ public class Ex4 implements Ex4_GUI{
 	public void init(ShapeCollectionable s) {
 		if (s == null) { _shapes = new ShapeCollection(); }
 		else { _shapes = s.copy(); }
-		GUI_Shapeable _gs = null; // TODO: do all these variables need to be inside the function or the fields?
-		Polygon2D _pp = null; // TODO: what is this?
 		_color = Color.blue;
 		_fill = false;
 		_mode = "";
-		Point2D _p1 = null;
 	}
 	public void show(double d) {
 		StdDraw_Ex4.setScale(0, d);
@@ -168,7 +165,6 @@ public class Ex4 implements Ex4_GUI{
 		
 		// Edit menu
 		if (action.equals("Remove")) { removeSelected(); }
-		// TODO: add non-implemented actions
 
 		// Sort menu
 		if (action.equals("ByArea")) { _shapes.sort(ShapeComp.CompByArea); }

@@ -16,7 +16,7 @@ public class Triangle2D implements GeoShapeable{
 	}
 
 	@Override
-	public boolean contains(Point2D ot) { // TODO: can return true for points outside the triangle
+	public boolean contains(Point2D ot) {
 		// concept: make sure the point is close to each vertex's parallel line than the vertex is to the opposite line
 		double dy3 = (_p1.y() - _p2.y()) / (_p1.x() - _p2.x());   // we calculate the line slopes to create a parallel line
 		double dy2 = (_p1.y() - _p3.y()) / (_p1.x() - _p3.x());   // the slope is the default for dy
@@ -27,7 +27,7 @@ public class Triangle2D implements GeoShapeable{
 		if (Double.isInfinite(dy3)) { dy3 = 1; dx3 = 0; }  // for each of the dys, if they are infinite we need to change them to 1
 		if (Double.isInfinite(dy2)) { dy2 = 1; dx2 = 0; }  // we also set dx to 0 to make the point directly above
 		if (Double.isInfinite(dy1)) { dy1 = 1; dx1 = 0; }  // this will give a line with infinite slope
-		
+
 		Segment2D line3 = new Segment2D(_p3, new Point2D(_p3.x() + dx3, _p3.y() + dy3));   // create a new line, with the opposite point and a point on the same sloped line
 		Segment2D line2 = new Segment2D(_p2, new Point2D(_p2.x() + dx2, _p2.y() + dy2));   // we create the point on the sloped line by adding 1 to x and k (AKA dy/dx) to y
 		Segment2D line1 = new Segment2D(_p1, new Point2D(_p1.x() + dx1, _p1.y() + dy1));

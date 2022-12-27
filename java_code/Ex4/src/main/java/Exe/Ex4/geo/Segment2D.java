@@ -1,6 +1,5 @@
 package Exe.Ex4.geo;
 
-
 /**
  * This class represents a 2D segment on the plane, 
  * Ex4: you should implement this class!
@@ -8,6 +7,8 @@ package Exe.Ex4.geo;
  *
  */
 public class Segment2D implements GeoShapeable{
+	private final double SEGMENT_WIDTH = 0.1;  // this represents a practical segment width for the purpose of containment
+
 	private Point2D _p1;   // the endpoints of the segment
 	private Point2D _p2;
 
@@ -27,8 +28,10 @@ public class Segment2D implements GeoShapeable{
 
 	@Override
 	public boolean contains(Point2D ot) {
-		// TODO: what is the logic of this?
-		return false;
+		double minX = Math.min(_p1.x(), _p2.x()), maxX = Math.max(_p1.x(), _p2.x()), minY = Math.min(_p1.y(), _p2.y()), maxY = Math.max(_p1.y(), _p2.y());
+		if (ot.x() < minX || ot.x() > maxX || ot.y() < minY || ot.y() > maxY) return false;
+		if (ot.distance(this) > SEGMENT_WIDTH) return false;
+		return true;
 	}
 
 	@Override

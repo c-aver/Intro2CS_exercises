@@ -1,6 +1,5 @@
 package Exe.Ex4.geo;
 
-import java.util.ArrayList;
 
 /**
  * This class represents a 2D rectangle (NOT necessarily axis parallel - this shape can be rotated!)
@@ -75,11 +74,6 @@ public class Rect2D implements GeoShapeable {
 	}
 
 	private Polygon2D toPoly() {
-		ArrayList<Point2D> list = new ArrayList<Point2D>();
-		list.add(_p1);
-		list.add(_p2);
-		list.add(_p3);
-		list.add(_p4);
-		return new Polygon2D(list);
+		return new Polygon2D(getPoints());
 	}
 }

@@ -27,7 +27,7 @@ import Exe.Ex4.geo.Triangle2D;
  *
  */
 public class Ex4 implements Ex4_GUI{
-	private final boolean DEBUG = false;  // debug mode
+	private final boolean DEBUG = true;  // debug mode
 
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
 	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn, the only field that should be changed is its GeoShapeable
@@ -195,7 +195,6 @@ public class Ex4 implements Ex4_GUI{
 				finalizeShape();
 			}
 		}
-		// TODO: add support for Rect, Triangle
 		if (_mode.equals("Triangle")) {
 			if (_lastClick == null) {           // if we don't have a last click this is the first point of the triangle
 				_polyPoints = new ArrayList<Point2D>();  // initialize the point list
@@ -212,7 +211,7 @@ public class Ex4 implements Ex4_GUI{
 		if (_mode.equals("Polygon")) {
 			if (_lastClick == null) {                    // if this is the first click of the polygon
 				_polyPoints = new ArrayList<Point2D>();  // initialize the point list
-				_previewShape.setShape(new Polygon2D(_polyPoints)); // set the preview shape as an empty polygon
+				_previewShape.setShape(new Polygon2D(_polyPoints.toArray(new Point2D[0]))); // set the preview shape as an empty polygon
 			}
 			_polyPoints.add(p);               // add the clicked point to the point list
 			_lastClick = new Point2D(p);
@@ -273,7 +272,7 @@ public class Ex4 implements Ex4_GUI{
 		} else if (numPoints < 3) {
 			_previewShape.setShape(new Triangle2D(_polyPoints.get(0), _polyPoints.get(1), _polyPoints.get(2)));
 		} else {
-			_previewShape.setShape(new Polygon2D(_polyPoints));   // set the preview shape as a new polygon with the point list, this removes the current mouse position since it is not needed
+			_previewShape.setShape(new Polygon2D(_polyPoints.toArray(new Point2D[0])));   // set the preview shape as a new polygon with the point list, this removes the current mouse position since it is not needed
 		}
 		_polyPoints = null;          // nullify the list after it has been used
 		finalizeShape();             // finalize the shape
@@ -364,9 +363,10 @@ public class Ex4 implements Ex4_GUI{
 		}
 		if (_mode.equals("Polygon")) {
 			assert _previewShape instanceof Polygon2D : "Preview shape is not polygon in mode Polygon";    
-			Polygon2D previewPoly = new Polygon2D(_polyPoints);       // set the preview polygon as a polygon with the list of points
-			previewPoly.addPoint(p);                                  // add the current mouse position, note that inside previewPoly is a shallow copy of _polyPoints, so the point is not added to the list
-			_previewShape.setShape(previewPoly);                      // set the preview shape as the preview poly
+			Point2D[] previewPoints = new Point2D[_polyPoints.size() + 1];
+			System.arraycopy(_polyPoints.toArray(), 0, previewPoints, 0, _polyPoints.size());
+			previewPoints[_polyPoints.size()] = p;                                  // add the current mouse position, note that inside previewPoly is a shallow copy of _polyPoints, so the point is not added to the list
+			_previewShape.setShape(new Polygon2D(previewPoints));                      // set the preview shape as the preview poly
 		}
 		if (_mode.equals("Triangle")) {                               // if we are drawing a triangle
 			if (_polyPoints.size() == 1) {                            // and have only one point so far

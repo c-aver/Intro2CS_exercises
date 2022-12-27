@@ -273,7 +273,17 @@ public class Ex4 implements Ex4_GUI{
 		drawShapes();
 	}
 	public void mouseRightClicked(Point2D p) {
-		_previewShape.setShape(new Polygon2D(_polyPoints));   // set the preview shape as a new polygon with the point list, this removes the current mouse position since it is not needed
+		int numPoints = _polyPoints.size();
+		if (numPoints < 2) {
+			cancelShape();
+			return;
+		} else if (numPoints < 3) {
+			_previewShape.setShape(new Segment2D(_polyPoints.get(0), _polyPoints.get(1)));
+		} else if (numPoints < 3) {
+			_previewShape.setShape(new Triangle2D(_polyPoints.get(0), _polyPoints.get(1), _polyPoints.get(2)));
+		} else {
+			_previewShape.setShape(new Polygon2D(_polyPoints));   // set the preview shape as a new polygon with the point list, this removes the current mouse position since it is not needed
+		}
 		_polyPoints = null;          // nullify the list after it has been used
 		finalizeShape();             // finalize the shape
 		drawShapes();                // update the screen
@@ -395,6 +405,11 @@ public class Ex4 implements Ex4_GUI{
 		newShape.setFilled(_fill);
 		newShape.setTag(_runningTag++);
 		_shapes.add(newShape);
+		_lastClick = null;
+		_previewShape.setShape(null);
+	}
+	private void cancelShape() {
+		assert _previewShape != null : "Trying to cancel null shape";
 		_lastClick = null;
 		_previewShape.setShape(null);
 	}

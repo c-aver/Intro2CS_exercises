@@ -222,7 +222,7 @@ public class Ex4 implements Ex4_GUI{
 		if (_mode.equals("Polygon")) {
 			if (_lastClick == null) {                    // if this is the first click of the polygon
 				_polyPoints = new ArrayList<Point2D>();  // initialize the point list
-				_previewShape.setShape(new Polygon2D()); // set the preview shape as an empty polygon
+				_previewShape.setShape(new Polygon2D(_polyPoints)); // set the preview shape as an empty polygon
 			}
 			_polyPoints.add(p);               // add the clicked point to the point list
 			_lastClick = new Point2D(p);

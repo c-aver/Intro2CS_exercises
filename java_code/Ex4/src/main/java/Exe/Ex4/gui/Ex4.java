@@ -274,7 +274,10 @@ public class Ex4 implements Ex4_GUI{
 		drawShapes();
 	}
 	public void mouseRightClicked(Point2D p) {
-		if (_polyPoints == null) return; // TODO: is this correct?
+		if (_polyPoints == null) {
+			cancelShape();
+			return;
+		}
 		int numPoints = _polyPoints.size();
 		if (numPoints < 2) {
 			cancelShape();
@@ -424,7 +427,7 @@ public class Ex4 implements Ex4_GUI{
 		JFileChooser chooser = new JFileChooser();
 		int returnVal = (mode == SAVE ? chooser.showSaveDialog(null) : chooser.showOpenDialog(null));
         if (returnVal == JFileChooser.APPROVE_OPTION) {   // if succesful
-            return chooser.getSelectedFile().getName();   // return the chosen file
+            return chooser.getSelectedFile().getAbsolutePath();   // return the chosen file
         }
 		// otherwise, could be cancelled or errored
 		return null;

@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.JFileChooser;
+
 import Exe.Ex4.Ex4_Const;
 import Exe.Ex4.GUIShape;
 import Exe.Ex4.GUI_Shapeable;
@@ -127,8 +129,14 @@ public class Ex4 implements Ex4_GUI{
 
 		// File menu
 		if (action.equals("Clear"))  { _shapes.removeAll(); _runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
-		if (action.equals("Save")) { _shapes.save("Bob"); }  // TODO: choose file
-		if (action.equals("Load")) { _shapes.load("Bob"); }
+		if (action.equals("Save")) {
+			String filePath = chooseFile();
+			if (filePath != null) _shapes.save(filePath);
+		}
+		if (action.equals("Load")) {
+			String filePath = chooseFile();
+			if (filePath != null) _shapes.load(filePath);
+		}
 
 		// Select menu
 		if (action.equals("All")) {
@@ -407,5 +415,15 @@ public class Ex4 implements Ex4_GUI{
 		assert _previewShape != null : "Trying to cancel null shape";
 		_lastClick = null;
 		_previewShape.setShape(null);
+	}
+
+	private String chooseFile() {
+		JFileChooser chooser = new JFileChooser();
+		int returnVal = chooser.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {   // if succesful
+            return chooser.getSelectedFile().getName();   // return the chosen file
+        }
+		// otherwise, could be cancelled or errored
+		return null;
 	}
 }

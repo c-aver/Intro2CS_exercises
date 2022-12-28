@@ -8,7 +8,7 @@ import java.awt.Color;
 
 import Exe.Ex4.geo.*;
 
-public class GUIShape implements GUI_Shapeable{
+public class GUIShape implements GUI_Shapeable {
 	private GeoShapeable _g = null;
 	private boolean _fill;
 	private Color _color;
@@ -54,7 +54,6 @@ public class GUIShape implements GUI_Shapeable{
 				_g = new Polygon2D(points);
 				return;
 		}
-		// TODO: finish this
 	} 
 	
 	@Override

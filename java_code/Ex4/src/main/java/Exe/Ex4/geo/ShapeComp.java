@@ -33,10 +33,10 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 	public int compare(GUI_Shapeable o1, GUI_Shapeable o2) {
 		assert Ex4_Const.sortTypeCount == 8 : "Sort type check is not exhaustive";
 		if (_flag == Ex4_Const.Sort_By_Tag) {
-			return Integer.compare(o1.getTag(), o2.getTag());
+			return Integer.compare(o2.getTag(), o1.getTag());
 		}
 		if (_flag == Ex4_Const.Sort_By_Anti_Tag) {
-			return Integer.compare(o2.getTag(), o1.getTag());
+			return Integer.compare(o1.getTag(), o2.getTag());
 		}
 		if (_flag == Ex4_Const.Sort_By_Area) {
 			return Double.compare(o1.getShape().area(), o2.getShape().area());

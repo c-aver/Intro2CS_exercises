@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import Exe.Ex4.geo.Circle2D;
+import Exe.Ex4.geo.GeoShapeable;
+import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Rect2D;
 
 /**
@@ -100,12 +103,31 @@ public class ShapeCollection implements ShapeCollectionable{
 	}
 	@Override
 	public Rect2D getBoundingBox() {
-		Rect2D ans = null;
-		////////// TODO: add your code below ///////////
-		
-		
-		//////////////////////////////////////////
-		return ans;
+		if (_shapes.size() < 1) return null;
+		double minX = Ex4_Const.DIM_SIZE, maxX = 0, minY = Ex4_Const.DIM_SIZE, maxY = 0;
+		for (GUI_Shapeable gs : _shapes) {
+			GeoShapeable g = gs.getShape();
+			if (g instanceof Circle2D) {
+				Circle2D circ = (Circle2D) g;
+				double r = circ.getRadius();
+				Point2D c = circ.getPoints()[0];
+				double cX = c.x(), cY = c.y();
+				if (cX - r < minX) minX = cX - r;
+				if (cX + r > maxX) maxX = cX + r;
+				if (cY - r < minY) minY = cY - r;
+				if (cY + r > maxY) maxY = cY + r;
+			} else {
+				Point2D[] ps = g.getPoints();
+				for (Point2D p : ps) {
+					if (p.x() < minX) minX = p.x();
+					if (p.x() > maxX) maxX = p.x();
+					if (p.y() < minY) minY = p.y();
+					if (p.y() > maxY) maxY = p.y();
+				}
+			}
+		}
+		Point2D p1 = new Point2D(minX, minY), p2 = new Point2D(maxX, maxY);
+		return new Rect2D(p1, p2);
 	}
 	@Override
 	public String toString() {

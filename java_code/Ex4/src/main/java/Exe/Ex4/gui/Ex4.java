@@ -276,6 +276,11 @@ public class Ex4 implements Ex4_GUI{
 	public void mouseRightClicked(Point2D p) {
 		if (_polyPoints == null) {
 			cancelShape();
+			if (DEBUG) {
+				Rect2D boundingBox = _shapes.getBoundingBox();
+				GUI_Shapeable gBoundingBox = new GUIShape(boundingBox, false, Color.RED, -1);
+				_shapes.add(gBoundingBox);
+			}
 			return;
 		}
 		int numPoints = _polyPoints.size();
@@ -360,7 +365,7 @@ public class Ex4 implements Ex4_GUI{
 		if (DEBUG) {                                    // debug mode operations
 			for (int i = 0; i < _shapes.size(); ++i) {  // fill shapes with mouse on them
 				GUI_Shapeable gs = _shapes.get(i);
-				gs.setFilled(gs.getShape().contains(p));
+				if (gs.getTag() != -1) gs.setFilled(gs.getShape().contains(p));
 			}
 			drawShapes();
 		}

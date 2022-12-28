@@ -86,20 +86,23 @@ public class GUIShape implements GUI_Shapeable {
 			System.err.println("ERROR: ");
 		}
 		String type = args[4];
-		String[] points = new String[args.length - 5];
-		System.arraycopy(args, 5, points, 0, points.length);
+		String[] pointStrings = new String[args.length - 5];
+		System.arraycopy(args, 5, pointStrings, 0, pointStrings.length);
 		switch (type) {
 			case "Circle2D": 
 				_g = new Circle2D(new Point2D(Double.parseDouble(args[5]), Double.parseDouble(args[6])), Double.parseDouble(args[7]));
 				return;
 			case "Segment2D":
-				_g = new Segment2D(points);
+				_g = new Segment2D(pointStrings);
 				return;
 			case "Triangle2D":
-				_g = new Triangle2D(points);
+				_g = new Triangle2D(pointStrings);
+				return;
+			case "Rect2D":
+				_g = new Rect2D(pointStrings);
 				return;
 			case "Polygon2D":
-				_g = new Polygon2D(points);
+				_g = new Polygon2D(pointStrings);
 				return;
 		}
 	}

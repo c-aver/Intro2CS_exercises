@@ -6,15 +6,14 @@ package Exe.Ex4;
  */
 import java.awt.Color;
 
-import Exe.Ex4.geo.GeoShapeable;
-
+import Exe.Ex4.geo.*;
 
 public class GUIShape implements GUI_Shapeable{
 	private GeoShapeable _g = null;
 	private boolean _fill;
 	private Color _color;
 	private int _tag;
-	private boolean _isSelected;
+	private boolean _isSelected = false;
 	
 	public GUIShape(GeoShapeable gs, boolean fill, Color color, int tag) {
 		_g = null;
@@ -27,6 +26,36 @@ public class GUIShape implements GUI_Shapeable{
 	public GUIShape(GUIShape ot) {
 		this(ot._g.copy(), ot._fill, ot._color, ot._tag);
 	}
+
+	public GUIShape(String str) {
+		String[] args = str.split(",");
+		if (!args[0].equals("GUIShape")) throw new IllegalArgumentException("Trying to initialze GUIShape with non-GUIShape string");
+		try {
+			_color = new Color(Integer.parseInt(args[1]));
+			_fill = Boolean.parseBoolean(args[2]);
+			_tag = Integer.parseInt(args[3]);
+		} catch (NumberFormatException e) {
+			System.err.println("ERROR: ");
+		}
+		String type = args[4];
+		String[] points = new String[args.length - 5];
+		System.arraycopy(args, 5, points, 0, points.length);
+		switch (type) {
+			case "Circle2D": 
+				_g = new Circle2D(new Point2D(Double.parseDouble(args[5]), Double.parseDouble(args[6])), Double.parseDouble(args[7]));
+				return;
+			case "Segment2D":
+				_g = new Segment2D(points);
+				return;
+			case "Triangle2D":
+				_g = new Triangle2D(points);
+				return;
+			case "Polygon2D":
+				_g = new Polygon2D(points);
+				return;
+		}
+		// TODO: finish this
+	} 
 	
 	@Override
 	public GeoShapeable getShape() {
@@ -69,24 +98,9 @@ public class GUIShape implements GUI_Shapeable{
 		GUI_Shapeable cp = new GUIShape(this);
 		return cp;
 	}
-	/**
-	 * This functions returns the name a Color object.
-	 * Only for the color options presented in the Ex4 GUI.
-	 * @param col the color to be named
-	 * @return a string containing the name of the color
-	 */
-	private String colorName(Color col) {
-		if (col.equals(Color.WHITE))  return "white";
-		if (col.equals(Color.BLACK))  return "black";
-		if (col.equals(Color.BLUE))   return "blue";
-		if (col.equals(Color.RED))    return "red";
-		if (col.equals(Color.YELLOW)) return "yellow";
-		if (col.equals(Color.GREEN))  return "green";
-		return "unknown color";
-	}
 	@Override
 	public String toString() {
-		return (_isSelected ? "*" : " ") + Integer.toString(_tag) + ": " + (_fill ? "Filled " : "Hollow ") + colorName(_color) + " " + _g.toString();
+		return "GUIShape," + _color.getRGB() + ',' + _fill + ',' + _tag + ',' + _g; // TODO: make this work regradless of shape
 	}
 	private void init(String[] ww) {
 		// TODO: what is this?

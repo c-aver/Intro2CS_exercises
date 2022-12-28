@@ -28,32 +28,7 @@ public class GUIShape implements GUI_Shapeable {
 	}
 
 	public GUIShape(String str) {
-		String[] args = str.split(",");
-		if (!args[0].equals("GUIShape")) throw new IllegalArgumentException("Trying to initialze GUIShape with non-GUIShape string");
-		try {
-			_color = new Color(Integer.parseInt(args[1]));
-			_fill = Boolean.parseBoolean(args[2]);
-			_tag = Integer.parseInt(args[3]);
-		} catch (NumberFormatException e) {
-			System.err.println("ERROR: ");
-		}
-		String type = args[4];
-		String[] points = new String[args.length - 5];
-		System.arraycopy(args, 5, points, 0, points.length);
-		switch (type) {
-			case "Circle2D": 
-				_g = new Circle2D(new Point2D(Double.parseDouble(args[5]), Double.parseDouble(args[6])), Double.parseDouble(args[7]));
-				return;
-			case "Segment2D":
-				_g = new Segment2D(points);
-				return;
-			case "Triangle2D":
-				_g = new Triangle2D(points);
-				return;
-			case "Polygon2D":
-				_g = new Polygon2D(points);
-				return;
-		}
+		init(str.split(","));
 	} 
 	
 	@Override
@@ -99,10 +74,34 @@ public class GUIShape implements GUI_Shapeable {
 	}
 	@Override
 	public String toString() {
-		return "GUIShape," + _color.getRGB() + ',' + _fill + ',' + _tag + ',' + _g; // TODO: make this work regradless of shape
+		return "GUIShape," + _color.getRGB() + ',' + _fill + ',' + _tag + ',' + _g;
 	}
-	private void init(String[] ww) {
-		// TODO: what is this?
+	private void init(String[] args) {
+		if (!args[0].equals("GUIShape")) throw new IllegalArgumentException("Trying to initialze GUIShape with non-GUIShape string");
+		try {
+			_color = new Color(Integer.parseInt(args[1]));
+			_fill = Boolean.parseBoolean(args[2]);
+			_tag = Integer.parseInt(args[3]);
+		} catch (NumberFormatException e) {
+			System.err.println("ERROR: ");
+		}
+		String type = args[4];
+		String[] points = new String[args.length - 5];
+		System.arraycopy(args, 5, points, 0, points.length);
+		switch (type) {
+			case "Circle2D": 
+				_g = new Circle2D(new Point2D(Double.parseDouble(args[5]), Double.parseDouble(args[6])), Double.parseDouble(args[7]));
+				return;
+			case "Segment2D":
+				_g = new Segment2D(points);
+				return;
+			case "Triangle2D":
+				_g = new Triangle2D(points);
+				return;
+			case "Polygon2D":
+				_g = new Polygon2D(points);
+				return;
+		}
 	}
 	@Override
 	public boolean isSelected() {

@@ -51,7 +51,7 @@ public class Polygon2D implements GeoShapeable {
 		// this uses the method described in https://en.wikipedia.org/wiki/Polygon#Simple_polygons
 		double res = 0;
 		for (int i = 0; i < _points.length; ++i) {
-			res += _points[i].x()*_points[i+1].y() - _points[i+1].x()*_points[i].y();
+			res += _points[i].x()*_points[(i+1) % _points.length].y() - _points[(i+1) % _points.length].x()*_points[i].y();
 		}
 		return res / 2;
 	}

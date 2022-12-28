@@ -37,7 +37,11 @@ public class Rect2D implements GeoShapeable {
 			double p14Slope = (p1.y() - p4.y()) / (p1.x() - p4.x());
 		 	if (p12Slope != p43Slope || p23Slope != p14Slope)
 		 		throw new IllegalArgumentException("Cannot create non-parallelogram rectangle");
-		 	if (p12Slope * p14Slope != -1) throw new IllegalArgumentException("Cannot create rectangle with non-right angle");
+		 	if ((p12Slope * p14Slope != -1)                          // check if they are not perpendicular
+			 && (p12Slope != 0 || Double.isFinite(p14Slope))         // also make sure they are not parallel to the axes
+			 && (p14Slope != 0 || Double.isFinite(p12Slope))) {      // we check both option of axis-parallelity
+				throw new IllegalArgumentException("Cannot create rectangle with non-right angle");
+			}
 			_p1 = p1; _p2 = p2; _p3 = p3; _p4 = p4;
 		} catch (IllegalArgumentException e) {
 			System.err.println("ERROR: " + e.getMessage());

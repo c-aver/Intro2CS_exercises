@@ -30,6 +30,8 @@ import Exe.Ex4.geo.Triangle2D;
  */
 public class Ex4 implements Ex4_GUI{
 	private final boolean DEBUG = false;  // debug mode
+	static private final int LOAD = 0;
+	static private final int SAVE = 1;
 
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
 	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn, the only field that should be changed is its GeoShapeable
@@ -130,11 +132,11 @@ public class Ex4 implements Ex4_GUI{
 		// File menu
 		if (action.equals("Clear"))  { _shapes.removeAll(); _runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
 		if (action.equals("Save")) {
-			String filePath = chooseFile();
+			String filePath = chooseFile(SAVE);
 			if (filePath != null) _shapes.save(filePath);
 		}
 		if (action.equals("Load")) {
-			String filePath = chooseFile();
+			String filePath = chooseFile(LOAD);
 			if (filePath != null) _shapes.load(filePath);
 		}
 
@@ -417,9 +419,9 @@ public class Ex4 implements Ex4_GUI{
 		_previewShape.setShape(null);
 	}
 
-	private String chooseFile() {
+	private String chooseFile(int mode) {
 		JFileChooser chooser = new JFileChooser();
-		int returnVal = chooser.showOpenDialog(null);
+		int returnVal = (mode == SAVE ? chooser.showSaveDialog(null) : chooser.showOpenDialog(null));
         if (returnVal == JFileChooser.APPROVE_OPTION) {   // if succesful
             return chooser.getSelectedFile().getName();   // return the chosen file
         }

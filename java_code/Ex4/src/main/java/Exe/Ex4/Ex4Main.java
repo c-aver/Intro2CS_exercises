@@ -18,8 +18,8 @@ public class Ex4Main {
 
 	public static void main(String[] args) {
 		// t1();
-		// t2();
-		t3(); // won't work "out of the box" - requires editing the code (save, load..)
+		t2();
+		// t3(); // won't work "out of the box" - requires editing the code (save, load..)
 	}
 	// Minimal empty frame (no shapes)
 	public static void t1() {
@@ -38,7 +38,7 @@ public class Ex4Main {
 		GUI_Shapeable gs2 = new GUIShape(c2, false, Color.blue, 2);
 		shapes.add(gs1);
 		shapes.add(gs2);
-		//ex4.init(shapes);
+		ex4.init(shapes);
 		ex4.show();
 		System.out.print(ex4.getInfo());
 	}

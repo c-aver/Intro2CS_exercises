@@ -53,6 +53,7 @@ public class Ex4 implements Ex4_GUI{
 		_color = Color.blue;
 		_fill = false;
 		_mode = "";
+		if (s != null) _runningTag = s.size() + 1;
 	}
 	public void show(double d) {
 		StdDraw_Ex4.setScale(0, d);

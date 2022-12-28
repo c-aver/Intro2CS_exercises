@@ -1,5 +1,9 @@
 package Exe.Ex4;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -65,19 +69,34 @@ public class ShapeCollection implements ShapeCollectionable{
 	}
 
 	@Override
-	public void save(String file) {
-		////////// TODO: add your code below ///////////
-		
-		
-		//////////////////////////////////////////
+	public void save(String filePath) {
+		try {
+			FileWriter f = new FileWriter(filePath);
+			for (GUI_Shapeable shape : _shapes) {
+				f.append(shape.toString() + '\n');
+			}
+			f.close();
+		} catch (IOException e) {
+			System.err.println("ERROR: Could not open \"" + filePath + "\" for writing: " + e.getMessage());
+			System.err.println("Looked in " + System.getProperty("user.dir"));
+		} 
 	}
 
 	@Override
-	public void load(String file) {
-		////////// TODO: add your code below ///////////
-		
-		
-		//////////////////////////////////////////
+	public void load(String filePath) {
+		_shapes.clear();
+		try {
+			FileReader f = new FileReader(filePath);
+			BufferedReader buf = new BufferedReader(f);
+			String line;
+			while ((line = buf.readLine()) != null) {
+				_shapes.add(new GUIShape(line));
+			}
+			f.close();
+		} catch (IOException e) {
+			System.err.println("ERROR: Could not open \"" + filePath + "\": " + e.getMessage());
+			System.err.println("Looked in " + System.getProperty("user.dir"));
+		}
 	}
 	@Override
 	public Rect2D getBoundingBox() {

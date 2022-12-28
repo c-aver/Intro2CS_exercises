@@ -15,10 +15,16 @@ public class Circle2D implements GeoShapeable{
 		this._center = new Point2D(cen);
 		this._radius = rad;
 	}
+	public Circle2D(String str) {
+		String[] args = str.split(",");
+		if (args[0] != "Circle2D") throw new IllegalArgumentException("Trying to initialze Circle2D with non-Circle2D string");
+		_center = new Point2D(args[1] + "," + args[2]);
+		_radius = Double.parseDouble(args[3]);
+	}
 	public double getRadius() {return this._radius;}
 	@Override
 	public String toString() {
-		return "Circle centered on " + _center + " with radius " + _radius;
+		return "Circle2D," + _center + ", " + _radius;
 	}
 	@Override
 	public boolean contains(Point2D ot) {

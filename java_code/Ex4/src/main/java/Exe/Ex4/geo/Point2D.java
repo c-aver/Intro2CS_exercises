@@ -22,13 +22,15 @@ public class Point2D implements GeoShapeable {
        this(p.x(), p.y());
     }
     public Point2D(String s) {
+        this(s.split(","));
+    }
+    public Point2D(String[] args) {
         try {
-            String[] a = s.split(",");
-            _x = Double.parseDouble(a[0]);
-            _y = Double.parseDouble(a[1]);
+            _x = Double.parseDouble(args[0]);
+            _y = Double.parseDouble(args[1]);
         }
         catch(IllegalArgumentException e) {
-            System.err.println("ERROR: Got wrongly formatted string for Point2D constructor. Got: \"" + s + "\", should be of format: \"x,y\"");
+            System.err.println("ERROR: Got wrongly formatted string for Point2D constructor. Got: \"" + args[0] + ',' + args[1] + "\", should be of format: \"x,y\"");
             throw(e);
         }
     }

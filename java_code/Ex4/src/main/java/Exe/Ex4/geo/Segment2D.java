@@ -21,9 +21,18 @@ public class Segment2D implements GeoShapeable{
 	public Segment2D(Segment2D seg) {
 		this(seg.getPoints()[0], seg.getPoints()[1]);
 	}
+	public Segment2D(String[] args) {
+		if (args.length < 4) throw new IllegalArgumentException("Can't initialize Segment2D with less than 4 arguments");
+		try {
+			_p1 = new Point2D(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+			_p2 = new Point2D(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+		} catch (IllegalArgumentException e) {
+			// TODO: handle exception
+		}
+	}
 	@Override
 	public String toString() {
-		return "Segment: " + _p1 + " -- " + _p2;
+		return "Segment2D," + _p1 + "," + _p2;
 	}
 
 	@Override

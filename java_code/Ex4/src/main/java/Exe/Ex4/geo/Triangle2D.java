@@ -15,6 +15,22 @@ public class Triangle2D implements GeoShapeable{
 		_p3 = new Point2D(p3);
 	}
 
+	public Triangle2D(String[] args) {
+		if (args.length < 6) throw new IllegalArgumentException("Can't initialize Triangle2D with less than 6 arguments");
+		try {
+			_p1 = new Point2D(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+			_p2 = new Point2D(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+			_p3 = new Point2D(Double.parseDouble(args[4]), Double.parseDouble(args[5]));
+		} catch (IllegalArgumentException e) {
+			// TODO: handle exception
+		}
+    }
+
+    @Override
+	public String toString() {
+		return "Triangle2D," + _p1 + ',' + _p2 + ',' + _p3;
+	}
+
 	@Override
 	public boolean contains(Point2D ot) {
 		// concept: make sure the point is close to each vertex's parallel line than the vertex is to the opposite line

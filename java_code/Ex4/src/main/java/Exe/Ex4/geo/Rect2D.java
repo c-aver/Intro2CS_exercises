@@ -23,6 +23,22 @@ public class Rect2D implements GeoShapeable {
 		_p3 = orig._p3;
 		_p4 = orig._p4;
 	}
+	public Rect2D(String[] args) {
+		if (args.length < 8) throw new IllegalArgumentException("Can't initialize Rect2D with less than 8 arguments");
+		try {  // TODO: make sure is rectangular
+			_p1 = new Point2D(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+			_p2 = new Point2D(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+			_p3 = new Point2D(Double.parseDouble(args[4]), Double.parseDouble(args[5]));
+			_p4 = new Point2D(Double.parseDouble(args[6]), Double.parseDouble(args[7]));
+		} catch (IllegalArgumentException e) {
+			// TODO: handle exception
+		}
+    }
+
+	@Override
+	public String toString() {
+		return "Rect2D," + _p1 + ',' + _p2 + ',' + _p3 + ',' + _p4;
+	}
 
 	@Override
 	public boolean contains(Point2D ot) {

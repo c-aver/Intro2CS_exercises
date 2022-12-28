@@ -19,6 +19,25 @@ public class Polygon2D implements GeoShapeable {
 		if (_points.length > 2)
 			_mesh = triangleMesh();
 	}
+	public Polygon2D(String[] args) {
+		if (args.length % 2 != 0) throw new IllegalArgumentException("Can't initialize Polygon2D with an odd number of arguments");
+		_points = new Point2D[args.length / 2];
+		for (int i = 0; i < _points.length; ++i) {
+			String[] pointArgs = new String[] { args[i*2], args[i*2+1] };
+			_points[i] = new Point2D(pointArgs);
+		}
+		if (_points.length > 2)
+			_mesh = triangleMesh();
+	}
+
+	@Override
+	public String toString() {
+		String res = "Polygon2D";
+		for (Point2D point : _points) {
+			res += "," + point;
+		}
+		return res;
+	}
 	
 	@Override
 	public boolean contains(Point2D ot) {

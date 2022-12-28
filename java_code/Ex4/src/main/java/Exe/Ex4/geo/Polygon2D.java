@@ -13,8 +13,6 @@ public class Polygon2D implements GeoShapeable {
 	private Triangle2D[] _mesh = null;
 
 	public Polygon2D(Point2D[] points) {
-		// TODO: fix this line
-		// if (_points.size() < 3) throw new IllegalArgumentException("Cannot create polygon with less than 3 points");
 		_points = points;
 		if (_points.length > 2)
 			_mesh = triangleMesh();
@@ -41,8 +39,6 @@ public class Polygon2D implements GeoShapeable {
 	
 	@Override
 	public boolean contains(Point2D ot) {
-		// concept: check if the point hits an odd number of triangle from the mesh
-		// TODO: problem: sometimes an even number is correct, e.g. middle of a pentagram
 		int hits = 0;
 		for (Triangle2D tri : _mesh) {
 			if (tri.contains(ot)) hits += 1;
@@ -52,13 +48,16 @@ public class Polygon2D implements GeoShapeable {
 
 	@Override
 	public double area() {
-		// TODO Auto-generated method stub
-		assert false : "Polygon2D is not implemented";
-		return 0;
+		// this uses the method described in https://en.wikipedia.org/wiki/Polygon#Simple_polygons
+		double res = 0;
+		for (int i = 0; i < _points.length; ++i) {
+			res += _points[i].x()*_points[i+1].y() - _points[i+1].x()*_points[i].y();
+		}
+		return res / 2;
 	}
 
 	@Override
-	public double perimeter() { // TODO: this function is untested
+	public double perimeter() {
 		double answer = 0;
 		int numPoints = _points.length;
 		for (int i = 0; i < numPoints; ++i) { // iterate on the points

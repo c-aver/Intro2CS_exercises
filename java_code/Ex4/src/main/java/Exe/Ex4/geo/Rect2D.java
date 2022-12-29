@@ -98,7 +98,7 @@ public class Rect2D implements GeoShapeable {
 	}
 
 	@Override
-	public Point2D[] getPoints() {
+	public Point2D[] getPoints() { // TODO: that's not what this function should return
 		return new Point2D[] { _p1, _p2, _p3, _p4 };
 	}
 

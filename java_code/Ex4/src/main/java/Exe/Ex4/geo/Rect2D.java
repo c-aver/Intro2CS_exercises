@@ -1,5 +1,9 @@
 package Exe.Ex4.geo;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * This class represents a 2D rectangle (NOT necessarily axis parallel - this shape can be rotated!)
@@ -98,8 +102,30 @@ public class Rect2D implements GeoShapeable {
 	}
 
 	@Override
-	public Point2D[] getPoints() { // TODO: that's not what this function should return
-		return new Point2D[] { _p1, _p2, _p3, _p4 };
+	public Point2D[] getPoints() { // TODO: test this
+		List<Point2D> ps = Arrays.asList(new Point2D[] { _p1, _p2, _p3, _p4});
+		Comparator<Point2D> xComp = new Comparator<Point2D>() {
+			@Override
+			public int compare(Point2D p1, Point2D p2) {
+				return Double.compare(p1.x(), p2.x());
+			}
+		};
+		Comparator<Point2D> yComp = new Comparator<Point2D>() {
+			@Override
+			public int compare(Point2D p1, Point2D p2) {
+				return Double.compare(p1.y(), p2.y());
+			}
+		};
+		Double xMin = ((Point2D) Collections.min(ps, xComp)).x();
+		Double xMax = ((Point2D) Collections.max(ps, xComp)).x();
+
+		Double yMin = ((Point2D) Collections.min(ps, yComp)).y();
+		Double yMax = ((Point2D) Collections.max(ps, yComp)).y();
+
+		Point2D minP = new Point2D(xMin, yMin);
+		Point2D maxP = new Point2D(xMax, yMax);
+
+		return new Point2D[] { minP, maxP };
 	}
 
 	private Polygon2D toPoly() {

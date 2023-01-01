@@ -1,6 +1,6 @@
 /*
  * This class contains tests that are common among all GeoShapeables.
- * TODO: does this need to be an actual JUnit test class?
+ * TODO: should this all be static?
  */
 
 package Exe.Ex4.geo;

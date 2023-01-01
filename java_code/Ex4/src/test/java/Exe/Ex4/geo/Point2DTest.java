@@ -1,12 +1,28 @@
 package Exe.Ex4.geo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class Point2DTest {
+    private Point2D p = null;
+
+    public static Point2D randPoint() {
+        return new Point2D(Math.random() * GeoTestConsts.MAX_X, Math.random() * GeoTestConsts.MAX_Y);
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        p = randPoint();
+    }
+
     @Test
     void testAdd() {
-        // TODO: implement
-        assert false : "Not implemented";
+        Point2D addP = randPoint();
+        Point2D newP = p.add(addP);
+        assertEquals(p.x() + addP.x(), newP.x(), GeoTestConsts.EPS);
+        assertEquals(p.y() + addP.y(), newP.y(), GeoTestConsts.EPS);
     }
 
     @Test

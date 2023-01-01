@@ -1,5 +1,8 @@
 package Exe.Ex4.geo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,8 +24,12 @@ public class Circle2DTest {
     @Test
     void testArea() {
         superTest.testArea(circ);
-
-        assert false : "Not implemented";
+        Rect2D boundingBox = GeoShapeableTest.boundingBox(circ);
+        double boundingBoxArea = boundingBox.area();
+        assertTrue(boundingBox.isSquare(), "Circle is bounded by non-square rectangle");
+        double expectedArea = boundingBoxArea * Math.PI / 4;
+        assertEquals(expectedArea, circ.area(), GeoTestConsts.EPS, "Circle area is not correctly proportional to bounding box");
+        //assert false : "Not implemented";
     }
 
     @Test
@@ -39,10 +46,11 @@ public class Circle2DTest {
 
     @Test
     void testGetPoints() {
-        superTest.testArea(circ);
+        superTest.testGetPoints(circ);
 
-        // TODO: implement
-        assert false : "Not implemented";
+        Point2D[] ps = circ.getPoints();
+        assertEquals(2, ps.length, "Circle2D.getPoints didn't return 2 points");
+        assertEquals(circ.getRadius(), ps[0].distance(ps[1]), GeoTestConsts.EPS, "Circle2D.getPoints distance is not radius");
     }
 
     @Test
@@ -53,7 +61,7 @@ public class Circle2DTest {
 
     @Test
     void testMove() {
-        superTest.testArea(circ);
+        superTest.testMove(circ);
 
         // TODO: implement
         assert false : "Not implemented";
@@ -61,7 +69,7 @@ public class Circle2DTest {
 
     @Test
     void testPerimeter() {
-        superTest.testArea(circ);
+        superTest.testPerimeter(circ);
 
         // TODO: implement
         assert false : "Not implemented";
@@ -69,7 +77,7 @@ public class Circle2DTest {
 
     @Test
     void testRotate() {
-        superTest.testArea(circ);
+        superTest.testRotate(circ);
 
         // TODO: implement
         assert false : "Not implemented";

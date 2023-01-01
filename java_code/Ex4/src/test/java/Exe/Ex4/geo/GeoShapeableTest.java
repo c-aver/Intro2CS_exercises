@@ -6,6 +6,7 @@
 package Exe.Ex4.geo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,8 +46,13 @@ public class GeoShapeableTest {
     }
 
     void testCopy(GeoShapeable geo) { // TODO: test deep copy?
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeable copy = geo.copy();
+        assertNotEquals(System.identityHashCode(geo), System.identityHashCode(copy), "copy returned shallow copy");
+        Point2D[] ps = geo.getPoints(), copyPs = copy.getPoints();
+        assertEquals(ps.length, copyPs.length, "copy changed number of points");
+        for (int i = 0; i < ps.length; ++i) {
+            assertNotEquals(System.identityHashCode(ps[i]), System.identityHashCode(copyPs[i]), "copy returned shallow point copy");
+        }
     }
 
     void testGetPoints(GeoShapeable geo) {

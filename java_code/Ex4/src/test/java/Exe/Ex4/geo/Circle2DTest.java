@@ -34,14 +34,15 @@ public class Circle2DTest {
 
     @Test
     void testContains() {
-        // TODO: implement
+        superTest.testContains(circ);
         assert false : "Not implemented";
     }
 
     @Test
     void testCopy() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testCopy(circ);
+        Circle2D copy = (Circle2D) circ.copy();
+        assertEquals(circ.getRadius(), copy.getRadius(), "Copy changed radius");
     }
 
     @Test

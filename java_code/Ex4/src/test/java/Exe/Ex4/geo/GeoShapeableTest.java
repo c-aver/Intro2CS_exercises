@@ -9,8 +9,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import Exe.Ex4.GUIShape;
+import Exe.Ex4.ShapeCollection;
+import Exe.Ex4.ShapeCollectionable;
+
 
 public class GeoShapeableTest {
+    static Rect2D boundingBox(GeoShapeable geo) {
+        ShapeCollectionable coll = new ShapeCollection();
+        coll.add(new GUIShape(geo, false, null, 0));
+        return coll.getBoundingBox();
+    }
+
     // this is just in case I need it, should not use
     void runAll(GeoShapeable geo) {
         testArea(geo);
@@ -24,17 +34,17 @@ public class GeoShapeableTest {
         testToString(geo);
     }
 
-    void testArea(GeoShapeable geo) {
+    void testArea(GeoShapeable geo) { // TODO: idea: dartboard probability
         double area = geo.area();
         assertTrue(area > 0, "Area returned non-positive value"); // TODO: >= ?
     }
 
     void testContains(GeoShapeable geo) {
-        // TODO: implement
+        // TODO: implement, how?
         assert false : "Not implemented";
     }
 
-    void testCopy(GeoShapeable geo) {
+    void testCopy(GeoShapeable geo) { // TODO: test deep copy?
         // TODO: implement
         assert false : "Not implemented";
     }

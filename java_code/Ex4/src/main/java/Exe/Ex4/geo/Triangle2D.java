@@ -22,7 +22,7 @@ public class Triangle2D implements GeoShapeable{
 			_p2 = new Point2D(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
 			_p3 = new Point2D(Double.parseDouble(args[4]), Double.parseDouble(args[5]));
 		} catch (IllegalArgumentException e) {
-			// TODO: handle exception
+			System.err.println("ERROR: Could not initialize Triangle2D: " + e.getMessage());
 		}
     }
 
@@ -56,7 +56,7 @@ public class Triangle2D implements GeoShapeable{
 	}
 
 	@Override
-	public double area() { // TODO: this function is untested and unverified
+	public double area() {
 		double base = _p1.distance(_p2);    // calculate the length of the triangle's base
 		double height = _p3.distance(new Segment2D(_p1, _p2));   // the triangle's height is the distance of p3 from the line p1 -- p2
 		return (base * height) / 2; // the formula for a traingle's area

@@ -83,14 +83,18 @@ public class GUIShape implements GUI_Shapeable {
 			_fill = Boolean.parseBoolean(args[2]);
 			_tag = Integer.parseInt(args[3]);
 		} catch (NumberFormatException e) {
-			System.err.println("ERROR: ");
+			System.err.println("ERROR: Got wrongly fomatted string for GUIShape initialize: " + e.getMessage());
 		}
 		String type = args[4];
 		String[] pointStrings = new String[args.length - 5];
 		System.arraycopy(args, 5, pointStrings, 0, pointStrings.length);
 		switch (type) {
 			case "Circle2D": 
-				_g = new Circle2D(new Point2D(Double.parseDouble(args[5]), Double.parseDouble(args[6])), Double.parseDouble(args[7]));
+				try {
+					_g = new Circle2D(new Point2D(Double.parseDouble(args[5]), Double.parseDouble(args[6])), Double.parseDouble(args[7]));
+				} catch (IllegalArgumentException e) {
+					System.err.println("ERROR: Got wrongly formatted string for Circle2D GUIShape initialize: " + e.getMessage());
+				}
 				return;
 			case "Segment2D":
 				_g = new Segment2D(pointStrings);

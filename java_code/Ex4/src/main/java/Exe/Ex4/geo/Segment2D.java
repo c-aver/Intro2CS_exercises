@@ -27,7 +27,7 @@ public class Segment2D implements GeoShapeable{
 			_p1 = new Point2D(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
 			_p2 = new Point2D(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
 		} catch (IllegalArgumentException e) {
-			// TODO: handle exception
+			System.err.println("ERROR: Could not initialize Segment2D: " + e.getMessage());
 		}
 	}
 	@Override

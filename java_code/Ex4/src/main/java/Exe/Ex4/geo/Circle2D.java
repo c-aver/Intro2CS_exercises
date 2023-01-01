@@ -16,10 +16,14 @@ public class Circle2D implements GeoShapeable{
 		this._radius = rad;
 	}
 	public Circle2D(String str) {
-		String[] args = str.split(",");
-		if (args[0] != "Circle2D") throw new IllegalArgumentException("Trying to initialze Circle2D with non-Circle2D string");
-		_center = new Point2D(args[1] + "," + args[2]);
-		_radius = Double.parseDouble(args[3]);
+		try {
+			String[] args = str.split(",");
+			if (args[0] != "Circle2D") throw new IllegalArgumentException("Trying to initialze Circle2D with non-Circle2D string");
+			_center = new Point2D(args[1] + "," + args[2]);
+			_radius = Double.parseDouble(args[3]);
+		} catch (IllegalArgumentException e) {
+			System.err.println("ERROR: Could not initialize Circle2D: " + e.getMessage());
+		}
 	}
 	public double getRadius() { return this._radius; }
 	@Override

@@ -48,7 +48,7 @@ public class Rect2D implements GeoShapeable {
 			}
 			_p1 = p1; _p2 = p2; _p3 = p3; _p4 = p4;
 		} catch (IllegalArgumentException e) {
-			System.err.println("ERROR: " + e.getMessage());
+			System.err.println("ERROR: Could not initialize Rect2D: " + e.getMessage());
 		}
     }
 
@@ -103,6 +103,7 @@ public class Rect2D implements GeoShapeable {
 
 	@Override
 	public Point2D[] getPoints() { // TODO: test this
+		// TODO: change to more pleasant code?
 		List<Point2D> ps = Arrays.asList(new Point2D[] { _p1, _p2, _p3, _p4});
 		Comparator<Point2D> xComp = new Comparator<Point2D>() {
 			@Override

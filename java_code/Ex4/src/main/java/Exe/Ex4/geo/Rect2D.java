@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import Exe.Ex4.Ex4_Const;
+
 /**
  * This class represents a 2D rectangle (NOT necessarily axis parallel - this shape can be rotated!)
  * Ex4: you should implement this class!
@@ -138,6 +140,6 @@ public class Rect2D implements GeoShapeable {
 	}
 
 	public boolean isSquare() {
-		return _p1.distance(_p2) == _p2.distance(_p3);
+		return Math.abs(_p1.distance(_p2) - _p2.distance(_p3)) < Ex4_Const.EPS;
 	}
 }

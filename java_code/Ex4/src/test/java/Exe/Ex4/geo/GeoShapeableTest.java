@@ -90,17 +90,25 @@ public class GeoShapeableTest {
 
     void testScale(GeoShapeable geo) {
         double ratio = Math.random();
+        Point2D center = Point2DTest.randPoint();
+
+        boolean wasContained = geo.contains(center);
+
         double oldPerimeter = geo.perimeter(), expectedNewPerimeter = oldPerimeter * ratio;
         double oldArea = geo.area(), expectedNewArea = oldArea * ratio * ratio;
-        geo.scale(Point2D.ORIGIN, ratio);
+
+        geo.scale(center, ratio);
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Scaled area incorrectly");
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Scaled perimeter incorrectly");
-
+        assertEquals(wasContained, geo.contains(center), "Center containment changed after scale");
     }
 
     void testToString(GeoShapeable geo) {
         String str = geo.toString();
         String expectedName = geo.getClass().getSimpleName();
-        assertEquals(expectedName, str.split(",")[0], "toString first value is not class name");
+        assertNotNull(str, "toString returned null string");
+        String[] splitStr = str.split(",");
+        assertTrue(splitStr.length > 2, "toString returned too few commas");
+        assertEquals(expectedName, splitStr[0], "toString first value is not class name");
     }
 }

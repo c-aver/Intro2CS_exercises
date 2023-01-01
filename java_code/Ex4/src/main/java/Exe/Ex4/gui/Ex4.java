@@ -97,6 +97,7 @@ public class Ex4 implements Ex4_GUI{
 		}
 		if (gs instanceof Polygon2D || gs instanceof Triangle2D || gs instanceof Rect2D) {
 			Point2D[] ps = gs.getPoints();
+			if (gs instanceof Rect2D) { ps = ((Rect2D) gs).getAllPoints(); }
 			double[] xs = new double[ps.length], ys = new double[ps.length];
 			for (int i = 0; i < ps.length; ++i) {
 				xs[i] = ps[i].x();
@@ -276,6 +277,7 @@ public class Ex4 implements Ex4_GUI{
 	public void mouseRightClicked(Point2D p) {
 		if (_polyPoints == null) {
 			cancelShape();
+			drawShapes();
 			if (DEBUG) {
 				Rect2D boundingBox = _shapes.getBoundingBox();
 				GUI_Shapeable gBoundingBox = new GUIShape(boundingBox, false, Color.RED, -1);

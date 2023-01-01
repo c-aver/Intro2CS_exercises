@@ -129,6 +129,10 @@ public class Rect2D implements GeoShapeable {
 		return new Point2D[] { minP, maxP };
 	}
 
+	public Point2D[] getAllPoints() {
+		return new Point2D[] { _p1, _p2, _p3, _p4 };
+	}
+
 	private Polygon2D toPoly() {
 		return new Polygon2D(getPoints());
 	}

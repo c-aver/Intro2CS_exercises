@@ -5,11 +5,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import Exe.Ex4.GUIShape;
+import Exe.Ex4.ShapeCollection;
+import Exe.Ex4.ShapeCollectionable;
+
 public class Point2DTest {
     private Point2D p = null;
 
     public static Point2D randPoint() {
         return new Point2D(Math.random() * GeoTestConsts.MAX_X, Math.random() * GeoTestConsts.MAX_Y);
+    }
+    public static Point2D randPointInBox(Rect2D box) {
+        Point2D[] ps = box.getPoints();
+        double minX = ps[0].x(), maxX = ps[1].x(), minY = ps[0].y(), maxY = ps[1].y();
+        double dx = maxX - minX, dy = maxY - minY;
+        double x = Math.random() * dx + minX, y = Math.random() * dy + minY;
+        return new Point2D(x, y);
+    }
+    public static Point2D randPointInBoundingBox(GeoShapeable geo) {
+        ShapeCollectionable coll = new ShapeCollection();
+        coll.add(new GUIShape(geo, false, null, 0));
+        return randPointInBox(coll.getBoundingBox());
     }
 
     public static Point2D randVec() {

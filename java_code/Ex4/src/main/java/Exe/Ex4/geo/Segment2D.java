@@ -6,7 +6,7 @@ package Exe.Ex4.geo;
  * @author I2CS
  *
  */
-public class Segment2D implements GeoShapeable{
+public class Segment2D implements GeoShapeable {
 	private final double SEGMENT_WIDTH = 0.1;  // this represents a practical segment width for the purpose of containment
 
 	private Point2D _p1;   // the endpoints of the segment

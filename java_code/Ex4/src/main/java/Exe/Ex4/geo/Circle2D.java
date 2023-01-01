@@ -7,7 +7,7 @@ package Exe.Ex4.geo;
  * @author boaz.benmoshe
  *
  */
-public class Circle2D implements GeoShapeable{
+public class Circle2D implements GeoShapeable {
 	private Point2D _center;
 	private double _radius;
 	

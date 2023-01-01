@@ -6,7 +6,7 @@ package Exe.Ex4.geo;
  * @author I2CS
  *
  */
-public class Triangle2D implements GeoShapeable{
+public class Triangle2D implements GeoShapeable {
 	Point2D _p1, _p2, _p3;
 
 	public Triangle2D(Point2D p1, Point2D p2, Point2D p3) {

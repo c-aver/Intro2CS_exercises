@@ -12,6 +12,11 @@ public class Point2DTest {
         return new Point2D(Math.random() * GeoTestConsts.MAX_X, Math.random() * GeoTestConsts.MAX_Y);
     }
 
+    public static Point2D randVec() {
+        return new Point2D(Math.random() * GeoTestConsts.MAX_X - (GeoTestConsts.MAX_X / 2),
+                           Math.random() * GeoTestConsts.MAX_Y - (GeoTestConsts.MAX_Y / 2));
+    }
+
     @BeforeEach
     void beforeEach() {
         p = randPoint();

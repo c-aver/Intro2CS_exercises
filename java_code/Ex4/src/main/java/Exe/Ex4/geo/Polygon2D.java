@@ -12,6 +12,11 @@ public class Polygon2D implements GeoShapeable {
 	private Point2D[] _points;
 	private Triangle2D[] _mesh = null;
 
+	private Triangle2D[] getMesh() {
+		if (_mesh != null) return _mesh;
+		return _mesh = triangleMesh();
+	}
+
 	public Polygon2D(Point2D[] points) {
 		_points = points;
 		if (_points.length > 2)
@@ -40,7 +45,7 @@ public class Polygon2D implements GeoShapeable {
 	@Override
 	public boolean contains(Point2D ot) {
 		int hits = 0;
-		for (Triangle2D tri : _mesh) {
+		for (Triangle2D tri : getMesh()) {
 			if (tri.contains(ot)) hits += 1;
 		}
 		return hits % 2 == 1;

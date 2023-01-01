@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
 
 public class Circle2DTest {
     Circle2D circ = null;
@@ -32,20 +31,21 @@ public class Circle2DTest {
         assertEquals(expectedArea, circ.area(), GeoTestConsts.EPS, "Circle area is not correctly proportional to bounding box");
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testContains() {
         superTest.testContains(circ);
-        assert false : "Not implemented";
+        Point2D p = Point2DTest.randPoint();
+        assertTrue(circ.contains(p) == (circ.getPoints()[0].distance(p) <= circ.getRadius()), "Said contained on a point outside circle"); // make sure it is contained iff the distance is less than or equal the radius
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
         superTest.testCopy(circ);
         Circle2D copy = (Circle2D) circ.copy();
         assertEquals(circ.getRadius(), copy.getRadius(), "Copy changed radius");
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
         superTest.testGetPoints(circ);
 
@@ -54,52 +54,52 @@ public class Circle2DTest {
         assertEquals(circ.getRadius(), ps[0].distance(ps[1]), GeoTestConsts.EPS, "Circle2D.getPoints distance is not radius");
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testGetRadius() {
-        // TODO: implement
-        assert false : "Not implemented";
+        assertTrue(circ.getRadius() > 0, "Circle returned negative radius");
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
         double oldRad = circ.getRadius();
         superTest.testMove(circ);
         double newRad = circ.getRadius();
 
         assertEquals(oldRad, newRad, "Circle2D.move changed radius");
-        // TODO: implement
-        //assert false : "Not implemented";
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testPerimeter() {
         superTest.testPerimeter(circ);
-
-        // TODO: implement
-        assert false : "Not implemented";
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testRotate() {
+        double oldRad = circ.getRadius();
         superTest.testRotate(circ);
+        double newRad = circ.getRadius();
 
-        // TODO: implement
-        assert false : "Not implemented";
+        assertEquals(oldRad, newRad, "Circle2D.rotate changed radius");
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
         superTest.testScale(circ);
+        
+        double oldRad = circ.getRadius();
+        double ratio = Math.random() * 2;
+        circ.scale(Point2D.ORIGIN, ratio);
+        double newRad = circ.getRadius();
 
-        // TODO: implement
-        //assert false : "Not implemented";
+        assertEquals(oldRad * ratio, newRad, "Circle2D.scale changed radius");
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
         superTest.testToString(circ);
         
-        // TODO: implement
-        //assert false : "Not implemented";
+        String str = circ.toString();
+        String[] splitStr = str.split(",");
+        assertEquals(4, splitStr.length);
     }
 }

@@ -50,11 +50,12 @@ public class GeoShapeableTest {
     }
 
     void testContains(GeoShapeable geo) {
-        // TODO: implement, how?
-        assert false : "Not implemented";
+        Rect2D boundingBox = boundingBox(geo);
+        Point2D p = Point2DTest.randPoint();
+        assertTrue(!geo.contains(p) || boundingBox.contains(p), "Point claimed outside boundingBox but inside shape");
     }
 
-    void testCopy(GeoShapeable geo) { // TODO: test deep copy?
+    void testCopy(GeoShapeable geo) {
         GeoShapeable copy = geo.copy();
         assertNotEquals(System.identityHashCode(geo), System.identityHashCode(copy), "copy returned shallow copy");
         Point2D[] ps = geo.getPoints(), copyPs = copy.getPoints();
@@ -115,7 +116,7 @@ public class GeoShapeableTest {
 
         geo.rotate(center, rotateAngleDegrees);
 
-        assertEquals(ps, geo.getPoints(), "Points moved unexpectedly");
+        assertEquals(ps[0], geo.getPoints()[0], "Center moved unexpectedly");
 
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Rotate changed area");
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Rotate changed perimeter");

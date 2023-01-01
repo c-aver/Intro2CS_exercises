@@ -134,6 +134,10 @@ public class Rect2D implements GeoShapeable {
 	}
 
 	private Polygon2D toPoly() {
-		return new Polygon2D(getPoints());
+		return new Polygon2D(getAllPoints());
+	}
+
+	public boolean isSquare() {
+		return _p1.distance(_p2) == _p2.distance(_p3);
 	}
 }

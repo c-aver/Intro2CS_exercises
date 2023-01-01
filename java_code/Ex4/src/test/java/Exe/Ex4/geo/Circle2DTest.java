@@ -62,10 +62,13 @@ public class Circle2DTest {
 
     @Test
     void testMove() {
+        double oldRad = circ.getRadius();
         superTest.testMove(circ);
+        double newRad = circ.getRadius();
 
+        assertEquals(oldRad, newRad, "Circle2D.move changed radius");
         // TODO: implement
-        assert false : "Not implemented";
+        //assert false : "Not implemented";
     }
 
     @Test

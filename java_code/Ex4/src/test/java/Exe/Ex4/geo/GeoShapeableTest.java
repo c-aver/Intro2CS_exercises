@@ -61,6 +61,10 @@ public class GeoShapeableTest {
         assertTrue(ps.length > 0, "getPoints returned empty array");
     }
 
+    /* Common move tests:
+     * Area and perimeter do not change.
+     * All points change by the move vector.
+     */
     void testMove(GeoShapeable geo) {
         Point2D vec = Point2DTest.randVec();
         Point2D[] ps = geo.getPoints();
@@ -74,8 +78,12 @@ public class GeoShapeableTest {
         }
 
         geo.move(vec);
+        ps = geo.getPoints();
 
-        assertEquals(expectedPs, geo.getPoints(), "Points moved unexpectedly");
+        for (int i = 0; i < ps.length; ++i) {
+            assertTrue(ps[i].closeToEquals(expectedPs[i]), "Points moved unexpectedly");
+        }
+        //assertEquals(expectedPs, geo.getPoints());
         
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Move changed area");
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Move changed perimeter");

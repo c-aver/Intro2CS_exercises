@@ -5,10 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import Exe.Ex4.GUIShape;
-import Exe.Ex4.ShapeCollection;
-import Exe.Ex4.ShapeCollectionable;
-
 public class Point2DTest {
     private Point2D p = null;
 
@@ -23,9 +19,7 @@ public class Point2DTest {
         return new Point2D(x, y);
     }
     public static Point2D randPointInBoundingBox(GeoShapeable geo) {
-        ShapeCollectionable coll = new ShapeCollection();
-        coll.add(new GUIShape(geo, false, null, 0));
-        return randPointInBox(coll.getBoundingBox());
+        return randPointInBox(GeoShapeableTest.boundingBox(geo));
     }
 
     public static Point2D randVec() {

@@ -33,6 +33,10 @@ public class Polygon2D implements GeoShapeable {
 			_mesh = triangleMesh();
 	}
 
+	private void regenMesh() {
+		_mesh = triangleMesh();
+	}
+
 	@Override
 	public String toString() {
 		String res = "Polygon2D";
@@ -76,6 +80,7 @@ public class Polygon2D implements GeoShapeable {
 		for (Point2D point : _points) {
 			point.move(vec);
 		}
+		regenMesh();
 	}
 
 	@Override
@@ -92,6 +97,7 @@ public class Polygon2D implements GeoShapeable {
 		for (Point2D point : _points) {
 			point.scale(center, ratio);
 		}
+		regenMesh();
 	}
 
 	@Override
@@ -99,6 +105,7 @@ public class Polygon2D implements GeoShapeable {
 		for (Point2D point : _points) {
 			point.rotate(center, angleDegrees);
 		}
+		regenMesh();
 	}
 
 	@Override

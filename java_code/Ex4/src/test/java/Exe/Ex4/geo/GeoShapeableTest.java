@@ -122,7 +122,7 @@ public class GeoShapeableTest {
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Rotate changed perimeter");
     }
 
-    void testScale(GeoShapeable geo) {
+    double testScale(GeoShapeable geo) {
         double ratio = Math.random();
         Point2D center = Point2DTest.randPoint();
 
@@ -135,6 +135,7 @@ public class GeoShapeableTest {
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Scaled area incorrectly");
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Scaled perimeter incorrectly");
         assertEquals(wasContained, geo.contains(center), "Center containment changed after scale");
+        return ratio;
     }
 
     void testToString(GeoShapeable geo) {
@@ -146,3 +147,5 @@ public class GeoShapeableTest {
         assertEquals(expectedName, splitStr[0], "toString first value is not class name");
     }
 }
+
+// TODO: test string constructors

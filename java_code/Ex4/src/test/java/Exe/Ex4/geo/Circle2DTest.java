@@ -84,11 +84,8 @@ public class Circle2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
-        superTest.testScale(circ);
-        
         double oldRad = circ.getRadius();
-        double ratio = Math.random() * 2;
-        circ.scale(Point2D.ORIGIN, ratio);
+        double ratio = superTest.testScale(circ);
         double newRad = circ.getRadius();
 
         assertEquals(oldRad * ratio, newRad, "Circle2D.scale changed radius");

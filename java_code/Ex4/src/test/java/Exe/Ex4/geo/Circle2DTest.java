@@ -20,7 +20,8 @@ public class Circle2DTest {
 
     @Test
     void testArea() {
-        // TODO: implement
+        superTest.testArea(circ);
+
         assert false : "Not implemented";
     }
 
@@ -38,6 +39,8 @@ public class Circle2DTest {
 
     @Test
     void testGetPoints() {
+        superTest.testArea(circ);
+
         // TODO: implement
         assert false : "Not implemented";
     }
@@ -50,18 +53,24 @@ public class Circle2DTest {
 
     @Test
     void testMove() {
+        superTest.testArea(circ);
+
         // TODO: implement
         assert false : "Not implemented";
     }
 
     @Test
     void testPerimeter() {
+        superTest.testArea(circ);
+
         // TODO: implement
         assert false : "Not implemented";
     }
 
     @Test
     void testRotate() {
+        superTest.testArea(circ);
+
         // TODO: implement
         assert false : "Not implemented";
     }
@@ -69,6 +78,7 @@ public class Circle2DTest {
     @Test
     void testScale() {
         superTest.testScale(circ);
+
         // TODO: implement
         //assert false : "Not implemented";
     }
@@ -76,6 +86,7 @@ public class Circle2DTest {
     @Test
     void testToString() {
         superTest.testToString(circ);
+        
         // TODO: implement
         //assert false : "Not implemented";
     }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 public class Circle2DTest {
@@ -21,7 +22,7 @@ public class Circle2DTest {
         circ = randCircle();
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
         superTest.testArea(circ);
         Rect2D boundingBox = GeoShapeableTest.boundingBox(circ);
@@ -29,7 +30,6 @@ public class Circle2DTest {
         assertTrue(boundingBox.isSquare(), "Circle is bounded by non-square rectangle");
         double expectedArea = boundingBoxArea * Math.PI / 4;
         assertEquals(expectedArea, circ.area(), GeoTestConsts.EPS, "Circle area is not correctly proportional to bounding box");
-        //assert false : "Not implemented";
     }
 
     @Test

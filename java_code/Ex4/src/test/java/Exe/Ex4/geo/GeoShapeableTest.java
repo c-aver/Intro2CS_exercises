@@ -35,9 +35,18 @@ public class GeoShapeableTest {
         testToString(geo);
     }
 
-    void testArea(GeoShapeable geo) { // TODO: idea: dartboard probability
+    void testArea(GeoShapeable geo) {
         double area = geo.area();
         assertTrue(area > 0, "Area returned non-positive value"); // TODO: >= ?
+        Rect2D boundingBox = boundingBox(geo);
+        int hits = 0;
+        for (int i = 0; i < GeoTestConsts.DARTS; ++i) {
+            Point2D dart = Point2DTest.randPointInBox(boundingBox);
+            if (geo.contains(dart)) hits += 1;
+        }
+        double hitRate = ((double) hits) / GeoTestConsts.DARTS;
+        double areaRatio = geo.area() / boundingBox.area();
+        assertEquals(areaRatio, hitRate, GeoTestConsts.EPS * 10, "Dart hit rate does not match area ratio");
     }
 
     void testContains(GeoShapeable geo) {

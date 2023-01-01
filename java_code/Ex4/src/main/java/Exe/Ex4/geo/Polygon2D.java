@@ -58,7 +58,7 @@ public class Polygon2D implements GeoShapeable {
 		for (int i = 0; i < _points.length; ++i) {
 			res += _points[i].x()*_points[(i+1) % _points.length].y() - _points[(i+1) % _points.length].x()*_points[i].y();
 		}
-		return res / 2;
+		return Math.abs(res) / 2;
 	}
 
 	@Override

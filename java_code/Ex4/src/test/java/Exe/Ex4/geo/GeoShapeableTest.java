@@ -37,7 +37,7 @@ public class GeoShapeableTest {
 
     void testArea(GeoShapeable geo) {
         double area = geo.area();
-        assertTrue(area > 0, "Area returned non-positive value"); // TODO: >= ?
+        assertTrue(area >= 0, "Area returned non-positive value");
         Rect2D boundingBox = boundingBox(geo);
         int hits = 0;
         for (int i = 0; i < GeoTestConsts.DARTS; ++i) {

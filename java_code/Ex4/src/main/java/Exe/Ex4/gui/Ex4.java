@@ -28,7 +28,7 @@ import Exe.Ex4.geo.Triangle2D;
  * @author boaz.benmoshe
  *
  */
-public class Ex4 implements Ex4_GUI{
+public class Ex4 implements Ex4_GUI {
 	private final boolean DEBUG = false;  // debug mode
 	static private final int LOAD = 0;
 	static private final int SAVE = 1;
@@ -162,7 +162,7 @@ public class Ex4 implements Ex4_GUI{
 		if (action.equals("Info")) {
 			for (int i = 0; i < _shapes.size(); ++i) {  // iterate on the shapes
 				GUI_Shapeable shape = _shapes.get(i);
-				if (shape.isSelected()) System.out.println(shape); // if the shape is selected print its info
+				System.out.println(shape);              // print the shape as a string
 			}
 		}
 

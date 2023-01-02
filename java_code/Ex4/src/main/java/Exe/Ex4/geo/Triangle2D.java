@@ -48,9 +48,9 @@ public class Triangle2D implements GeoShapeable {
 		Segment2D line2 = new Segment2D(_p2, new Point2D(_p2.x() + dx2, _p2.y() + dy2));   // we create the point on the sloped line by adding 1 to x and k (AKA dy/dx) to y
 		Segment2D line1 = new Segment2D(_p1, new Point2D(_p1.x() + dx1, _p1.y() + dy1));
 
-		boolean closerToP1 = ot.distance(line1) < _p1.distance(new Segment2D(_p2, _p3));  // check that the point is closer to the parallel line that the point to its opposite line
-		boolean closerToP2 = ot.distance(line2) < _p2.distance(new Segment2D(_p1, _p3));  // this means the point is not beyond the line
-		boolean closerToP3 = ot.distance(line3) < _p3.distance(new Segment2D(_p1, _p2));
+		boolean closerToP1 = ot.distance(line1) <= _p1.distance(new Segment2D(_p2, _p3));  // check that the point is closer to the parallel line that the point to its opposite line
+		boolean closerToP2 = ot.distance(line2) <= _p2.distance(new Segment2D(_p1, _p3));  // this means the point is not beyond the line
+		boolean closerToP3 = ot.distance(line3) <= _p3.distance(new Segment2D(_p1, _p2));  // we check leq to include points on the segments
 
 		return closerToP1 && closerToP2 && closerToP3;   // the point is contained if all 3 conditions are true
 	}

@@ -1,9 +1,9 @@
 package Exe.Ex4.gui;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.util.ArrayList;
-
-import javax.swing.JFileChooser;
 
 import Exe.Ex4.Ex4_Const;
 import Exe.Ex4.GUIShape;
@@ -30,8 +30,8 @@ import Exe.Ex4.geo.Triangle2D;
  */
 public class Ex4 implements Ex4_GUI {
 	private final boolean DEBUG = false;  // debug mode
-	static private final int LOAD = 0;
-	static private final int SAVE = 1;
+	private static final int LOAD = 0;
+	private static final int SAVE = 1;
 
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
 	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn, the only field that should be changed is its GeoShapeable
@@ -431,12 +431,12 @@ public class Ex4 implements Ex4_GUI {
 	}
 
 	private String chooseFile(int mode) {
-		JFileChooser chooser = new JFileChooser();
-		int returnVal = (mode == SAVE ? chooser.showSaveDialog(null) : chooser.showOpenDialog(null));
-        if (returnVal == JFileChooser.APPROVE_OPTION) {   // if succesful
-            return chooser.getSelectedFile().getAbsolutePath();   // return the chosen file
-        }
-		// otherwise, could be cancelled or errored
-		return null;
+		FileDialog chooser;
+		if (mode == SAVE)
+			chooser = new FileDialog(new Frame(), "Choose where to save", FileDialog.SAVE);
+		else 
+			chooser = new FileDialog(new Frame(), "Choose file to load", FileDialog.LOAD);
+		chooser.setVisible(true);
+		return chooser.getDirectory() + chooser.getFile();
 	}
 }

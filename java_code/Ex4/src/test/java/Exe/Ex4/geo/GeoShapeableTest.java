@@ -60,6 +60,8 @@ public class GeoShapeableTest {
         assertNotEquals(System.identityHashCode(geo), System.identityHashCode(copy), "copy returned shallow copy");
         Point2D[] ps = geo.getPoints(), copyPs = copy.getPoints();
         assertEquals(ps.length, copyPs.length, "copy changed number of points");
+        assertEquals(geo.area(), copy.area(), "Copy changed area");
+        assertEquals(geo.perimeter(), copy.perimeter(), "Copy changed perimeter");
         for (int i = 0; i < ps.length; ++i) {
             assertNotEquals(System.identityHashCode(ps[i]), System.identityHashCode(copyPs[i]), "copy returned shallow point copy");
         }

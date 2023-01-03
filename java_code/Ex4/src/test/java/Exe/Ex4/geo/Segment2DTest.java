@@ -2,7 +2,7 @@ package Exe.Ex4.geo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+// import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -48,8 +48,6 @@ public class Segment2DTest {
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
         superTest.testCopy(seg);
-        GeoShapeable copy = seg.copy();
-        assertEquals(seg.perimeter(), copy.perimeter(), "Copy changed perimeter");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

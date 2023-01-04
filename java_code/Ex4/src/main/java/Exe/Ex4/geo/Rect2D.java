@@ -106,7 +106,7 @@ public class Rect2D implements GeoShapeable {
 	@Override
 	public Point2D[] getPoints() { // TODO: test this
 		// TODO: change to more pleasant code?
-		List<Point2D> ps = Arrays.asList(new Point2D[] { _p1, _p2, _p3, _p4});
+		List<Point2D> ps = Arrays.asList(getAllPoints());
 		Comparator<Point2D> xComp = new Comparator<Point2D>() {
 			@Override
 			public int compare(Point2D p1, Point2D p2) {

@@ -131,7 +131,7 @@ public class GeoShapeableTest {
         boolean wasContained = geo.contains(center);
 
         double oldPerimeter = geo.perimeter(), expectedNewPerimeter = oldPerimeter * ratio;
-        double oldArea = geo.area(), expectedNewArea = oldArea * ratio * ratio;
+        double oldArea = geo.area(), expectedNewArea = oldArea * ratio * ratio;  // due to the square-cube law we expect area to be scaled by the square
 
         geo.scale(center, ratio);
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Scaled area incorrectly");

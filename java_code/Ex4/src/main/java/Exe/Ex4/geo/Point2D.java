@@ -72,8 +72,7 @@ public class Point2D implements GeoShapeable {
         return dist;
     }
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if(o == null || !(o instanceof Point2D)) { return false; }  // these conditions will always stop an object from equaling to this
         Point2D p = (Point2D) o;                 // cast the object to a Point2D for logical evaluation
         return ((_x == p._x) && (_y == p._y));   // the points are equal if both their coordinated are equal
@@ -84,8 +83,7 @@ public class Point2D implements GeoShapeable {
      * @param eps the distance from which they are not considered equal
      * @return whether the points are close enough to equal
      */
-    public boolean closeToEquals(Point2D p2, double eps)
-    {
+    public boolean closeToEquals(Point2D p2, double eps) {
         return (this.distance(p2) < eps);        // the points are close enough to equal if their distance is less than the allowed epsilon
     }
     /**
@@ -94,8 +92,7 @@ public class Point2D implements GeoShapeable {
      * @param p2 the point to compare to
      * @return whether the points are close enough to eqaul
      */
-    public boolean closeToEquals(Point2D p2)
-    {
+    public boolean closeToEquals(Point2D p2) {
         return closeToEquals(p2, Ex4_Const.EPS);  // check the same thing with the constant epsilon 
     }
     /**
@@ -183,5 +180,4 @@ public class Point2D implements GeoShapeable {
     public Point2D[] getPoints() {
         return new Point2D[] { this };
     }
-   
 }

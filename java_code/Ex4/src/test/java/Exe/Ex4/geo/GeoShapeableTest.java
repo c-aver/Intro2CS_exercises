@@ -39,6 +39,7 @@ public class GeoShapeableTest {
         double area = geo.area();
         assertTrue(area >= 0, "Area returned non-positive value");
         Rect2D boundingBox = boundingBox(geo);
+        assertTrue(geo.area() <= boundingBox.area(), "Calculated area larger than bounding box");
         int hits = 0;
         for (int i = 0; i < GeoTestConsts.DARTS; ++i) {
             Point2D dart = Point2DTest.randPointInBox(boundingBox);

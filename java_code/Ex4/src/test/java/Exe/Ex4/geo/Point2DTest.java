@@ -38,6 +38,12 @@ public class Point2DTest {
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
+    void testStringConstructor() {
+        String str = p.toString();
+        assertEquals(p, new Point2D(str));
+    }
+
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testAdd() {
         Point2D addP = randPoint();
         Point2D newP = p.add(addP);
@@ -181,23 +187,6 @@ public class Point2DTest {
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
         superTest.testToString(p);
-    }
-
-    @RepeatedTest(GeoTestConsts.TESTS)
-    void testVector() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
-
-    @RepeatedTest(GeoTestConsts.TESTS)
-    void testX() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
-
-    @RepeatedTest(GeoTestConsts.TESTS)
-    void testY() {
-        // TODO: implement
-        assert false : "Not implemented";
+        assertEquals(3, p.toString().split(",").length, "Point2D.toString should have 3 parts");
     }
 }

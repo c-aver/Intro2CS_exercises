@@ -12,7 +12,7 @@ public class Segment2DTest {
     double length;
     GeoShapeableTest superTest = new GeoShapeableTest();
 
-    Segment2D randSegment() {
+    static Segment2D randSegment() {
         Point2D p1 = Point2DTest.randPoint(), p2 = Point2DTest.randPoint();
         return new Segment2D(p1, p2);
     }

@@ -107,75 +107,80 @@ public class Point2DTest {
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
-    void testDistance3() {
-        // TODO: implement
-        assert false : "Not implemented";
+    void testDistanceFromLine() {
+        Segment2D seg = Segment2DTest.randSegment();
+        double dist = p.distance(seg);
+        assertTrue(dist >= 0, "Calculated negative distance from segment");
+        Point2D[] ps = seg.getPoints();
+        assertTrue(dist <= p.distance(ps[0]), "Point cannot be further closer to a point on segment than it is to the segment");
+        assertTrue(dist <= p.distance(ps[1]), "Point cannot be further closer to a point on segment than it is to the segment");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testEquals() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testCopy(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testGetPoints(p);
+        Point2D[] ps = p.getPoints();
+        assertEquals(1, ps.length, "Point2D.getPoints should return array of size 1");
+        assertEquals(p, ps[0], "First point of Point2D.getPoints should be original point");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testIx() {
-        // TODO: implement
-        assert false : "Not implemented";
+        int ix = p.ix();
+        assertTrue((p.x() - ix) < 1, "Point2D.ix() should be within 1 of true x");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testIy() {
-        // TODO: implement
-        assert false : "Not implemented";
+        int iy = p.iy();
+        assertTrue((p.y() - iy) < 1, "Point2D.iy() should be within 1 of true y");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
-        // TODO: implement
-        assert false : "Not implemented";
+        Point2D origP = (Point2D) p.copy();
+        Point2D vec = superTest.testMove(p);
+        assertEquals(origP.distance(p), vec.distance(), GeoTestConsts.EPS, "Distance from original point should be equal to move vector length");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testPerimeter() {
-        // TODO: implement
-        assert false : "Not implemented";
+        assertEquals(0, p.perimeter(), "Point2D perimeter should be 0");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testRotate() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testRotate(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
-    void testRotate2() {
-        // TODO: implement
-        assert false : "Not implemented";
+    void testRotateAroundOrigin() {
+        double origDist = p.distance();
+        p.rotate(Math.random() * 360);
+        assertEquals(origDist, p.distance(), GeoTestConsts.EPS, "Rotating around origin should not change distance from it");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testScale(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
-    void testScale2() {
-        // TODO: implement
-        assert false : "Not implemented";
+    void testScaleByOrigin() {
+        double ratio = Math.random() * 4 - 2;   // we test negative ratio
+        double origDist = p.distance();
+        p.scale(ratio);
+        assertEquals(Math.abs(origDist * ratio), p.distance(), GeoTestConsts.EPS, "Point distance from origin should be scaled by ratio");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testToString(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

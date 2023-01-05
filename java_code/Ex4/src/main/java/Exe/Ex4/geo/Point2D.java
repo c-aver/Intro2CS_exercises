@@ -45,7 +45,7 @@ public class Point2D implements GeoShapeable {
     	return a;
     }
     public String toString() {
-        return _x + "," + _y;
+        return "Point2D, " + _x + "," + _y;
     }
 
     public double distance() {

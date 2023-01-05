@@ -78,7 +78,7 @@ public class GeoShapeableTest {
      * Area and perimeter do not change.
      * All points change by the move vector.
      */
-    void testMove(GeoShapeable geo) {
+    Point2D testMove(GeoShapeable geo) {
         Point2D vec = Point2DTest.randVec();
         Point2D[] ps = geo.getPoints();
         
@@ -100,6 +100,8 @@ public class GeoShapeableTest {
         
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Move changed area");
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Move changed perimeter");
+
+        return vec;
     }
 
     void testPerimeter(GeoShapeable geo) {
@@ -112,12 +114,22 @@ public class GeoShapeableTest {
         double rotateAngleDegrees = Math.random() * 360;
         double oldPerimeter = geo.perimeter(), expectedNewPerimeter = oldPerimeter;
         double oldArea = geo.area(), expectedNewArea = oldArea;
-        Point2D[] ps = geo.getPoints();
+        Point2D[] ps = geo.copy().getPoints();
+        double[] dists = new double[ps.length];
+        for (int i = 0; i < dists.length; ++i) {
+            dists[i] = ps[i].distance(center);
+        }
         for (int i = 0; i < ps.length; ++i) {
             ps[i].rotate(center, rotateAngleDegrees);
         }
 
         geo.rotate(center, rotateAngleDegrees);
+
+        Point2D[] newPs = geo.getPoints();
+        if (!(geo instanceof Circle2D))    // Circle2D getPoints behaves a bit differently so this should not be tested
+            for (int i = 0; i < dists.length; ++i) {
+                assertEquals(dists[i], newPs[i].distance(center), GeoTestConsts.EPS, "Point distance from center should not change on rotate");
+            }
 
         assertEquals(ps[0], geo.getPoints()[0], "Center moved unexpectedly");
 
@@ -126,15 +138,29 @@ public class GeoShapeableTest {
     }
 
     double testScale(GeoShapeable geo) {
-        double ratio = Math.random();
+        double ratio = Math.random() * 4 - 2;     // we allow negative ratios despite not being strictly required
+        double absRatio = Math.abs(ratio);
         Point2D center = Point2DTest.randPoint();
 
         boolean wasContained = geo.contains(center);
 
-        double oldPerimeter = geo.perimeter(), expectedNewPerimeter = oldPerimeter * ratio;
-        double oldArea = geo.area(), expectedNewArea = oldArea * ratio * ratio;  // due to the square-cube law we expect area to be scaled by the square
+        double oldPerimeter = geo.perimeter(), expectedNewPerimeter = oldPerimeter * absRatio;
+        double oldArea = geo.area(), expectedNewArea = oldArea * absRatio * absRatio;  // due to the square-cube law we expect area to be scaled by the square
+
+        Point2D[] ps = geo.copy().getPoints();
+        double[] dists = new double[ps.length];
+        for (int i = 0; i < dists.length; ++i) {
+            dists[i] = ps[i].distance(center);
+        }
 
         geo.scale(center, ratio);
+
+        Point2D[] newPs = geo.getPoints();
+        if (!(geo instanceof Circle2D))    // Circle2D getPoints behaves a bit differently so this should not be tested
+            for (int i = 0; i < dists.length; ++i) {
+                assertEquals(dists[i] * absRatio, newPs[i].distance(center), GeoTestConsts.EPS, "Point distance from center should be scaled by the ratio");
+            }
+
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Scaled area incorrectly");
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Scaled perimeter incorrectly");
         assertEquals(wasContained, geo.contains(center), "Center containment changed after scale");
@@ -148,6 +174,11 @@ public class GeoShapeableTest {
         String[] splitStr = str.split(",");
         assertTrue(splitStr.length > 2, "toString returned too few commas");
         assertEquals(expectedName, splitStr[0], "toString first value is not class name");
+    }
+
+    void testEquals(GeoShapeable geo) {
+        GeoShapeable copy = geo.copy();
+        assertEquals(geo, copy, "Shape should be equal to its copy"); // this uses the overloaded equals method and thus tests it
     }
 }
 

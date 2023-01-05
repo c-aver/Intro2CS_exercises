@@ -62,7 +62,7 @@ public class Circle2D implements GeoShapeable {
 	@Override
 	public void scale(Point2D center, double ratio) {
 		_center.scale(center, ratio);    // scale (actually move, since points have no area) the center
-		_radius *= ratio;
+		_radius = Math.abs(_radius * ratio);  // we take the absolute value to allow negative ratios, although not strictly required
 	}
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {

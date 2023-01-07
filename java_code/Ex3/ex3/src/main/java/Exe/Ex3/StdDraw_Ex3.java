@@ -1,4 +1,4 @@
-package Exe.EX3;
+package Exe.Ex3;
 
 // https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java.html
 /******************************************************************************

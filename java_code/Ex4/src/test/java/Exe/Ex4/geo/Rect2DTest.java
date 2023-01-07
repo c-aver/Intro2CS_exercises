@@ -33,7 +33,7 @@ public class Rect2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        // GeoShapeableTest.testArea(rect);  // TODO: fails sometimes
+        GeoShapeableTest.testArea(rect);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

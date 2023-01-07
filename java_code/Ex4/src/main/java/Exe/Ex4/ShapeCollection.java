@@ -104,7 +104,7 @@ public class ShapeCollection implements ShapeCollectionable{
 	@Override
 	public Rect2D getBoundingBox() {
 		if (_shapes.size() < 1) return null;
-		double minX = Ex4_Const.DIM_SIZE, maxX = 0, minY = Ex4_Const.DIM_SIZE, maxY = 0;
+		double minX = Double.POSITIVE_INFINITY, maxX = Double.NEGATIVE_INFINITY, minY = Double.POSITIVE_INFINITY, maxY = Double.NEGATIVE_INFINITY;  // we start by assuming inifinity, guaranteed to be overriden
 		for (GUI_Shapeable gs : _shapes) {
 			GeoShapeable g = gs.getShape();
 			if (g instanceof Circle2D) {

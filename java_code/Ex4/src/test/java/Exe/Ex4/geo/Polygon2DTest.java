@@ -29,11 +29,11 @@ public class Polygon2DTest {
             }
         };
 
+        //GeoShapeableTest.showShape(new Polygon2D(ps));
+
         Arrays.sort(ps, angleComp);
 
-        Polygon2D poly = new Polygon2D(ps);
-
-        GeoShapeableTest.showShape(poly);
+        //GeoShapeableTest.showShape(new Polygon2D(ps));
 
         return new Polygon2D(ps);
     }
@@ -45,7 +45,7 @@ public class Polygon2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        GeoShapeableTest.testArea(poly);
+        GeoShapeableTest.testArea(poly);  // TODO: this fails
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
@@ -78,25 +78,22 @@ public class Polygon2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testRotate() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testRotate(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testScale(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testToString(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testTriangleMesh() {
-        // TODO: implement
+        // TODO: implement?
         assert false : "Not implemented";
     }
 }

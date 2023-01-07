@@ -104,8 +104,7 @@ public class Rect2D implements GeoShapeable {
 	}
 
 	@Override
-	public Point2D[] getPoints() { // TODO: test this
-		// TODO: change to more pleasant code?
+	public Point2D[] getPoints() {
 		List<Point2D> ps = Arrays.asList(getAllPoints());
 		Comparator<Point2D> xComp = new Comparator<Point2D>() {
 			@Override
@@ -141,5 +140,17 @@ public class Rect2D implements GeoShapeable {
 
 	public boolean isSquare() {
 		return Math.abs(_p1.distance(_p2) - _p2.distance(_p3)) < Ex4_Const.EPS;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Rect2D)) return false;
+		Rect2D oRec = (Rect2D) o;
+		Point2D[] ps = this.getAllPoints();
+		Point2D[] ops = oRec.getAllPoints();
+		for (int i = 0; i < ps.length; ++i) {
+			if (!ps[i].closeToEquals(ops[i])) return false;
+		}
+		return true;
 	}
 }

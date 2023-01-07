@@ -123,7 +123,7 @@ public class Polygon2D implements GeoShapeable {
 		return _points;  // return the points arraylist converted to an array, the paramter is provided to determine the type of the array
 	}
 	
-	public Triangle2D[] triangleMesh() {
+	private Triangle2D[] triangleMesh() {
 		assert _points.length > 2;
 		int numTriangles = _points.length - 2;
 		Triangle2D[] result = new Triangle2D[numTriangles];

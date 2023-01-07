@@ -90,10 +90,4 @@ public class Polygon2DTest {
     void testToString() {
         GeoShapeableTest.testToString(poly);
     }
-
-    @RepeatedTest(GeoTestConsts.TESTS)
-    void testTriangleMesh() {
-        // TODO: implement?
-        assert false : "Not implemented";
-    }
 }

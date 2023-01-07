@@ -74,7 +74,7 @@ public class Rect2DTest {
         
         String str = rect.toString();
         String[] splitStr = str.split(",");
-        assertEquals(3, splitStr.length);
+        assertEquals(8, splitStr.length);
         assertEquals(rect, new Rect2D(splitStr));  // TODO: nulls?
     }
 }

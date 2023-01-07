@@ -65,6 +65,9 @@ public class Triangle2DTest {
     void testToString() {
         GeoShapeableTest.testToString(tri);
         String str = tri.toString();
-        assertEquals(tri, new Triangle2D(str.split(",")));
+        
+        String[] splitStr = str.split(",");
+        assertEquals(6, splitStr.length);
+        assertEquals(tri, new Triangle2D(splitStr));
     }
 }

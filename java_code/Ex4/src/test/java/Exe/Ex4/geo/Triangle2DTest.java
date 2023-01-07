@@ -1,59 +1,70 @@
 package Exe.Ex4.geo;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 
 public class Triangle2DTest {
-    @Test
+    Triangle2D tri;
+
+
+    static Triangle2D randTri() {
+        Point2D p1 = Point2DTest.randPoint(), p2 = Point2DTest.randPoint(), p3 = Point2DTest.randPoint();
+        return new Triangle2D(p1, p2, p3);
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        tri = randTri();
+    }
+
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testArea(tri);
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testContains() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testContains(tri);
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testCopy(tri);
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testGetPoints(tri);
+        Point2D[] ps = tri.getPoints();
+        assertEquals(tri, new Triangle2D(ps[0], ps[1], ps[2]));
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testMove(tri);
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testPerimeter() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testPerimeter(tri);
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testRotate() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testRotate(tri);
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testScale(tri);
     }
 
-    @Test
+    @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
-        // TODO: implement
-        assert false : "Not implemented";
+        GeoShapeableTest.testToString(tri);
+        String str = tri.toString();
+        assertEquals(tri, new Triangle2D(str.split(",")));
     }
 }

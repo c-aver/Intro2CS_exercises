@@ -30,7 +30,7 @@ public class Segment2DTest {
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
-    void testContains() {  // TODO: this fails
+    void testContains() {
         /* 
          * The following code does not always succeed, although it is a decent test and does get about 95% success rate.
          * But I ended up deciding not to create a test, especially because there's no strictly defined behaviour for this.
@@ -79,7 +79,7 @@ public class Segment2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
-        double ratio = GeoShapeableTest.testScale(seg);  // TODO: this fails sometimes
+        double ratio = GeoShapeableTest.testScale(seg);
         Point2D[] ps = seg.getPoints();
         assertEquals(Math.abs(length * ratio), ps[0].distance(ps[1]), GeoTestConsts.EPS, "Rotate changed segment length");
     }

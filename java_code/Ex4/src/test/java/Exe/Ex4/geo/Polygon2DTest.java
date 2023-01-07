@@ -1,5 +1,7 @@
 package Exe.Ex4.geo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 
@@ -8,7 +10,7 @@ public class Polygon2DTest {
     GeoShapeableTest superTest = new GeoShapeableTest();
 
     static Polygon2D randPoly() {
-        int sides = (int) (Math.random() * 10) + 2;
+        int sides = (int) (Math.random() * 10) + 3;
         Point2D[] ps = new Point2D[sides];
         for (int i = 0; i < sides; ++i) {
             ps[i] = Point2DTest.randPoint();
@@ -28,32 +30,30 @@ public class Polygon2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testContains() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testContains(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testCopy(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testGetPoints(poly);
+        Point2D[] ps = poly.getPoints();
+        Polygon2D newPoly = new Polygon2D(ps);
+        assertEquals(poly, newPoly, "Polygon created with points must be equal");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testMove(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testPerimeter() {
-        // TODO: implement
-        assert false : "Not implemented";
+        superTest.testPerimeter(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

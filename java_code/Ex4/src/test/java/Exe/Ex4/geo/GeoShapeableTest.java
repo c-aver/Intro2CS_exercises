@@ -181,5 +181,3 @@ public class GeoShapeableTest {
         assertEquals(geo, copy, "Shape should be equal to its copy"); // this uses the overloaded equals method and thus tests it
     }
 }
-
-// TODO: test string constructors

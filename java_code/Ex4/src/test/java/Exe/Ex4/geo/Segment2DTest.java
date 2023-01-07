@@ -82,7 +82,7 @@ public class Segment2DTest {
     void testScale() {
         double ratio = superTest.testScale(seg);  // TODO: this fails sometimes
         Point2D[] ps = seg.getPoints();
-        assertEquals(length * ratio, ps[0].distance(ps[1]), GeoTestConsts.EPS, "Rotate changed segment length");
+        assertEquals(Math.abs(length * ratio), ps[0].distance(ps[1]), GeoTestConsts.EPS, "Rotate changed segment length");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

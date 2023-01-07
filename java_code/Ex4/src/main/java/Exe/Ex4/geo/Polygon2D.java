@@ -45,6 +45,16 @@ public class Polygon2D implements GeoShapeable {
 		}
 		return res;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Polygon2D)) return false;
+		Polygon2D op = (Polygon2D) o;
+		for (int i = 0; i < _points.length; ++i) {
+			if (!_points[i].closeToEquals(op.getPoints()[i])) return false;
+		}
+		return true;
+	}
 	
 	@Override
 	public boolean contains(Point2D ot) {

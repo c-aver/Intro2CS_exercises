@@ -64,11 +64,7 @@ public class GeoShapeableTest {
         }
         double hitRate = ((double) hits) / GeoTestConsts.DARTS;
         double areaRatio = geo.area() / boundingBox.area();
-        if (Math.abs(areaRatio - hitRate) > 0.01) {
-            showShape(geo);
-            assert true;
-        }
-        assertEquals(areaRatio, hitRate, 0.01, "Dart hit rate does not match area ratio");
+        assertEquals(areaRatio, hitRate, 0.05, "Dart hit rate does not match area ratio");  // there is a tradeoff between the allowed delta and number of darts (which adds to run time)
     }
 
     static void testContains(GeoShapeable geo) {

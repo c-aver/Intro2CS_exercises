@@ -1,3 +1,6 @@
+// TODO: document the hell out of this
+// TODO: add identifying info to all my files
+
 package Exe.Ex4.gui;
 import java.awt.Color;
 import java.awt.event.MouseEvent;

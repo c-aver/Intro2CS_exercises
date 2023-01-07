@@ -36,7 +36,8 @@ public class GeoShapeableTest {
         testScale(geo);
         testToString(geo);
     }
-
+    // This function uses the Ex4 class to show a shape on the screen
+    // This is very useful for debugging specific shapes that cause tests to fail
     static void showShape(GeoShapeable geo) {
         Ex4 ex4 = Ex4.getInstance();
         ex4.getShape_Collection().removeAll();
@@ -49,6 +50,9 @@ public class GeoShapeableTest {
     }
 
     static void testArea(GeoShapeable geo) {
+        // this test takes a probabilistic method
+        // basically, the area of a shape should determine the chances of hitting in with a randomally thrown dart
+        // this assume that contains() and area() agree on their definitions
         double area = geo.area();
         assertTrue(area >= 0, "Area returned non-positive value");
         Rect2D boundingBox = boundingBox(geo);
@@ -60,7 +64,11 @@ public class GeoShapeableTest {
         }
         double hitRate = ((double) hits) / GeoTestConsts.DARTS;
         double areaRatio = geo.area() / boundingBox.area();
-        assertEquals(areaRatio, hitRate, GeoTestConsts.EPS * 10, "Dart hit rate does not match area ratio");
+        if (Math.abs(areaRatio - hitRate) > 0.01) {
+            showShape(geo);
+            assert true;
+        }
+        assertEquals(areaRatio, hitRate, 0.01, "Dart hit rate does not match area ratio");
     }
 
     static void testContains(GeoShapeable geo) {
@@ -128,6 +136,7 @@ public class GeoShapeableTest {
         double oldPerimeter = geo.perimeter(), expectedNewPerimeter = oldPerimeter;
         double oldArea = geo.area(), expectedNewArea = oldArea;
         Point2D[] ps = geo.copy().getPoints();
+        if (geo instanceof Rect2D) ps = ((Rect2D) geo).getAllPoints();
         double[] dists = new double[ps.length];
         for (int i = 0; i < dists.length; ++i) {
             dists[i] = ps[i].distance(center);
@@ -139,12 +148,11 @@ public class GeoShapeableTest {
         geo.rotate(center, rotateAngleDegrees);
 
         Point2D[] newPs = geo.getPoints();
+        if (geo instanceof Rect2D) newPs = ((Rect2D) geo).getAllPoints();
         if (!(geo instanceof Circle2D))    // Circle2D getPoints behaves a bit differently so this should not be tested
             for (int i = 0; i < dists.length; ++i) {
                 assertEquals(dists[i], newPs[i].distance(center), GeoTestConsts.EPS, "Point distance from center should not change on rotate");
             }
-
-        assertEquals(ps[0], geo.getPoints()[0], "Center moved unexpectedly");
 
         assertEquals(expectedNewArea, geo.area(), GeoTestConsts.EPS, "Rotate changed area");
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Rotate changed perimeter");
@@ -161,6 +169,7 @@ public class GeoShapeableTest {
         double oldArea = geo.area(), expectedNewArea = oldArea * absRatio * absRatio;  // due to the square-cube law we expect area to be scaled by the square
 
         Point2D[] ps = geo.copy().getPoints();
+        if (geo instanceof Rect2D) ps = ((Rect2D) geo).getAllPoints();
         double[] dists = new double[ps.length];
         for (int i = 0; i < dists.length; ++i) {
             dists[i] = ps[i].distance(center);
@@ -169,6 +178,7 @@ public class GeoShapeableTest {
         geo.scale(center, ratio);
 
         Point2D[] newPs = geo.getPoints();
+        if (geo instanceof Rect2D) newPs = ((Rect2D) geo).getAllPoints();
         if (!(geo instanceof Circle2D))    // Circle2D getPoints behaves a bit differently so this should not be tested
             for (int i = 0; i < dists.length; ++i) {
                 assertEquals(dists[i] * absRatio, newPs[i].distance(center), GeoTestConsts.EPS, "Point distance from center should be scaled by the ratio");

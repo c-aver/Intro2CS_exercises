@@ -32,7 +32,7 @@ public class Segment2D implements GeoShapeable {
 	}
 	@Override
 	public String toString() {
-		return "Segment2D," + _p1 + "," + _p2;
+		return "" + _p1 + "," + _p2;
 	}
 
 	@Override

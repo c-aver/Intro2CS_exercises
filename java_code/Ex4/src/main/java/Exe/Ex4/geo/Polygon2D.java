@@ -39,9 +39,9 @@ public class Polygon2D implements GeoShapeable {
 
 	@Override
 	public String toString() {
-		String res = "Polygon2D";
-		for (Point2D point : _points) {
-			res += "," + point;
+		String res = _points[0].toString();
+		for (int i = 1; i < _points.length; ++i) {
+			res += "," + _points[i];
 		}
 		return res;
 	}

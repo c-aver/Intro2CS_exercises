@@ -56,7 +56,7 @@ public class Rect2D implements GeoShapeable {
 
 	@Override
 	public String toString() {
-		return "Rect2D," + _p1 + ',' + _p2 + ',' + _p3 + ',' + _p4;
+		return "" + _p1 + ',' + _p2 + ',' + _p3 + ',' + _p4;
 	}
 
 	@Override

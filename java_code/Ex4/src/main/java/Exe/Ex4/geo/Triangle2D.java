@@ -28,7 +28,7 @@ public class Triangle2D implements GeoShapeable {
 
     @Override
 	public String toString() {
-		return "Triangle2D," + _p1 + ',' + _p2 + ',' + _p3;
+		return "" + _p1 + ',' + _p2 + ',' + _p3;
 	}
 
 	@Override
@@ -96,5 +96,17 @@ public class Triangle2D implements GeoShapeable {
 	@Override
 	public Point2D[] getPoints() {
 		return new Point2D[] { _p1, _p2, _p3 };
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Triangle2D)) return false;
+		Triangle2D oTri = (Triangle2D) o;
+		Point2D[] ps = this.getPoints();
+		Point2D[] ops = oTri.getPoints();
+		for (int i = 0; i < ps.length; ++i) {
+			if (!ps[i].closeToEquals(ops[i])) return false;
+		}
+		return true;
 	}
 }

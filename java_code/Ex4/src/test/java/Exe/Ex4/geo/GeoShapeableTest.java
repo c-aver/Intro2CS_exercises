@@ -67,7 +67,7 @@ public class GeoShapeableTest {
         assertEquals(areaRatio, hitRate, 0.05, "Dart hit rate does not match area ratio");  // there is a tradeoff between the allowed delta and number of darts (which adds to run time)
     }
 
-    static void testContains(GeoShapeable geo) {
+    static void testContains(GeoShapeable geo) { // note that contains() is also mostly tested in testArea()
         Rect2D boundingBox = boundingBox(geo);
         Point2D p = Point2DTest.randPoint();
         assertTrue(!geo.contains(p) || boundingBox.contains(p), "Point claimed outside boundingBox but inside shape");

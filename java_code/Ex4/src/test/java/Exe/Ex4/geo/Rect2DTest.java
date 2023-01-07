@@ -26,12 +26,6 @@ public class Rect2DTest {
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
-    void testString() {
-        String str = rect.toString();
-        assertEquals(rect, new Rect2D(str.split(",")));  // TODO: nulls?
-    }
-
-    @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
         GeoShapeableTest.testArea(rect);
     }
@@ -77,5 +71,10 @@ public class Rect2DTest {
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
         GeoShapeableTest.testToString(rect);
+        
+        String str = rect.toString();
+        String[] splitStr = str.split(",");
+        assertEquals(3, splitStr.length);
+        assertEquals(rect, new Rect2D(splitStr));  // TODO: nulls?
     }
 }

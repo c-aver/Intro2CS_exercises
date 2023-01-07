@@ -1,5 +1,7 @@
 package Exe.Ex4.geo;
 
+import Exe.Ex4.Ex4_Const;
+
 /** 
  * This class represents a 2D circle in the plane. 
  * Please make sure you update it according to the GeoShape interface.
@@ -67,4 +69,11 @@ public class Circle2D implements GeoShapeable {
 		_center.rotate(center, angleDegrees);  // rotate the center point, radius does not change
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Circle2D)) return false;
+		Circle2D oCirc = (Circle2D) o;
+		if (Math.abs(oCirc.getRadius() - this.getRadius()) > Ex4_Const.EPS) return false;
+		return oCirc.getPoints()[0].closeToEquals(_center);
+	}
 }

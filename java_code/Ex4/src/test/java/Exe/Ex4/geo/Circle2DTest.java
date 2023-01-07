@@ -91,11 +91,12 @@ public class Circle2DTest {
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
-    void testToString() {
+    void testString() {
         GeoShapeableTest.testToString(circ);
         
         String str = circ.toString();
         String[] splitStr = str.split(",");
-        assertEquals(4, splitStr.length);
+        assertEquals(3, splitStr.length);
+        assertEquals(circ, new Circle2D(splitStr));
     }
 }

@@ -188,11 +188,9 @@ public class GeoShapeableTest {
 
     static void testToString(GeoShapeable geo) {
         String str = geo.toString();
-        String expectedName = geo.getClass().getSimpleName();
         assertNotNull(str, "toString returned null string");
         String[] splitStr = str.split(",");
         assertTrue(splitStr.length > 2, "toString returned too few commas");
-        assertEquals(expectedName, splitStr[0], "toString first value is not class name");
     }
 
     void testEquals(GeoShapeable geo) {

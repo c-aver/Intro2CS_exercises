@@ -89,6 +89,6 @@ public class Segment2DTest {
         GeoShapeableTest.testToString(seg);
         String str = seg.toString();
         String[] splitStr = str.split(",");
-        assertEquals(5, splitStr.length, "Segment2D.toString didn't return 5 parts");
+        assertEquals(4, splitStr.length, "Segment2D.toString didn't return 5 parts");
     }
 }

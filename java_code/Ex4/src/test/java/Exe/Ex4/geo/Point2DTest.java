@@ -186,7 +186,14 @@ public class Point2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
-        superTest.testToString(p);
-        assertEquals(3, p.toString().split(",").length, "Point2D.toString should have 3 parts");
+        // superTest.testToString(p);     // Point2D's toString works in a different logic from the rest
+        String[] parts = p.toString().split(",");
+        assertEquals(2, parts.length, "Point2D.toString should have 3 parts");
+        try {
+            Double.parseDouble(parts[0]);
+            Double.parseDouble(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new AssertionError("Point2D.toString created illegal string");
+        }
     }
 }

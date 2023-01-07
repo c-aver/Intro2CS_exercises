@@ -8,7 +8,6 @@ import org.junit.jupiter.api.RepeatedTest;
 
 public class Circle2DTest {
     Circle2D circ = null;
-    GeoShapeableTest superTest = new GeoShapeableTest();
 
     public static Circle2D randCircle() {
         Point2D center = Point2DTest.randPoint();
@@ -23,7 +22,7 @@ public class Circle2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        superTest.testArea(circ);
+        GeoShapeableTest.testArea(circ);
         Rect2D boundingBox = GeoShapeableTest.boundingBox(circ);
         double boundingBoxArea = boundingBox.area();
         assertTrue(boundingBox.isSquare(), "Circle is bounded by non-square rectangle");
@@ -33,21 +32,21 @@ public class Circle2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testContains() {
-        superTest.testContains(circ);
+        GeoShapeableTest.testContains(circ);
         Point2D p = Point2DTest.randPoint();
         assertTrue(circ.contains(p) == (circ.getPoints()[0].distance(p) <= circ.getRadius()), "Said contained on a point outside circle"); // make sure it is contained iff the distance is less than or equal the radius
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
-        superTest.testCopy(circ);
+        GeoShapeableTest.testCopy(circ);
         Circle2D copy = (Circle2D) circ.copy();
         assertEquals(circ.getRadius(), copy.getRadius(), "Copy changed radius");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
-        superTest.testGetPoints(circ);
+        GeoShapeableTest.testGetPoints(circ);
 
         Point2D[] ps = circ.getPoints();
         assertEquals(2, ps.length, "Circle2D.getPoints didn't return 2 points");
@@ -62,7 +61,7 @@ public class Circle2DTest {
     @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
         double oldRad = circ.getRadius();
-        superTest.testMove(circ);
+        GeoShapeableTest.testMove(circ);
         double newRad = circ.getRadius();
 
         assertEquals(oldRad, newRad, "Circle2D.move changed radius");
@@ -70,13 +69,13 @@ public class Circle2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testPerimeter() {
-        superTest.testPerimeter(circ);
+        GeoShapeableTest.testPerimeter(circ);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testRotate() {
         double oldRad = circ.getRadius();
-        superTest.testRotate(circ);
+        GeoShapeableTest.testRotate(circ);
         double newRad = circ.getRadius();
 
         assertEquals(oldRad, newRad, "Circle2D.rotate changed radius");
@@ -85,7 +84,7 @@ public class Circle2DTest {
     @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
         double oldRad = circ.getRadius();
-        double ratio = superTest.testScale(circ);
+        double ratio = GeoShapeableTest.testScale(circ);
         double newRad = circ.getRadius();
 
         assertEquals(oldRad * Math.abs(ratio), newRad, "Circle2D.scale changed radius");
@@ -93,7 +92,7 @@ public class Circle2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
-        superTest.testToString(circ);
+        GeoShapeableTest.testToString(circ);
         
         String str = circ.toString();
         String[] splitStr = str.split(",");

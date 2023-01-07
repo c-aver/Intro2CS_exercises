@@ -10,7 +10,6 @@ import org.junit.jupiter.api.RepeatedTest;
 public class Segment2DTest {
     Segment2D seg = null;
     double length;
-    GeoShapeableTest superTest = new GeoShapeableTest();
 
     static Segment2D randSegment() {
         Point2D p1 = Point2DTest.randPoint(), p2 = Point2DTest.randPoint();
@@ -26,7 +25,7 @@ public class Segment2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        // superTest.testArea(seg);   // we cannot use the super test here since the definitions do not align
+        // GeoShapeableTest.testArea(seg);   // we cannot use the super test here since the definitions do not align
         assertEquals(0, seg.area(), "Claimed segment area as non-zero");
     }
 
@@ -47,12 +46,12 @@ public class Segment2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
-        superTest.testCopy(seg);
+        GeoShapeableTest.testCopy(seg);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
-        superTest.testGetPoints(seg);
+        GeoShapeableTest.testGetPoints(seg);
         Point2D[] ps = seg.getPoints();
         assertNotNull(ps, "Segment2D.getPoints returned null");
         assertEquals(2, ps.length, "Segment2D.getPoints didn't return 2 points");
@@ -60,34 +59,34 @@ public class Segment2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
-        superTest.testMove(seg);
+        GeoShapeableTest.testMove(seg);
         Point2D[] ps = seg.getPoints();
         assertEquals(length, ps[0].distance(ps[1]), GeoTestConsts.EPS, "Move changed segment length");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testPerimeter() {
-        superTest.testPerimeter(seg);
+        GeoShapeableTest.testPerimeter(seg);
         assertEquals(length * 2, seg.perimeter(), "Perimeter not calculated to two times length");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testRotate() {
-        superTest.testRotate(seg);
+        GeoShapeableTest.testRotate(seg);
         Point2D[] ps = seg.getPoints();
         assertEquals(length, ps[0].distance(ps[1]), GeoTestConsts.EPS, "Rotate changed segment length");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
-        double ratio = superTest.testScale(seg);  // TODO: this fails sometimes
+        double ratio = GeoShapeableTest.testScale(seg);  // TODO: this fails sometimes
         Point2D[] ps = seg.getPoints();
         assertEquals(Math.abs(length * ratio), ps[0].distance(ps[1]), GeoTestConsts.EPS, "Rotate changed segment length");
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
-        superTest.testToString(seg);
+        GeoShapeableTest.testToString(seg);
         String str = seg.toString();
         String[] splitStr = str.split(",");
         assertEquals(5, splitStr.length, "Segment2D.toString didn't return 5 parts");

@@ -2,12 +2,14 @@ package Exe.Ex4.geo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 
 public class Polygon2DTest {
     Polygon2D poly = null;
-    GeoShapeableTest superTest = new GeoShapeableTest();
 
     static Polygon2D randPoly() {
         int sides = (int) (Math.random() * 10) + 3;
@@ -15,6 +17,24 @@ public class Polygon2DTest {
         for (int i = 0; i < sides; ++i) {
             ps[i] = Point2DTest.randPoint();
         }
+
+        Point2D cen = ps[0];
+        Comparator<Point2D> angleComp = new Comparator<Point2D>() {
+            @Override
+            public int compare(Point2D p1, Point2D p2) {
+                if (p1 == cen) return Integer.MAX_VALUE;
+                Point2D vec1 = cen.vector(p1);
+                Point2D vec2 = cen.vector(p2);
+                return Double.compare(vec1.angleDegrees(), vec2.angleDegrees());
+            }
+        };
+
+        Arrays.sort(ps, angleComp);
+
+        Polygon2D poly = new Polygon2D(ps);
+
+        GeoShapeableTest.showShape(poly);
+
         return new Polygon2D(ps);
     }
 
@@ -25,22 +45,22 @@ public class Polygon2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        superTest.testArea(poly);
+        GeoShapeableTest.testArea(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testContains() {
-        superTest.testContains(poly);
+        GeoShapeableTest.testContains(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
-        superTest.testCopy(poly);
+        GeoShapeableTest.testCopy(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
-        superTest.testGetPoints(poly);
+        GeoShapeableTest.testGetPoints(poly);
         Point2D[] ps = poly.getPoints();
         Polygon2D newPoly = new Polygon2D(ps);
         assertEquals(poly, newPoly, "Polygon created with points must be equal");
@@ -48,12 +68,12 @@ public class Polygon2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
-        superTest.testMove(poly);
+        GeoShapeableTest.testMove(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testPerimeter() {
-        superTest.testPerimeter(poly);
+        GeoShapeableTest.testPerimeter(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

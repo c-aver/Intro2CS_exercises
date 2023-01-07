@@ -11,7 +11,6 @@ import Exe.Ex4.Ex4_Const;
 
 public class Point2DTest {
     private Point2D p = null;
-    GeoShapeableTest superTest = new GeoShapeableTest();
 
     public static Point2D randPoint() {
         return new Point2D(Math.random() * GeoTestConsts.MAX_X, Math.random() * GeoTestConsts.MAX_Y);
@@ -60,7 +59,7 @@ public class Point2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        // superTest.testArea(p);   // does not work for point
+        // GeoShapeableTest.testArea(p);   // does not work for point
         assertEquals(0.0, p.area(), "Calculated area different from 0 for point");
     }
 
@@ -91,7 +90,7 @@ public class Point2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCopy() {
-        superTest.testCopy(p);
+        GeoShapeableTest.testCopy(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
@@ -124,12 +123,12 @@ public class Point2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testEquals() {
-        superTest.testCopy(p);
+        GeoShapeableTest.testCopy(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testGetPoints() {
-        superTest.testGetPoints(p);
+        GeoShapeableTest.testGetPoints(p);
         Point2D[] ps = p.getPoints();
         assertEquals(1, ps.length, "Point2D.getPoints should return array of size 1");
         assertEquals(p, ps[0], "First point of Point2D.getPoints should be original point");
@@ -150,7 +149,7 @@ public class Point2DTest {
     @RepeatedTest(GeoTestConsts.TESTS)
     void testMove() {
         Point2D origP = (Point2D) p.copy();
-        Point2D vec = superTest.testMove(p);
+        Point2D vec = GeoShapeableTest.testMove(p);
         assertEquals(origP.distance(p), vec.distance(), GeoTestConsts.EPS, "Distance from original point should be equal to move vector length");
     }
 
@@ -161,7 +160,7 @@ public class Point2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testRotate() {
-        superTest.testRotate(p);
+        GeoShapeableTest.testRotate(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
@@ -173,7 +172,7 @@ public class Point2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testScale() {
-        superTest.testScale(p);
+        GeoShapeableTest.testScale(p);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)
@@ -186,7 +185,7 @@ public class Point2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testToString() {
-        // superTest.testToString(p);     // Point2D's toString works in a different logic from the rest
+        // GeoShapeableTest.testToString(p);     // Point2D's toString works in a different logic from the rest
         String[] parts = p.toString().split(",");
         assertEquals(2, parts.length, "Point2D.toString should have 3 parts");
         try {

@@ -1,6 +1,5 @@
 /*
- * This class contains tests that are common among all GeoShapeables.
- * TODO: should this all be static?
+ * This library contains tests that are common among all GeoShapeables.
  */
 
 package Exe.Ex4.geo;
@@ -11,9 +10,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import Exe.Ex4.GUIShape;
+import Exe.Ex4.GUI_Shapeable;
 import Exe.Ex4.ShapeCollection;
 import Exe.Ex4.ShapeCollectionable;
+import Exe.Ex4.gui.Ex4;
 
+import java.awt.Color;
 
 public class GeoShapeableTest {
     static Rect2D boundingBox(GeoShapeable geo) {
@@ -23,7 +25,7 @@ public class GeoShapeableTest {
     }
 
     // this is just in case I need it, should not use
-    void runAll(GeoShapeable geo) {
+    static void runAll(GeoShapeable geo) {
         testArea(geo);
         testContains(geo);
         testCopy(geo);
@@ -35,7 +37,18 @@ public class GeoShapeableTest {
         testToString(geo);
     }
 
-    void testArea(GeoShapeable geo) {
+    static void showShape(GeoShapeable geo) {
+        Ex4 ex4 = Ex4.getInstance();
+        ex4.getShape_Collection().removeAll();
+		ShapeCollectionable shapes = ex4.getShape_Collection();
+		GUI_Shapeable gs1 = new GUIShape(geo, true, Color.black, 1);
+		shapes.add(gs1);
+		ex4.init(shapes);
+		ex4.show();
+		System.out.print(ex4.getInfo());
+    }
+
+    static void testArea(GeoShapeable geo) {
         double area = geo.area();
         assertTrue(area >= 0, "Area returned non-positive value");
         Rect2D boundingBox = boundingBox(geo);
@@ -50,13 +63,13 @@ public class GeoShapeableTest {
         assertEquals(areaRatio, hitRate, GeoTestConsts.EPS * 10, "Dart hit rate does not match area ratio");
     }
 
-    void testContains(GeoShapeable geo) {
+    static void testContains(GeoShapeable geo) {
         Rect2D boundingBox = boundingBox(geo);
         Point2D p = Point2DTest.randPoint();
         assertTrue(!geo.contains(p) || boundingBox.contains(p), "Point claimed outside boundingBox but inside shape");
     }
 
-    void testCopy(GeoShapeable geo) {
+    static void testCopy(GeoShapeable geo) {
         GeoShapeable copy = geo.copy();
         assertNotEquals(System.identityHashCode(geo), System.identityHashCode(copy), "copy returned shallow copy");
         Point2D[] ps = geo.getPoints(), copyPs = copy.getPoints();
@@ -68,7 +81,7 @@ public class GeoShapeableTest {
         }
     }
 
-    void testGetPoints(GeoShapeable geo) {
+    static void testGetPoints(GeoShapeable geo) {
         Point2D[] ps = geo.getPoints();
         assertNotNull(ps, "getPoints returned null");
         assertTrue(ps.length > 0, "getPoints returned empty array");
@@ -78,7 +91,7 @@ public class GeoShapeableTest {
      * Area and perimeter do not change.
      * All points change by the move vector.
      */
-    Point2D testMove(GeoShapeable geo) {
+    static Point2D testMove(GeoShapeable geo) {
         Point2D vec = Point2DTest.randVec();
         Point2D[] ps = geo.getPoints();
         
@@ -104,12 +117,12 @@ public class GeoShapeableTest {
         return vec;
     }
 
-    void testPerimeter(GeoShapeable geo) {
+    static void testPerimeter(GeoShapeable geo) {
         double perimeter = geo.perimeter();
         assertTrue(perimeter > 0, "Perimeter returned non-positive value");
     }
 
-    void testRotate(GeoShapeable geo) {
+    static void testRotate(GeoShapeable geo) {
         Point2D center = Point2DTest.randPoint();
         double rotateAngleDegrees = Math.random() * 360;
         double oldPerimeter = geo.perimeter(), expectedNewPerimeter = oldPerimeter;
@@ -137,7 +150,7 @@ public class GeoShapeableTest {
         assertEquals(expectedNewPerimeter, geo.perimeter(), GeoTestConsts.EPS, "Rotate changed perimeter");
     }
 
-    double testScale(GeoShapeable geo) {
+    static double testScale(GeoShapeable geo) {
         double ratio = Math.random() * 4 - 2;     // we allow negative ratios despite not being strictly required
         double absRatio = Math.abs(ratio);
         Point2D center = Point2DTest.randPoint();
@@ -167,7 +180,7 @@ public class GeoShapeableTest {
         return ratio;
     }
 
-    void testToString(GeoShapeable geo) {
+    static void testToString(GeoShapeable geo) {
         String str = geo.toString();
         String expectedName = geo.getClass().getSimpleName();
         assertNotNull(str, "toString returned null string");

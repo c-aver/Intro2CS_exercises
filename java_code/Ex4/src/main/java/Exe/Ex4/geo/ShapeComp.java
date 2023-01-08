@@ -32,6 +32,8 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 	public ShapeComp(int flag) {
 		_flag = flag;
 	}
+
+	// For comparing we simply take the appropriate field and use its built-in comparator
 	@Override
 	public int compare(GUI_Shapeable o1, GUI_Shapeable o2) {
 		if (_flag == Ex4_Const.Sort_By_Tag) {

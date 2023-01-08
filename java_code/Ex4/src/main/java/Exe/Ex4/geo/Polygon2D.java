@@ -15,9 +15,9 @@
  */
 public class Polygon2D implements GeoShapeable {
 	private Point2D[] _points;
-	private Triangle2D[] _mesh = null;
+	private Triangle2D[] _mesh = null;  // this is a triangle mesh representing the polygon, singelton-like
 
-	private Triangle2D[] getMesh() {
+	private Triangle2D[] getMesh() {  // this calculates the mesh
 		if (_mesh != null) return _mesh;
 		return _mesh = triangleMesh();
 	}
@@ -38,7 +38,7 @@ public class Polygon2D implements GeoShapeable {
 			_mesh = triangleMesh();
 	}
 
-	private void regenMesh() {
+	private void regenMesh() {  // this recalculates the mesh after changing the polygon
 		_mesh = triangleMesh();
 	}
 
@@ -61,6 +61,11 @@ public class Polygon2D implements GeoShapeable {
 		return true;
 	}
 	
+	/**
+	 * This function uses the triangle mesh to check if a point is contained in the polygon.
+	 * The point is contained if it is contained in an odd number of triangle from the mesh.
+	 * (Each triangle the point meets either "moves it" into or out of the polygon.)
+	 */
 	@Override
 	public boolean contains(Point2D ot) {
 		int hits = 0;
@@ -127,10 +132,15 @@ public class Polygon2D implements GeoShapeable {
 	public Point2D[] getPoints() {
 		return _points;  // return the points arraylist converted to an array, the paramter is provided to determine the type of the array
 	}
-	
+	/**
+	 * This function creates a triangle mesh of the polygon.
+	 * Note that for concave polygon we can have intersections (due to the method used)
+	 * But 
+	 * @return an array of triangle representing the mesh
+	 */
 	private Triangle2D[] triangleMesh() {
-		assert _points.length > 2;
-		int numTriangles = _points.length - 2;
+		assert _points.length > 2;     // make sure we have at least a triangle, a segment can't be meshed
+		int numTriangles = _points.length - 2;   // we have a triangle for each vertex after the first two
 		Triangle2D[] result = new Triangle2D[numTriangles];
 		Point2D origin = _points[_points.length - 1]; // get the last point as the "origin" for each triangle
 		for (int i = 0; i < numTriangles; ++i) {

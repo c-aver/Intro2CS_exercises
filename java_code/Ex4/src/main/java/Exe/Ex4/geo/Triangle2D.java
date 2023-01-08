@@ -38,7 +38,7 @@ public class Triangle2D implements GeoShapeable {
 
 	@Override
 	public boolean contains(Point2D ot) {
-		// concept: make sure the point is close to each vertex's parallel line than the vertex is to the opposite line
+		// concept: make sure the point is closer to each vertex's parallel line than the vertex is to the opposite line
 		double dy3 = (_p1.y() - _p2.y()) / (_p1.x() - _p2.x());   // we calculate the line slopes to create a parallel line
 		double dy2 = (_p1.y() - _p3.y()) / (_p1.x() - _p3.x());   // the slope is the default for dy
 		double dy1 = (_p2.y() - _p3.y()) / (_p2.x() - _p3.x());

@@ -34,8 +34,7 @@ import Exe.Ex4.geo.Triangle2D;
  */
 public class Ex4 implements Ex4_GUI {
 	private final boolean DEBUG = false;  // debug mode
-	private static final int LOAD = 0;    // constants for file selection mode
-	private static final int SAVE = 1;
+	private enum FileDialogMode { LOAD, SAVE }
 
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
 	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);    // the shape currently being drawn, the only field that should be changed is its GeoShapeable
@@ -138,11 +137,11 @@ public class Ex4 implements Ex4_GUI {
 		// File menu
 		if (action.equals("Clear"))  { _shapes.removeAll(); _runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
 		if (action.equals("Save")) {                         // on save (or load) call chooseFile to show the dialog (with appropriate constant to select mode), and if not null call the appropriate function
-			String filePath = chooseFile(SAVE);
+			String filePath = chooseFile(FileDialogMode.SAVE);
 			if (filePath != null) _shapes.save(filePath);
 		}
 		if (action.equals("Load")) {
-			String filePath = chooseFile(LOAD);
+			String filePath = chooseFile(FileDialogMode.LOAD);
 			if (filePath != null) _shapes.load(filePath);
 		}
 
@@ -440,12 +439,18 @@ public class Ex4 implements Ex4_GUI {
 	 * @param mode either SAVE or LOAD, coded as in Ex4
 	 * @return the absolute path to the chosen file
 	 */
-	private String chooseFile(int mode) {
+	private String chooseFile(FileDialogMode mode) {
 		FileDialog chooser;   // create a FileDialog variable
-		if (mode == SAVE)     // depending on the mode
-			chooser = new FileDialog(new Frame(), "Choose where to save", FileDialog.SAVE);  // initialize the FileDialog with appropriate parameters
-		else 
-			chooser = new FileDialog(new Frame(), "Choose file to load", FileDialog.LOAD);
+		switch (mode) {
+			case LOAD:
+				chooser = new FileDialog(new Frame(), "Choose file to load", FileDialog.LOAD);  // initialize the FileDialog with appropriate parameters
+				break;
+			case SAVE:
+				chooser = new FileDialog(new Frame(), "Choose where to save", FileDialog.SAVE);
+				break;
+			default:
+				throw new IllegalArgumentException("Illegal FileDialogMode");
+		}
 		chooser.setVisible(true);    // show the FileDialog
 		return chooser.getDirectory() + chooser.getFile();   // return the absolute path
 	}

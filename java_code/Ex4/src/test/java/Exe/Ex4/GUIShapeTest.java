@@ -24,7 +24,7 @@ import Exe.Ex4.geo.Triangle2D;
 public class GUIShapeTest {
     GUIShape sh;
 
-    private static GUIShape randGuiShape() {
+    public static GUIShape randGuiShape() {
         GeoShapeable gs = GeoShapeableTest.randShape();
         
         boolean fill = Math.random() < 0.5;

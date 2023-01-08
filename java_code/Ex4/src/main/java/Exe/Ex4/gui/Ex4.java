@@ -1,5 +1,7 @@
-// TODO: add identifying info to all my files
-
+/**
+ * Name: Chaim Averbach
+ * ID: 207486473
+ */
 package Exe.Ex4.gui;
 import java.awt.Color;
 import java.awt.event.MouseEvent;

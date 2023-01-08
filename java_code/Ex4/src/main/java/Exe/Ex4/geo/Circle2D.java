@@ -1,4 +1,9 @@
-package Exe.Ex4.geo;
+/**
+ * Name: Chaim Averbach
+ * ID: 207486473
+ */
+
+ package Exe.Ex4.geo;
 
 import Exe.Ex4.Ex4_Const;
 
@@ -6,7 +11,7 @@ import Exe.Ex4.Ex4_Const;
  * This class represents a 2D circle in the plane. 
  * Please make sure you update it according to the GeoShape interface.
  * Ex4: you should update this class!
- * @author boaz.benmoshe
+ * @author c-aver
  *
  */
 public class Circle2D implements GeoShapeable {

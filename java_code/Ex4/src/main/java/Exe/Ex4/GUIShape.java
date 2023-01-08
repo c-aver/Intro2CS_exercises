@@ -1,8 +1,13 @@
-package Exe.Ex4;
+/**
+ * Name: Chaim Averbach
+ * ID: 207486473
+ */
+
+ package Exe.Ex4;
 /**
  * This class implements the GUI_shape.
  * Ex4: you should implement this class!
- * @author I2CS
+ * @author c-aver
  */
 import java.awt.Color;
 

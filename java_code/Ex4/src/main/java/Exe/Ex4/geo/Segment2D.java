@@ -1,9 +1,14 @@
+/**
+ * Name: Chaim Averbach
+ * ID: 207486473
+ */
+
 package Exe.Ex4.geo;
 
 /**
  * This class represents a 2D segment on the plane, 
  * Ex4: you should implement this class!
- * @author I2CS
+ * @author c-aver
  *
  */
 public class Segment2D implements GeoShapeable {

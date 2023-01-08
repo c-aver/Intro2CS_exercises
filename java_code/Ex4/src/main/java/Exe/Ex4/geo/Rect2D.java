@@ -1,4 +1,9 @@
-package Exe.Ex4.geo;
+/**
+ * Name: Chaim Averbach
+ * ID: 207486473
+ */
+
+ package Exe.Ex4.geo;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +15,7 @@ import Exe.Ex4.Ex4_Const;
 /**
  * This class represents a 2D rectangle (NOT necessarily axis parallel - this shape can be rotated!)
  * Ex4: you should implement this class!
- * @author I2CS
+ * @author c-aver
  *
  */
 public class Rect2D implements GeoShapeable {

@@ -1,4 +1,9 @@
-package Exe.Ex4;
+/**
+ * Name: Chaim Averbach
+ * ID: 207486473
+ */
+
+ package Exe.Ex4;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +20,7 @@ import Exe.Ex4.geo.Rect2D;
 /**
  * This class represents a collection of GUI_Shape.
  * Ex4: you should implement this class!
- * @author I2CS
+ * @author c-aver
  *
  */
 public class ShapeCollection implements ShapeCollectionable{

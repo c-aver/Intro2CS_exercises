@@ -127,4 +127,15 @@ public class GUIShape implements GUI_Shapeable {
 	public void setShape(GeoShapeable g) {
 		this._g = g;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof GUIShape)) return false;
+		GUIShape osh = (GUIShape) o;
+		return this.getShape().equals(osh.getShape())
+			&& this.isFilled() == osh.isFilled()
+			&& this.getColor().equals(osh.getColor())
+			&& this.getTag() == osh.getTag()
+			&& this.isSelected() == osh.isSelected();
+	}
 }

@@ -71,7 +71,7 @@ public class Ex4 implements Ex4_GUI {
 		return _winEx4;
 	}
 	
-	public void drawShapes() {
+	private void drawShapes() {
 		StdDraw_Ex4.clear();   // clear the screen to prepare for new shapes
 		for (int i = 0; i < _shapes.size(); ++i) {  // iterate on the shapes
 			GUI_Shapeable sh = _shapes.get(i);

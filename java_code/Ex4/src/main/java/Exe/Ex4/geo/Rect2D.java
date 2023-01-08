@@ -36,26 +36,30 @@ public class Rect2D implements GeoShapeable {
 	}
 	public Rect2D(String[] args) {
 		if (args.length < 8) throw new IllegalArgumentException("Can't initialize Rect2D with less than 8 arguments");
-		try {
+		try { // We are going to make sure the quadrilateral is actually a rectangle
+			// Get the points
 			Point2D p1 = new Point2D(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
 			Point2D p2 = new Point2D(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
 			Point2D p3 = new Point2D(Double.parseDouble(args[4]), Double.parseDouble(args[5]));
 			Point2D p4 = new Point2D(Double.parseDouble(args[6]), Double.parseDouble(args[7]));
-			// TODO: this code might be buggy
+			// Get the slopes of the quadrilateral sides
 			double p12Slope = (p1.y() - p2.y()) / (p1.x() - p2.x());
 			double p43Slope = (p4.y() - p3.y()) / (p4.x() - p3.x());
 			double p23Slope = (p2.y() - p3.y()) / (p2.x() - p3.x());
 			double p14Slope = (p1.y() - p4.y()) / (p1.x() - p4.x());
-		 	if (p12Slope != p43Slope || p23Slope != p14Slope)
+			// Make sure the opposite slopes are close to equals - parallel
+		 	if (Math.abs(p12Slope - p43Slope) >= Ex4_Const.EPS || Math.abs(p23Slope - p14Slope) >= Ex4_Const.EPS)
 		 		throw new IllegalArgumentException("Cannot create non-parallelogram rectangle");
-		 	if ((p12Slope * p14Slope != -1)                          // check if they are not perpendicular
-			 && (p12Slope != 0 || Double.isFinite(p14Slope))         // also make sure they are not parallel to the axes
-			 && (p14Slope != 0 || Double.isFinite(p12Slope))) {      // we check both option of axis-parallelity
+			// Make sure touching slopes are perpendicular, their multiplication is -1
+		 	if ((Math.abs(p12Slope * p14Slope - -1) >= Ex4_Const.EPS)  // check if they are not perpendicular
+			 && (p12Slope != 0 || Double.isFinite(p14Slope))           // also make sure they are not parallel to the axes
+			 && (p14Slope != 0 || Double.isFinite(p12Slope))) {        // we check both options of axis-parallelity
 				throw new IllegalArgumentException("Cannot create rectangle with non-right angle");
 			}
-			_p1 = p1; _p2 = p2; _p3 = p3; _p4 = p4;
-		} catch (IllegalArgumentException e) {
+			_p1 = p1; _p2 = p2; _p3 = p3; _p4 = p4;  // if all checks passed set the points
+		} catch (IllegalArgumentException e) {   // if something failed, print the error and rethrow it
 			System.err.println("ERROR: Could not initialize Rect2D: " + e.getMessage());
+			throw e;
 		}
     }
 

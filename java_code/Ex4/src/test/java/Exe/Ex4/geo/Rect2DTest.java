@@ -80,6 +80,6 @@ public class Rect2DTest {
         String str = rect.toString();
         String[] splitStr = str.split(",");
         assertEquals(8, splitStr.length);
-        assertEquals(rect, new Rect2D(splitStr));  // TODO: nulls?
+        assertEquals(rect, new Rect2D(splitStr));
     }
 }

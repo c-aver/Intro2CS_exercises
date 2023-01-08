@@ -102,7 +102,7 @@ public class GUIShapeTest {
             default:
                 assert false : "Unreachable";
         }
-        assertEquals(sh.getShape(), gs);  // TODO: fails because of Rect2D
+        assertEquals(sh.getShape(), gs);
 
         assertEquals(sh, new GUIShape(str));
     }

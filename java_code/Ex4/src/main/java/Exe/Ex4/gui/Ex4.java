@@ -355,6 +355,7 @@ public class Ex4 implements Ex4_GUI {
 			if (s.isSelected() && g != null) {   // for each selected shape
 				GUI_Shapeable copy = s.copy();   // create a copy
 				copy.getShape().move(moveVec);   // move it
+				copy.setTag(_runningTag++);      // set the tag to the current running tag and increment it
 				_shapes.add(copy);               // add it to the canvas
 			}
 		}

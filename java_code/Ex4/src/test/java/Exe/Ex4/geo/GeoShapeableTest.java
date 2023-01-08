@@ -203,4 +203,23 @@ public class GeoShapeableTest {
         GeoShapeable copy = geo.copy();
         assertEquals(geo, copy, "Shape should be equal to its copy"); // this uses the overloaded equals method and thus tests it
     }
+
+    public static GeoShapeable randShape() {
+        int type = (int) (Math.random() * 5);
+        switch (type) {
+            case 0:
+                return Circle2DTest.randCircle();
+            case 1:
+                return Polygon2DTest.randPoly();
+            case 2:
+                return Circle2DTest.randCircle();
+            case 3:
+                return Rect2DTest.randRect();
+            case 4:
+                return Triangle2DTest.randTri();
+            default:
+                assert false : "Unreachable";
+        }
+        return null;
+    }
 }

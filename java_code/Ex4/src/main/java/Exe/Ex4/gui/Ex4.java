@@ -436,7 +436,7 @@ public class Ex4 implements Ex4_GUI {
 	}
 	/**
 	 * This function shows the file selection dialog and returns the selected file
-	 * @param mode either SAVE or LOAD, coded as in Ex4
+	 * @param mode a FileDialogMode, either SAVE or LOAD
 	 * @return the absolute path to the chosen file
 	 */
 	private String chooseFile(FileDialogMode mode) {
@@ -449,7 +449,7 @@ public class Ex4 implements Ex4_GUI {
 				chooser = new FileDialog(new Frame(), "Choose where to save", FileDialog.SAVE);
 				break;
 			default:
-				throw new IllegalArgumentException("Illegal FileDialogMode");
+				throw new IllegalArgumentException("UNREACHABLE: Illegal FileDialogMode");
 		}
 		chooser.setVisible(true);    // show the FileDialog
 		return chooser.getDirectory() + chooser.getFile();   // return the absolute path

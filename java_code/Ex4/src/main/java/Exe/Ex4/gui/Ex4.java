@@ -1,4 +1,3 @@
-// TODO: document the hell out of this
 // TODO: add identifying info to all my files
 
 package Exe.Ex4.gui;
@@ -28,16 +27,16 @@ import Exe.Ex4.geo.Triangle2D;
  * StdDraw with the Map class.
  * Written for 101 java course it uses simple static functions to allow a 
  * "Singleton-like" implementation.
- * @author boaz.benmoshe
+ * @author c-aver
  *
  */
 public class Ex4 implements Ex4_GUI {
 	private final boolean DEBUG = false;  // debug mode
-	private static final int LOAD = 0;
+	private static final int LOAD = 0;    // constants for file selection mode
 	private static final int SAVE = 1;
 
 	private ShapeCollectionable _shapes = new ShapeCollection();  // the shapes in the canvas
-	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);           // the shape currently being drawn, the only field that should be changed is its GeoShapeable
+	private GUI_Shapeable _previewShape = new GUIShape(null, false, Color.pink, 0);    // the shape currently being drawn, the only field that should be changed is its GeoShapeable
 	private ArrayList<Point2D> _polyPoints = null;  // the list of points in the polygon being drawn
 	private Color _color = Color.blue;   // the current brush color
 	private boolean _fill = false;       // whether we are creating a filled shape
@@ -71,49 +70,49 @@ public class Ex4 implements Ex4_GUI {
 	}
 	
 	public void drawShapes() {
-		StdDraw_Ex4.clear();
-		for (int i = 0; i < _shapes.size(); ++i) {
+		StdDraw_Ex4.clear();   // clear the screen to prepare for new shapes
+		for (int i = 0; i < _shapes.size(); ++i) {  // iterate on the shapes
 			GUI_Shapeable sh = _shapes.get(i);
-			drawShape(sh);
+			drawShape(sh);            // draw each one
 		}
-		if (_previewShape.getShape() != null) { drawShape(_previewShape); }
-		StdDraw_Ex4.show();
+		if (_previewShape.getShape() != null) { drawShape(_previewShape); }   // if the preview shape is not null, draw it as well (on top)
+		StdDraw_Ex4.show();   // show the new buffer
 	}
 	private static void drawShape(GUI_Shapeable g) {
-		StdDraw_Ex4.setPenColor(g.getColor());
-		if (g.isSelected()) { StdDraw_Ex4.setPenColor(Color.gray); }
-		GeoShapeable gs = g.getShape();
-		boolean isFill = g.isFilled();
-		if (gs instanceof Circle2D) {
-			Circle2D circle = (Circle2D) gs;
-			Point2D center = circle.getPoints()[0];
-			double rad = circle.getRadius();
-			if (isFill) {
+		StdDraw_Ex4.setPenColor(g.getColor());                             // set the pen color to the shape's color
+		if (g.isSelected()) { StdDraw_Ex4.setPenColor(Color.gray); }       // if it selected we draw it in gray
+		GeoShapeable gs = g.getShape();                // get the GeoShapeable inside
+		boolean isFill = g.isFilled();                 // check whether it should be filled
+		if (gs instanceof Circle2D) {                  // if the shape is a circle
+			Circle2D circle = (Circle2D) gs;           // cast it as such
+			Point2D center = circle.getPoints()[0];    // get the center
+			double rad = circle.getRadius();           // get the radius
+			if (isFill) {                              // draw it with the parameters, determining which function to use on isFille
 				StdDraw_Ex4.filledCircle(center.x(), center.y(), rad);
 			} else { 
 				StdDraw_Ex4.circle(center.x(), center.y(), rad);
 			}
 		}
-		if (gs instanceof Segment2D) {
-			Point2D[] ps = gs.getPoints();
-			StdDraw_Ex4.line(ps[0].x(), ps[0].y(), ps[1].x(), ps[1].y());
+		if (gs instanceof Segment2D) {   // if it is a segment
+			Point2D[] ps = gs.getPoints();   // get the points
+			StdDraw_Ex4.line(ps[0].x(), ps[0].y(), ps[1].x(), ps[1].y());  // draw the segement
 		}
-		if (gs instanceof Polygon2D || gs instanceof Triangle2D || gs instanceof Rect2D) {
-			Point2D[] ps = gs.getPoints();
-			if (gs instanceof Rect2D) { ps = ((Rect2D) gs).getAllPoints(); }
-			double[] xs = new double[ps.length], ys = new double[ps.length];
-			for (int i = 0; i < ps.length; ++i) {
+		if (gs instanceof Polygon2D || gs instanceof Triangle2D || gs instanceof Rect2D) {    // all these shapes are treated the same way
+			Point2D[] ps = gs.getPoints();                                        // get the points
+			if (gs instanceof Rect2D) { ps = ((Rect2D) gs).getAllPoints(); }      // Rect2D specifically need all points, since getPoints only returns bounding box
+			double[] xs = new double[ps.length], ys = new double[ps.length];      // create two arrays for the coordinates
+			for (int i = 0; i < ps.length; ++i) {                                 // copy the points' coordinates into the arrays
 				xs[i] = ps[i].x();
 				ys[i] = ps[i].y();
 			}
-			if (g.isFilled()) {
+			if (isFill) {     // draw the polygon, depending on isFill
 				StdDraw_Ex4.filledPolygon(xs, ys);
 			} else {
 				StdDraw_Ex4.polygon(xs, ys);
 			}
 		}
 	}
-	private void updateColor(Color c) {
+	private void updateColor(Color c) {   // the next two functions update the status of selected shapes with either a color or a fill state
 		for (int i = 0; i < _shapes.size(); ++i) {
 			GUI_Shapeable s = _shapes.get(i);
 			if (s.isSelected()) {
@@ -136,7 +135,7 @@ public class Ex4 implements Ex4_GUI {
 
 		// File menu
 		if (action.equals("Clear"))  { _shapes.removeAll(); _runningTag = 1; } // if the option was clear, remove all shapes from the canvas and reset the running tag to 1
-		if (action.equals("Save")) {
+		if (action.equals("Save")) {                         // on save (or load) call chooseFile to show the dialog (with appropriate constant to select mode), and if not null call the appropriate function
 			String filePath = chooseFile(SAVE);
 			if (filePath != null) _shapes.save(filePath);
 		}
@@ -183,6 +182,7 @@ public class Ex4 implements Ex4_GUI {
 		if (action.equals("Remove")) { removeSelected(); }
 
 		// Sort menu
+		// simply sorts the shapes by the relevant comparator
 		if (action.equals("ByArea")) { _shapes.sort(ShapeComp.CompByArea); }
 		if (action.equals("ByAntiArea")) { _shapes.sort(ShapeComp.CompByAntiArea); }
 		if (action.equals("ByPerimeter")) { _shapes.sort(ShapeComp.CompByPerimter); }
@@ -192,32 +192,33 @@ public class Ex4 implements Ex4_GUI {
 		if (action.equals("ByTag")) { _shapes.sort(ShapeComp.CompByTag); }
 		if (action.equals("ByAntiTag")) { _shapes.sort(ShapeComp.CompByAntiTag); }
 
+		// redraw the shapes after the updates
 		drawShapes();
 	}
 	
 	public void mouseClicked(Point2D p) {
-		System.out.println("Mode: " + _mode + ". Click location: " + p);
+		System.out.println("Mode: " + _mode + ". Click location: " + p);  // debug info
 		// Select menu
-		if (_mode.equals("Point")) {
-			selectUnderPoint(p);
+		if (_mode.equals("Point")) {   // under mode Point in select menu
+			selectUnderPoint(p);       // call the function to select under the clicked point
 		}
 
 		// Shape menu
-		if (_mode.equals("Circle") || _mode.equals("Segment") || _mode.equals("Rect")) {
-			if(_lastClick == null) {
-				_lastClick = new Point2D(p);
-				return;
-			} else {
-				finalizeShape();
+		if (_mode.equals("Circle") || _mode.equals("Segment") || _mode.equals("Rect")) {    // these are modes with two clicks
+			if (_lastClick == null) {            // if it is the first click
+				_lastClick = new Point2D(p);     // save it
+				return;                          // and return
+			} else {                // if it is the second click
+				finalizeShape();    // finalize the preview shape
 			}
 		}
-		if (_mode.equals("Triangle")) {
+		if (_mode.equals("Triangle")) {   // in this mode we accpet three click
 			if (_lastClick == null) {           // if we don't have a last click this is the first point of the triangle
 				_polyPoints = new ArrayList<Point2D>();  // initialize the point list
-				_lastClick = new Point2D(p);    // so we remember it
-				_polyPoints.add(p);
+				_lastClick = new Point2D(p);    // remember this click
+				_polyPoints.add(p);             // and add it to the list
 				return;
-			} else if (_polyPoints.size() == 1) { // if we have a last click but only one point in the list
+			} else if (_polyPoints.size() == 1) { // if we have a last click but only one point in the list (second click)
 				_polyPoints.add(p);               // we add the current point as well
 				return;
 			} else {                              // otherwise we have enough points
@@ -234,17 +235,17 @@ public class Ex4 implements Ex4_GUI {
 		}
 
 		// Edit menu
-		if (_mode.equals("Move")) {
+		if (_mode.equals("Move")) {              // this is also a two click operation
 			if (_lastClick == null) {
 				_lastClick = new Point2D(p);
 				return;
 			} else {
-				Point2D moveVec = new Point2D(p.x() - _lastClick.x(), p.y() - _lastClick.y());
-				moveSelected(moveVec);
-				_lastClick = null;
+				Point2D moveVec = new Point2D(p.x() - _lastClick.x(), p.y() - _lastClick.y());   // create a vector between the clicks
+				moveSelected(moveVec);       // move the selected by the vector
+				_lastClick = null;           // nullify to indicate next click is the first again
 			}
 		}
-		if (_mode.equals("Copy")) {
+		if (_mode.equals("Copy")) {          // same thing as last option
 			if (_lastClick == null) {
 				_lastClick = new Point2D(p);
 				return;
@@ -254,48 +255,45 @@ public class Ex4 implements Ex4_GUI {
 				_lastClick = null;
 			}
 		}
-		if (_mode.equals("Remove")) {
-			removeSelected();
-		}
-		if (_mode.equals("Rotate")) {
+		if (_mode.equals("Rotate")) {   // same thing again
 			if (_lastClick == null) {
 				_lastClick = new Point2D(p);
 				return;
 			} else {
-				Point2D rotateVector = _lastClick.vector(p);
+				Point2D rotateVector = _lastClick.vector(p);                  // except here we need to calculate the rotation angle by the vector
 				double rotateAngleDegrees = rotateVector.angleDegrees();
-				rotateSelected(_lastClick, rotateAngleDegrees);
+				rotateSelected(_lastClick, rotateAngleDegrees);       // and rotate around the first click
 				_lastClick = null;
 			}
 		}
-		if (_mode.equals("Scale_90%")) {
+		if (_mode.equals("Scale_90%")) {   // the next two options are one click operations with specific values
 			scaleSelected(p, 0.9);
 		}
 		if (_mode.equals("Scale_110%")) {
 			scaleSelected(p, 1.1);
 		}
 
-		drawShapes();
+		drawShapes();   // redraw the shapes after the update
 	}
-	public void mouseRightClicked(Point2D p) {
-		if (_polyPoints == null) {
-			cancelShape();
-			drawShapes();
-			if (DEBUG) {
+	public void mouseRightClicked(Point2D p) {       // this is for finalizing a polygon, or cancelling a shape
+		if (_polyPoints == null) {                   // if we are not currently drawing a polygon
+			cancelShape();                           // cancel the current shape
+			drawShapes();                            // redraw shapes
+			if (DEBUG) {            // for debugging, draw the bounding box
 				Rect2D boundingBox = _shapes.getBoundingBox();
 				GUI_Shapeable gBoundingBox = new GUIShape(boundingBox, false, Color.RED, -1);
 				_shapes.add(gBoundingBox);
 			}
-			return;
+			return;  // return, the rest is for polygon
 		}
-		int numPoints = _polyPoints.size();
-		if (numPoints < 2) {
-			cancelShape();
+		int numPoints = _polyPoints.size();     // get the number of points in the polygon
+		if (numPoints < 2) {         // less than 2 is too few to create a shape
+			cancelShape();           // so cancel it
 			return;
-		} else if (numPoints < 3) {
-			_previewShape.setShape(new Segment2D(_polyPoints.get(0), _polyPoints.get(1)));
-		} else if (numPoints < 3) {
-			_previewShape.setShape(new Triangle2D(_polyPoints.get(0), _polyPoints.get(1), _polyPoints.get(2)));
+		} else if (numPoints < 3) {  // less than 3 means we have a segment
+			_previewShape.setShape(new Segment2D(_polyPoints.get(0), _polyPoints.get(1)));   // so we set the preview shape to a segment with the points
+		} else if (numPoints < 4) {  // less than 4 means we have a triangle
+			_previewShape.setShape(new Triangle2D(_polyPoints.get(0), _polyPoints.get(1), _polyPoints.get(2)));  // set the preview shape to a triangle
 		} else {
 			_previewShape.setShape(new Polygon2D(_polyPoints.toArray(new Point2D[0])));   // set the preview shape as a new polygon with the point list, this removes the current mouse position since it is not needed
 		}
@@ -305,24 +303,24 @@ public class Ex4 implements Ex4_GUI {
 	}
 	
 	private void selectUnderPoint(Point2D p) {
-		for(int i = 0; i < _shapes.size(); ++i) {
-			GUI_Shapeable s = _shapes.get(i);
-			GeoShapeable g = s.getShape();
-			if (g != null && g.contains(p)) {
-				s.setSelected(!s.isSelected());
+		for(int i = 0; i < _shapes.size(); ++i) {   // iterate on the shapes
+			GUI_Shapeable s = _shapes.get(i);                // get each GUIShape
+			GeoShapeable g = _shapes.get(i).getShape();      // and its GeoShapeable
+			if (g != null && g.contains(p)) {     // if the GeoShapeable contains the point
+				s.setSelected(!s.isSelected());   // reverse the GUIShape's selection
 			}
 		}
 	}
 	private void moveSelected(Point2D moveVec) {
-		for (int i = 0; i < _shapes.size(); ++i) {
-			GUI_Shapeable s = _shapes.get(i);
+		for (int i = 0; i < _shapes.size(); ++i) {  // iterate on the shapes
+			GUI_Shapeable s = _shapes.get(i);       // get both kinds
 			GeoShapeable g = s.getShape();
-			if (s.isSelected() && g != null) {
-				g.move(moveVec);
+			if (s.isSelected() && g != null) {   // if it is selected
+				g.move(moveVec);   // move by the provided vector
 			}
 		}
 	}
-	private void scaleSelected(Point2D center, double ratio) {
+	private void scaleSelected(Point2D center, double ratio) {   // same thing as last function with different paramteres
 		for (int i = 0; i < _shapes.size(); ++i) {
 			GUI_Shapeable s = _shapes.get(i);
 			GeoShapeable g = s.getShape();
@@ -331,7 +329,7 @@ public class Ex4 implements Ex4_GUI {
 			}
 		}
 	}
-	private void rotateSelected(Point2D center, double angleDegrees) {
+	private void rotateSelected(Point2D center, double angleDegrees) {  // same thing as last function
 		for (int i = 0; i < _shapes.size(); ++i) {
 			GUI_Shapeable s = _shapes.get(i);
 			GeoShapeable g = s.getShape();
@@ -348,14 +346,14 @@ public class Ex4 implements Ex4_GUI {
 			}
 		}
 	}
-	private void copySelected(Point2D moveVec) {
+	private void copySelected(Point2D moveVec) {     // copy creates a copy and moves it by the vector
 		for (int i = 0; i < _shapes.size(); ++i) {
 			GUI_Shapeable s = _shapes.get(i);
 			GeoShapeable g = s.getShape();
-			if (s.isSelected() && g != null) {
-				GUI_Shapeable copy = s.copy();
-				copy.getShape().move(moveVec);
-				_shapes.add(copy);
+			if (s.isSelected() && g != null) {   // for each selected shape
+				GUI_Shapeable copy = s.copy();   // create a copy
+				copy.getShape().move(moveVec);   // move it
+				_shapes.add(copy);               // add it to the canvas
 			}
 		}
 	}
@@ -370,7 +368,7 @@ public class Ex4 implements Ex4_GUI {
 		if (DEBUG) {                                    // debug mode operations
 			for (int i = 0; i < _shapes.size(); ++i) {  // fill shapes with mouse on them
 				GUI_Shapeable gs = _shapes.get(i);
-				if (gs.getTag() != -1) gs.setFilled(gs.getShape().contains(p));
+				if (gs.getTag() != -1) gs.setFilled(gs.getShape().contains(p)); // tag -1 is for the bounding box, filling it would cover everything
 			}
 			drawShapes();
 		}
@@ -388,15 +386,15 @@ public class Ex4 implements Ex4_GUI {
 		}
 		if (_mode.equals("Polygon")) {
 			assert _previewShape instanceof Polygon2D : "Preview shape is not polygon in mode Polygon";    
-			Point2D[] previewPoints = new Point2D[_polyPoints.size() + 1];
-			System.arraycopy(_polyPoints.toArray(), 0, previewPoints, 0, _polyPoints.size());
+			Point2D[] previewPoints = new Point2D[_polyPoints.size() + 1];   // the points for the preview polygon are the save points with the current mouse position
+			System.arraycopy(_polyPoints.toArray(), 0, previewPoints, 0, _polyPoints.size());   // copy the save points
 			previewPoints[_polyPoints.size()] = p;                                  // add the current mouse position, note that inside previewPoly is a shallow copy of _polyPoints, so the point is not added to the list
-			_previewShape.setShape(new Polygon2D(previewPoints));                      // set the preview shape as the preview poly
+			_previewShape.setShape(new Polygon2D(previewPoints));                   // set the preview shape as the preview poly
 		}
 		if (_mode.equals("Triangle")) {                               // if we are drawing a triangle
 			if (_polyPoints.size() == 1) {                            // and have only one point so far
 				_previewShape.setShape(new Segment2D(_lastClick, p)); // set the preview as a segment from last click to mouse position, indicating the first line of the triangle
-			} else if (_polyPoints.size() > 1) {                      // otherwise (and if we have more than one poitn) we have enough points to preview a triangle (including the current mouse position)
+			} else if (_polyPoints.size() > 1) {                      // otherwise (and if we have more than one point) we have enough points to preview a triangle (including the current mouse position)
 				_previewShape.setShape(new Triangle2D(_polyPoints.get(0), _polyPoints.get(1), p));  
 			}
 		}
@@ -414,32 +412,38 @@ public class Ex4 implements Ex4_GUI {
 		return _shapes.toString();
 	}
 	/**
-	 * This function adds a GUI shape to the canvas's collection
-	 * @param g the Geo shape represented in the GUI shape
+	 * This function adds the preview shape to the canvas's collection
 	 */
 	private void finalizeShape() {
-		assert _previewShape != null : "Trying to finalize null shape";
-		GUI_Shapeable newShape = _previewShape.copy();
-		newShape.setColor(_color);
+		assert _previewShape != null : "Trying to finalize null shape";  // make sure we have a shape
+		GUI_Shapeable newShape = _previewShape.copy();     // create a copy of it (_previewShape is a resereved variable and not to be tampered with)
+		newShape.setColor(_color);          // set its parameters based on current values
 		newShape.setFilled(_fill);
-		newShape.setTag(_runningTag++);
-		_shapes.add(newShape);
-		_lastClick = null;
-		_previewShape.setShape(null);
+		newShape.setTag(_runningTag++);     // set the tag and increment the running tag
+		_shapes.add(newShape);              // add the new-born shape to the collection
+		_lastClick = null;                  // nullify last click, whatever just happened, the next click is a new shape
+		_previewShape.setShape(null);       // set the preview GeoShapeable to null to signal that no shape is to be previewed now
 	}
+	/**
+	 * This function cancels the preview shape
+	 */
 	private void cancelShape() {
 		assert _previewShape != null : "Trying to cancel null shape";
-		_lastClick = null;
+		_lastClick = null;               // we just need to nullify last click and the preview GeoShapeable
 		_previewShape.setShape(null);
 	}
-
+	/**
+	 * This function shows the file selection dialog and returns the selected file
+	 * @param mode either SAVE or LOAD, coded as in Ex4
+	 * @return the absolute path to the chosen file
+	 */
 	private String chooseFile(int mode) {
-		FileDialog chooser;
-		if (mode == SAVE)
-			chooser = new FileDialog(new Frame(), "Choose where to save", FileDialog.SAVE);
+		FileDialog chooser;   // create a FileDialog variable
+		if (mode == SAVE)     // depending on the mode
+			chooser = new FileDialog(new Frame(), "Choose where to save", FileDialog.SAVE);  // initialize the FileDialog with appropriate parameters
 		else 
 			chooser = new FileDialog(new Frame(), "Choose file to load", FileDialog.LOAD);
-		chooser.setVisible(true);
-		return chooser.getDirectory() + chooser.getFile();
+		chooser.setVisible(true);    // show the FileDialog
+		return chooser.getDirectory() + chooser.getFile();   // return the absolute path
 	}
 }

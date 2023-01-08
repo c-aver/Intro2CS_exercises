@@ -14,7 +14,7 @@ public class Triangle2DTest {
     Triangle2D tri;
 
 
-    static Triangle2D randTri() {
+    public static Triangle2D randTri() {
         Point2D p1 = Point2DTest.randPoint(), p2 = Point2DTest.randPoint(), p3 = Point2DTest.randPoint();
         return new Triangle2D(p1, p2, p3);
     }

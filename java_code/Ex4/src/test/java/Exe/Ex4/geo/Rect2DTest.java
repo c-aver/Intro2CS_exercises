@@ -13,7 +13,7 @@ import org.junit.jupiter.api.RepeatedTest;
 public class Rect2DTest {
     Rect2D rect;
 
-    static Rect2D randRect() {
+    public static Rect2D randRect() {
         Point2D p1 = Point2DTest.randPoint();
         Point2D p2 = Point2DTest.randPoint();
         Rect2D rect = new Rect2D(p1, p2);

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.RepeatedTest;
 public class Polygon2DTest {
     Polygon2D poly = null;
 
-    static Polygon2D randPoly() {
+    public static Polygon2D randPoly() {
         int sides = (int) (Math.random() * 10) + 3;
         Point2D[] ps = new Point2D[sides];
         for (int i = 0; i < sides; ++i) {

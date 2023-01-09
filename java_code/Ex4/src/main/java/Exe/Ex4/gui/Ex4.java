@@ -360,13 +360,15 @@ public class Ex4 implements Ex4_GUI {
 		}
 	}
 	
-	public void mouseMoved(MouseEvent e) {
+	public void mouseMoved(MouseEvent e) { mouseMoved(e, null); }   // for backwards compatability
+
+	public void mouseMoved(MouseEvent e, Point2D override) {   // override is for using my own point instead of StdDraw's
 	//	System.out.println("M: "+x+","+y);              // debug info, don't use unnecessarily as it creates a lot of trash in stdout
 
 		double x = StdDraw_Ex4.mouseX();                // save mouse coordinates
 		double y = StdDraw_Ex4.mouseY();
 		Point2D p = new Point2D(x, y);                  // create a point for the current mouse position
-
+		if (override != null) p = (Point2D) override.copy();   
 		if (DEBUG) {                                    // debug mode operations
 			for (int i = 0; i < _shapes.size(); ++i) {  // fill shapes with mouse on them
 				GUI_Shapeable gs = _shapes.get(i);

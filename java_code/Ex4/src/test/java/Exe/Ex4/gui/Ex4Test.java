@@ -5,7 +5,6 @@
 
 package Exe.Ex4.gui;
 
-import Exe.Ex4.Ex4_Const;
 import Exe.Ex4.GUIShapeTest;
 import Exe.Ex4.GUI_Shapeable;
 import Exe.Ex4.ShapeCollection;
@@ -14,6 +13,7 @@ import Exe.Ex4.TestConsts;
 import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Point2DTest;
+import Exe.Ex4.geo.Polygon2D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,8 +24,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 
 import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.Button;
 
 /* TODO:
  * To test:
@@ -43,14 +41,8 @@ import java.awt.Button;
 public class Ex4Test {
     Ex4 ex4;
 
-    // Stolen for StdDraw_Ex4 to create MouseEvent
-    // "Hard-coded" the constants and parameters
-	private static double  scaleX(double x) { return 640 * (x - 0) / (Ex4_Const.DIM_SIZE - 0); }
-	private static double  scaleY(double y) { return 640 * (y - 0) / (Ex4_Const.DIM_SIZE - 0); }
-
     private void moveMouseTo(Point2D p) {
-        MouseEvent ev = new MouseEvent(new Button(), MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, (int) scaleX(p.x()), (int) scaleY(p.y()), 0, false);  // TODO: wrong x and y values
-        ex4.mouseMoved(ev);
+        ex4.mouseMoved(null, p);   // call mouseMoved but with override p
     }
 
     private void randInit() {
@@ -149,6 +141,7 @@ public class Ex4Test {
             moveMouseTo(p);
             ex4.mouseClicked(p);
         }
+        if (sh.getShape() instanceof Polygon2D) ex4.mouseRightClicked(new Point2D(0, 0));
         assertEquals(sh, ex4.getShape_Collection().get(ex4.getShape_Collection().size() - 1), "Drawn shape is not the last in the colllection");
     }
 

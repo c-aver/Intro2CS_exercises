@@ -14,6 +14,7 @@ import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Point2DTest;
 import Exe.Ex4.geo.Polygon2D;
+import Exe.Ex4.geo.Triangle2D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -134,7 +135,7 @@ public class Ex4Test {
     void testDrawShape() {
         GUI_Shapeable sh = GUIShapeTest.randGuiShape(false);  // we do not allow a rotated rectangle since it cannot be drawn (directly)
         sh.setTag(ex4.getShape_Collection().size() + 1);  // this should be the next tag
-        sh.setColor(setRandColor());   // since randGuiShape gives illegal colors as well
+        sh.setColor(setRandColor());   // since randGuiShape gives illegal colors as well, we set the shape's color according to the passed color (this is not cheating)
         setFill(sh.isFilled());
         setShape(sh.getShape().getClass());
         for (Point2D p : sh.getShape().getPoints()) {
@@ -142,7 +143,12 @@ public class Ex4Test {
             ex4.mouseClicked(p);
         }
         if (sh.getShape() instanceof Polygon2D) ex4.mouseRightClicked(new Point2D(0, 0));
-        assertEquals(sh, ex4.getShape_Collection().get(ex4.getShape_Collection().size() - 1), "Drawn shape is not the last in the colllection");
+        GUI_Shapeable expectedShape = sh.copy();
+        if (sh.getShape() instanceof Polygon2D && sh.getShape().getPoints().length == 3) {   // in this case we actually expect a triangle
+            Point2D[] ps = sh.getShape().getPoints();
+            expectedShape.setShape(new Triangle2D(ps[0], ps[1], ps[2]));
+        }
+        assertEquals(expectedShape, ex4.getShape_Collection().get(ex4.getShape_Collection().size() - 1), "Drawn shape is not the last in the colllection");
     }
 
     void setColor(Color c) {

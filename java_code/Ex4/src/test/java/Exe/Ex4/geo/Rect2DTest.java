@@ -13,11 +13,11 @@ import org.junit.jupiter.api.RepeatedTest;
 public class Rect2DTest {
     Rect2D rect;
 
-    public static Rect2D randRect() {
+    public static Rect2D randRect(boolean allowRotatedRect) {
         Point2D p1 = Point2DTest.randPoint();
         Point2D p2 = Point2DTest.randPoint();
         Rect2D rect = new Rect2D(p1, p2);
-        if (Math.random() < 0.5) {      // a certain chance for the rectangle to be not axis parallel
+        if (allowRotatedRect && Math.random() < 0.5) {      // a certain chance for the rectangle to be not axis parallel
             double angleDegrees = Math.random() * 360;
             Point2D cen = Point2DTest.randPoint();
             rect.rotate(cen, angleDegrees);
@@ -27,7 +27,7 @@ public class Rect2DTest {
 
     @BeforeEach
     void beforeEach() {
-        rect = randRect();
+        rect = randRect(true);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

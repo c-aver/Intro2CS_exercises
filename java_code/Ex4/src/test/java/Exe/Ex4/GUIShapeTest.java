@@ -24,8 +24,8 @@ import Exe.Ex4.geo.Triangle2D;
 public class GUIShapeTest {
     GUIShape sh;
 
-    public static GUIShape randGuiShape() {
-        GeoShapeable gs = GeoShapeableTest.randShape();
+    public static GUIShape randGuiShape(boolean allowRotatedRect) {
+        GeoShapeable gs = GeoShapeableTest.randShape(allowRotatedRect);
         
         boolean fill = Math.random() < 0.5;
         Color c = new Color((float) Math.random(), (float) Math.random(), (float) Math.random());
@@ -34,7 +34,7 @@ public class GUIShapeTest {
 
     @BeforeEach
     void beforeEach() {
-        sh = randGuiShape();
+        sh = randGuiShape(true);
     }
 
     @RepeatedTest(TestConsts.TESTS)

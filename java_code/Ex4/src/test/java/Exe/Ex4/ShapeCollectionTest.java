@@ -10,11 +10,11 @@ import org.junit.jupiter.api.RepeatedTest;
 public class ShapeCollectionTest {
     ShapeCollection col;
 
-    public static ShapeCollection randShapeCollection() {
+    public static ShapeCollection randShapeCollection(boolean allowRotatedRect) {
         ShapeCollection ans = new ShapeCollection();
         int num = (int) (Math.random() * 17);
         for (int i = 0; i < num; ++i) {
-            ans.add(GUIShapeTest.randGuiShape());
+            ans.add(GUIShapeTest.randGuiShape(allowRotatedRect));
         }
         return ans;
     }

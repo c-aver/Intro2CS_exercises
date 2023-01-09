@@ -46,7 +46,7 @@ public class Ex4Test {
     // Stolen for StdDraw_Ex4 to create MouseEvent
     // "Hard-coded" the constants and parameters
 	private static double  scaleX(double x) { return 640 * (x - 0) / (Ex4_Const.DIM_SIZE - 0); }
-	private static double  scaleY(double y) { return 640 * (Ex4_Const.DIM_SIZE - y) / (Ex4_Const.DIM_SIZE - 0); }
+	private static double  scaleY(double y) { return 640 * (y - 0) / (Ex4_Const.DIM_SIZE - 0); }
 
     private void moveMouseTo(Point2D p) {
         MouseEvent ev = new MouseEvent(new Button(), MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, (int) scaleX(p.x()), (int) scaleY(p.y()), 0, false);  // TODO: wrong x and y values
@@ -55,7 +55,7 @@ public class Ex4Test {
 
     private void randInit() {
         ex4 = Ex4.getInstance();
-        ShapeCollection col = ShapeCollectionTest.randShapeCollection();
+        ShapeCollection col = ShapeCollectionTest.randShapeCollection(true);
         for (int i = 0; i < col.size(); ++i) {
             col.get(i).setSelected(Math.random() < 0.5);
         }
@@ -140,7 +140,7 @@ public class Ex4Test {
 
     @RepeatedTest(TestConsts.TESTS)
     void testDrawShape() {
-        GUI_Shapeable sh = GUIShapeTest.randGuiShape();
+        GUI_Shapeable sh = GUIShapeTest.randGuiShape(false);  // we do not allow a rotated rectangle since it cannot be drawn (directly)
         sh.setTag(ex4.getShape_Collection().size() + 1);  // this should be the next tag
         sh.setColor(setRandColor());   // since randGuiShape gives illegal colors as well
         setFill(sh.isFilled());

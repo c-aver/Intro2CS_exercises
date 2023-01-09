@@ -386,9 +386,7 @@ public class Ex4 implements Ex4_GUI {
 		if (_mode.equals("Rect")) {
 			_previewShape.setShape(new Rect2D(_lastClick, p));
 		}
-		if (_mode.equals("Polygon")) {
-			assert _previewShape instanceof Polygon2D : "Preview shape is not polygon in mode Polygon";    
-			Point2D[] previewPoints = new Point2D[_polyPoints.size() + 1];   // the points for the preview polygon are the save points with the current mouse position
+		if (_mode.equals("Polygon")) {Point2D[] previewPoints = new Point2D[_polyPoints.size() + 1];   // the points for the preview polygon are the save points with the current mouse position
 			System.arraycopy(_polyPoints.toArray(), 0, previewPoints, 0, _polyPoints.size());   // copy the save points
 			previewPoints[_polyPoints.size()] = p;                                  // add the current mouse position, note that inside previewPoly is a shallow copy of _polyPoints, so the point is not added to the list
 			_previewShape.setShape(new Polygon2D(previewPoints));                   // set the preview shape as the preview poly

@@ -19,8 +19,8 @@ public class ShapeCompTest {
     
     @BeforeEach
     void beforeEach() {
-        g1 = GUIShapeTest.randGuiShape();
-        g2 = GUIShapeTest.randGuiShape();
+        g1 = GUIShapeTest.randGuiShape(true);
+        g2 = GUIShapeTest.randGuiShape(true);
         if (Math.random() < 1/3)   // add a certain chance for the object to be (shallowly) equal
             g2 = g1.copy();
     }

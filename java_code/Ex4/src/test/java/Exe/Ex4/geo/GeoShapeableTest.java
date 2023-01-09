@@ -204,7 +204,7 @@ public class GeoShapeableTest {
         assertEquals(geo, copy, "Shape should be equal to its copy"); // this uses the overloaded equals method and thus tests it
     }
 
-    public static GeoShapeable randShape() {
+    public static GeoShapeable randShape(boolean allowRotatedRect) {
         int type = (int) (Math.random() * 5);
         switch (type) {
             case 0:
@@ -214,7 +214,7 @@ public class GeoShapeableTest {
             case 2:
                 return Circle2DTest.randCircle();
             case 3:
-                return Rect2DTest.randRect();
+                return Rect2DTest.randRect(allowRotatedRect);
             case 4:
                 return Triangle2DTest.randTri();
             default:

@@ -3,9 +3,6 @@
  * ID: 207486473
  */
 
-/*
- * This library contains tests that are common among all GeoShapeables.
- */
 
 package Exe.Ex4.geo;
 
@@ -22,6 +19,9 @@ import Exe.Ex4.gui.Ex4;
 
 import java.awt.Color;
 
+/*
+ * This library contains tests that are common among all GeoShapeables.
+ */
 public class GeoShapeableTest {
     static Rect2D boundingBox(GeoShapeable geo) {
         ShapeCollectionable coll = new ShapeCollection();

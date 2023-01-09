@@ -53,8 +53,6 @@ public class ShapeCollectionTest {
         for (int i = 0; i < col.size(); ++i) {
             GUI_Shapeable sh = col.get(i);
             for (Point2D p : sh.getShape().getPoints()) {
-                // TODO: fails because Polygon2D.contains is wrong when point is on edges of mesh triangles
-                // This mostly happens for circle center
                 assertTrue(boundingBox.contains(p), "Shape point is not contained in bounding box");
             }
         }

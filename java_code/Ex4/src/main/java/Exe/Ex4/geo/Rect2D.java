@@ -70,7 +70,18 @@ public class Rect2D implements GeoShapeable {
 
 	@Override
 	public boolean contains(Point2D ot) {
-		return toPoly().contains(ot);
+		// This work under a very similar concept to Triangle2D.contains, only difference is that the distances to compare to are the side lengths
+		double l12 = _p1.distance(_p2);
+		double l23 = _p2.distance(_p3);
+		double d12 = ot.distance(new Segment2D(_p1, _p2));
+		double d23 = ot.distance(new Segment2D(_p2, _p3));
+		double d34 = ot.distance(new Segment2D(_p3, _p4));
+		double d14 = ot.distance(new Segment2D(_p1, _p4));
+		boolean closerTo12 = d12 <= l23 + Ex4_Const.EPS;
+		boolean closerTo23 = d23 <= l12 + Ex4_Const.EPS;
+		boolean closerTo34 = d34 <= l23 + Ex4_Const.EPS;
+		boolean closerTo14 = d14 <= l12 + Ex4_Const.EPS;
+		return closerTo12 && closerTo23 && closerTo34 && closerTo14;
 	}
 
 	@Override

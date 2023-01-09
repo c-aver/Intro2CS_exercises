@@ -9,11 +9,13 @@ import Exe.Ex4.GUIShapeTest;
 import Exe.Ex4.GUI_Shapeable;
 import Exe.Ex4.ShapeCollection;
 import Exe.Ex4.ShapeCollectionTest;
+import Exe.Ex4.ShapeCollectionable;
 import Exe.Ex4.TestConsts;
 import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Point2DTest;
 import Exe.Ex4.geo.Polygon2D;
+import Exe.Ex4.geo.ShapeComp;
 import Exe.Ex4.geo.Triangle2D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,13 +27,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 
 import java.awt.Color;
+import java.util.Comparator;
 
 /* TODO:
  * To test:
  * Load, save
- * New shape colored drawing, filled/unfilled drawing
  * Move, copy, remove, rotate, scale 90%, scale 110%
- * Segment drawing, circle drawing, rect drawing, triangle drawing, polygon drawing
  * Sort by tag, antitag, area, antiarea, perimeter, antiperimter, tostring, antitostring
  * 
  */
@@ -195,6 +196,30 @@ public class Ex4Test {
             if (sh.isSelected()) {
                 assertEquals(fill, sh.isFilled(), "Selected shape not properly filled");
             }
+        }
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testSorts() {   // note: this only tests that ex4 sorts the shapes, it does not test the comparators
+        String[] allowedSorts = new String[] { "Area", "Perimeter", "ToString", "Tag" };
+        String randSort = allowedSorts[(int) (Math.random() * allowedSorts.length)];
+        boolean anti = Math.random() < 0.5;
+        String action = (anti ? "ByAnti" : "By") + randSort;
+        ex4.actionPerformed(action);
+        ShapeCollectionable col = ex4.getShape_Collection();
+        Comparator<GUI_Shapeable> expectedComp = null;
+        switch (action) {
+            case "ByArea": expectedComp = ShapeComp.CompByArea;                   break;
+            case "ByPerimeter": expectedComp = ShapeComp.CompByPerimeter;         break;
+            case "ByToString": expectedComp = ShapeComp.CompByToString;           break;
+            case "ByTag": expectedComp = ShapeComp.CompByTag;                     break;
+            case "ByAntiArea": expectedComp = ShapeComp.CompByAntiArea;           break;
+            case "ByAntiPerimeter": expectedComp = ShapeComp.CompByAntiPerimeter; break;
+            case "ByAntiToString": expectedComp = ShapeComp.CompByAntiToString;   break;
+            case "ByAntiTag": expectedComp = ShapeComp.CompByAntiTag;             break;
+        }
+        for (int i = 0; i < col.size() - 1; ++i) {
+            assertTrue(expectedComp.compare(col.get(i), col.get(i + 1)) < 0);
         }
     }
 }

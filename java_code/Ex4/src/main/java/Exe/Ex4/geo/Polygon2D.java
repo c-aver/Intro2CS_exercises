@@ -77,6 +77,7 @@ public class Polygon2D implements GeoShapeable {
 
 	@Override
 	public double area() {
+		if (_points.length == 2) return 0;
 		// this uses the method described in https://en.wikipedia.org/wiki/Polygon#Simple_polygons
 		double res = 0;
 		for (int i = 0; i < _points.length; ++i) {

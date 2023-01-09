@@ -7,7 +7,8 @@
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,31 +17,51 @@ import org.junit.jupiter.api.RepeatedTest;
 public class Polygon2DTest {
     Polygon2D poly = null;
 
-    public static Polygon2D randPoly() {
-        int sides = (int) (Math.random() * 10) + 3;
-        Point2D[] ps = new Point2D[sides];
-        for (int i = 0; i < sides; ++i) {
-            ps[i] = Point2DTest.randPoint();
-        }
+    public static boolean isPointAbove(Point2D p, Segment2D line) {
+        Point2D p1 = line.getPoints()[0], p2 = line.getPoints()[1];
+        double slope = (p1.y() - p2.y()) / (p1.x() - p2.x());
+        double yIntercept = p1.y() - slope * p1.x();
+        double yUnderPoint = p.x() * slope + yIntercept;
+        return p.y() > yUnderPoint;
+    }
 
-        Point2D cen = ps[0];
-        Comparator<Point2D> angleComp = new Comparator<Point2D>() {
+    public static Polygon2D randPoly() {
+        // Requirement: Non-selfintersecting polygon
+        // Concept: Take the two extreme points on the x-axis and draw a line between them
+        // Divide all other points to points below and above the line
+        // Sort one group by x values ascending and the other descending
+        // Connect a line by the sorting order, using the extreme points to switch between groups
+        int sides = (int) (Math.random() * 10) + 3;
+        ArrayList<Point2D> ps = new ArrayList<Point2D>();
+        for (int i = 0; i < sides; ++i) {
+            ps.add(Point2DTest.randPoint());
+        }
+        Comparator<Point2D> xComp = new Comparator<Point2D>() {
             @Override
             public int compare(Point2D p1, Point2D p2) {
-                if (p1 == cen) return Integer.MAX_VALUE;
-                Point2D vec1 = cen.vector(p1);
-                Point2D vec2 = cen.vector(p2);
-                return Double.compare(vec1.angleDegrees(), vec2.angleDegrees());
+                return Double.compare(p1.x(), p2.x());
             }
         };
+        Point2D minP = Collections.min(ps, xComp);
+        Point2D maxP = Collections.max(ps, xComp);
+        Segment2D divLine = new Segment2D(minP, maxP);
+        ArrayList<Point2D> above = new ArrayList<Point2D>(), below = new ArrayList<Point2D>();
+        for (Point2D p : ps) {
+            if (p == maxP || p == minP) continue;
+            if (isPointAbove(p, divLine)) above.add(p);
+            else below.add(p);
+        }
+        Collections.sort(below, xComp);
+        Collections.sort(above, xComp);
+        Collections.reverse(above);
 
-        //GeoShapeableTest.showShape(new Polygon2D(ps));
+        ArrayList<Point2D> finalPoints = new ArrayList<Point2D>();
+        finalPoints.add(minP);
+        finalPoints.addAll(below);
+        finalPoints.add(maxP);
+        finalPoints.addAll(above);
 
-        Arrays.sort(ps, angleComp);
-
-        //GeoShapeableTest.showShape(new Polygon2D(ps));
-
-        return new Polygon2D(ps);
+        return new Polygon2D(finalPoints.toArray(new Point2D[0]));
     }
 
     @BeforeEach
@@ -50,7 +71,7 @@ public class Polygon2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        GeoShapeableTest.testArea(poly);  // TODO: this fails
+        GeoShapeableTest.testArea(poly);  // TODO: this fails because of self-intersecting random polygons
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

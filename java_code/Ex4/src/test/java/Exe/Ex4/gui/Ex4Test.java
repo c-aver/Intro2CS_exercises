@@ -11,6 +11,7 @@ import Exe.Ex4.ShapeCollection;
 import Exe.Ex4.ShapeCollectionTest;
 import Exe.Ex4.ShapeCollectionable;
 import Exe.Ex4.TestConsts;
+
 import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Point2DTest;
@@ -29,11 +30,6 @@ import org.junit.jupiter.api.RepeatedTest;
 import java.awt.Color;
 import java.util.Comparator;
 
-/* TODO:
- * To test:
- * Load, save
- * Move, copy, remove, rotate, scale 90%, scale 110%
- */
 /**
  * Note: this class does not test the specific methods in Ex4, instead it tests functionalities.
  * This is because the methods are very interconnected, and it is somewhat weird to test only mouseMoved, for example.
@@ -218,6 +214,104 @@ public class Ex4Test {
         }
         for (int i = 0; i < col.size() - 1; ++i) {
             assertTrue(expectedComp.compare(col.get(i), col.get(i + 1)) < 0);
+        }
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testRemove() {
+        int numSelected = 0;
+        int numTotal = ex4.getShape_Collection().size();
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            if (ex4.getShape_Collection().get(i).isSelected()) {
+                numSelected += 1;
+            }
+        } 
+        ex4.actionPerformed("Remove");
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            assertFalse(ex4.getShape_Collection().get(i).isSelected(), "Selected shape remained after Remove");
+        }
+        assertEquals(numTotal - numSelected, ex4.getShape_Collection().size(), "Shape collection size changed incorrectly");
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testCopy() {
+        int numSelected = 0;
+        int numTotal = ex4.getShape_Collection().size();
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            if (ex4.getShape_Collection().get(i).isSelected()) {
+                numSelected += 1;
+            }
+        } 
+        ex4.actionPerformed("Copy");
+        ex4.mouseClicked(Point2D.ORIGIN);
+        ex4.mouseClicked(Point2D.ORIGIN);
+        assertEquals(numTotal + numSelected, ex4.getShape_Collection().size(), "Shape collection size changed incorrectly");
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testMove() {
+        Point2D p1 = Point2DTest.randPoint(), p2 = Point2DTest.randPoint();
+        Point2D moveVec = p1.vector(p2);
+        ShapeCollectionable expected = ex4.getShape_Collection().copy();
+        for (int i = 0; i < expected.size(); ++i) {
+            if (expected.get(i).isSelected()) {
+                expected.get(i).getShape().move(moveVec);
+            }
+        }
+        ex4.actionPerformed("Move");
+        ex4.mouseClicked(p1);
+        ex4.mouseClicked(p2);
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            assertEquals(expected.get(i), ex4.getShape_Collection().get(i), (ex4.getShape_Collection().get(i).isSelected() ? "Selected shape didn't move correctly" : "Not selected shape moved"));
+        }
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testRotate() {
+        Point2D p1 = Point2DTest.randPoint(), p2 = Point2DTest.randPoint();
+        double angleDegrees = p1.vector(p2).angleDegrees();
+        ShapeCollectionable expected = ex4.getShape_Collection().copy();
+        for (int i = 0; i < expected.size(); ++i) {
+            if (expected.get(i).isSelected()) {
+                expected.get(i).getShape().rotate(p1, angleDegrees);
+            }
+        }
+        ex4.actionPerformed("Rotate");
+        ex4.mouseClicked(p1);
+        ex4.mouseClicked(p2);
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            assertEquals(expected.get(i), ex4.getShape_Collection().get(i), (ex4.getShape_Collection().get(i).isSelected() ? "Selected shape didn't move correctly" : "Not selected shape moved"));
+        }
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testScale90() {
+        Point2D p1 = Point2DTest.randPoint();
+        ShapeCollectionable expected = ex4.getShape_Collection().copy();
+        for (int i = 0; i < expected.size(); ++i) {
+            if (expected.get(i).isSelected()) {
+                expected.get(i).getShape().scale(p1, 0.9);
+            }
+        }
+        ex4.actionPerformed("Scale_90%");
+        ex4.mouseClicked(p1);
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            assertEquals(expected.get(i), ex4.getShape_Collection().get(i), (ex4.getShape_Collection().get(i).isSelected() ? "Selected shape didn't move correctly" : "Not selected shape moved"));
+        }
+    }
+    @RepeatedTest(TestConsts.TESTS)
+    void testScale110() {
+        Point2D p1 = Point2DTest.randPoint();
+        ShapeCollectionable expected = ex4.getShape_Collection().copy();
+        for (int i = 0; i < expected.size(); ++i) {
+            if (expected.get(i).isSelected()) {
+                expected.get(i).getShape().scale(p1, 1.1);
+            }
+        }
+        ex4.actionPerformed("Scale_110%");
+        ex4.mouseClicked(p1);
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            assertEquals(expected.get(i), ex4.getShape_Collection().get(i), (ex4.getShape_Collection().get(i).isSelected() ? "Selected shape didn't move correctly" : "Not selected shape moved"));
         }
     }
 }

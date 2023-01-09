@@ -71,7 +71,7 @@ public class Polygon2DTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testArea() {
-        GeoShapeableTest.testArea(poly);  // TODO: this fails because of self-intersecting random polygons
+        GeoShapeableTest.testArea(poly);
     }
 
     @RepeatedTest(GeoTestConsts.TESTS)

@@ -8,32 +8,19 @@
 import org.junit.jupiter.api.RepeatedTest;
 
 public class ShapeCollectionTest {
-    @RepeatedTest(TestConsts.TESTS)
-    void testAdd() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
+    ShapeCollection col;
 
-    @RepeatedTest(TestConsts.TESTS)
-    void testAddAll() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
-
-    @RepeatedTest(TestConsts.TESTS)
-    void testAddAt() {
-        // TODO: implement
-        assert false : "Not implemented";
+    public static ShapeCollection randShapeCollection() {
+        ShapeCollection ans = new ShapeCollection();
+        int num = (int) (Math.random() * 17);
+        for (int i = 0; i < num; ++i) {
+            ans.add(GUIShapeTest.randGuiShape());
+        }
+        return ans;
     }
 
     @RepeatedTest(TestConsts.TESTS)
     void testCopy() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
-
-    @RepeatedTest(TestConsts.TESTS)
-    void testGet() {
         // TODO: implement
         assert false : "Not implemented";
     }
@@ -51,25 +38,7 @@ public class ShapeCollectionTest {
     }
 
     @RepeatedTest(TestConsts.TESTS)
-    void testRemoveAll() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
-
-    @RepeatedTest(TestConsts.TESTS)
-    void testRemoveElementAt() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
-
-    @RepeatedTest(TestConsts.TESTS)
     void testSave() {
-        // TODO: implement
-        assert false : "Not implemented";
-    }
-
-    @RepeatedTest(TestConsts.TESTS)
-    void testSize() {
         // TODO: implement
         assert false : "Not implemented";
     }

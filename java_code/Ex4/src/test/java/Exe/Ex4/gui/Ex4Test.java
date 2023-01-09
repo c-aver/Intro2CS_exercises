@@ -19,12 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
-import org.w3c.dom.events.MouseEvent;
+
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.Component;
 
 /*
  * To test:
- * Clear, load, save
- * Colored drawing, filled/unfilled drawing
+ * Load, save
+ * New shape colored drawing, filled/unfilled drawing
  * Move, copy, remove, rotate, scale 90%, scale 110%
  * Segment drawing, circle drawing, rect drawing, triangle drawing, polygon drawing
  * Sort by tag, antitag, area, antiarea, perimeter, antiperimter, tostring, antitostring
@@ -33,9 +36,10 @@ import org.w3c.dom.events.MouseEvent;
 public class Ex4Test {
     Ex4 ex4;
 
-    // private MouseEvent moveMouseTo(Point2D p) {
-    //     MouseEvent ans = new 
-    // }
+    private void moveMouseTo(Point2D p) {
+        MouseEvent ev = new MouseEvent((Component) null, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, p.ix(), p.iy(), 0, false);  // TODO: wrong x and y values
+        ex4.mouseMoved(ev);
+    }
 
     private void randInit() {
         ex4 = Ex4.getInstance();
@@ -102,6 +106,45 @@ public class Ex4Test {
         for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
             GUI_Shapeable sh = ex4.getShape_Collection().get(i);
             assertFalse(sh.isSelected(), "Shape is selected after select none");
+        }
+    }
+
+    private static String colorName(Color c) {
+        if (c.equals(Color.BLUE))   return "Blue"  ;
+		if (c.equals(Color.RED))    return "Red"   ;
+		if (c.equals(Color.GREEN))  return "Green" ;
+		if (c.equals(Color.WHITE))  return "White" ;
+		if (c.equals(Color.BLACK))  return "Black" ;
+		if (c.equals(Color.YELLOW)) return "Yellow";
+        assert false : "Illegal Color provided";
+        return null;
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testColors() {
+        Color[] allowedColors = new Color[] {Color.BLUE, Color.RED, Color.GREEN, Color.WHITE, Color.BLACK, Color.YELLOW};
+        
+        Color randColor = allowedColors[(int) (Math.random() * allowedColors.length)];
+        String randColorName = colorName(randColor);
+        ex4.actionPerformed(randColorName);
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            GUI_Shapeable sh = ex4.getShape_Collection().get(i);
+            if (sh.isSelected()) {
+                assertEquals(randColor, sh.getColor(), "Selected shape not colored");
+            }
+        }
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testFill() {
+        boolean fill = Math.random() < 0.5;
+        String randFillCommand = (fill ? "Fill" : "Empty");
+        ex4.actionPerformed(randFillCommand);
+        for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
+            GUI_Shapeable sh = ex4.getShape_Collection().get(i);
+            if (sh.isSelected()) {
+                assertEquals(fill, sh.isFilled(), "Selected shape not properly filled");
+            }
         }
     }
 }

@@ -2,7 +2,6 @@ package Exe.Ex4;
 import java.util.Comparator;
 
 import Exe.Ex4.geo.Rect2D;
-import Exe.Ex4.GUI_Shapeable;
 
 /**
  * This interface represents a collection of gui_shapes with the following capabilities:
@@ -77,7 +76,7 @@ public interface ShapeCollectionable {
 	public void load(String file);
 
 	/**
-	 * This methods returns the minimal bounding box containing all the shapes in this collection.
+	 * This methods returns the minimal bounding box (axis parallel) containing all the shapes in this collection.
 	 * @return
 	 */
 	 Rect2D getBoundingBox();

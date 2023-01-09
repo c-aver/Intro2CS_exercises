@@ -24,7 +24,7 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.Component;
 
-/*
+/* TODO:
  * To test:
  * Load, save
  * New shape colored drawing, filled/unfilled drawing
@@ -32,6 +32,10 @@ import java.awt.Component;
  * Segment drawing, circle drawing, rect drawing, triangle drawing, polygon drawing
  * Sort by tag, antitag, area, antiarea, perimeter, antiperimter, tostring, antitostring
  * 
+ */
+/**
+ * Note: this class does not test the specific methods in Ex4, instead it tests functionalities.
+ * This is because the method are very interconnected, and it is somewhat weird to test only mouseMoved, for example.
  */
 public class Ex4Test {
     Ex4 ex4;

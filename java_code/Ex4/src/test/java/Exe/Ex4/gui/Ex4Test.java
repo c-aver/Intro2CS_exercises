@@ -5,10 +5,13 @@
 
 package Exe.Ex4.gui;
 
+import Exe.Ex4.Ex4_Const;
+import Exe.Ex4.GUIShapeTest;
 import Exe.Ex4.GUI_Shapeable;
 import Exe.Ex4.ShapeCollection;
 import Exe.Ex4.ShapeCollectionTest;
 import Exe.Ex4.TestConsts;
+import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Point2DTest;
 
@@ -22,7 +25,7 @@ import org.junit.jupiter.api.RepeatedTest;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.awt.Component;
+import java.awt.Button;
 
 /* TODO:
  * To test:
@@ -40,8 +43,13 @@ import java.awt.Component;
 public class Ex4Test {
     Ex4 ex4;
 
+    // Stolen for StdDraw_Ex4 to create MouseEvent
+    // "Hard-coded" the constants and parameters
+	private static double  scaleX(double x) { return 640 * (x - 0) / (Ex4_Const.DIM_SIZE - 0); }
+	private static double  scaleY(double y) { return 640 * (Ex4_Const.DIM_SIZE - y) / (Ex4_Const.DIM_SIZE - 0); }
+
     private void moveMouseTo(Point2D p) {
-        MouseEvent ev = new MouseEvent((Component) null, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, p.ix(), p.iy(), 0, false);  // TODO: wrong x and y values
+        MouseEvent ev = new MouseEvent(new Button(), MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, (int) scaleX(p.x()), (int) scaleY(p.y()), 0, false);  // TODO: wrong x and y values
         ex4.mouseMoved(ev);
     }
 
@@ -124,26 +132,65 @@ public class Ex4Test {
         return null;
     }
 
+    void setShape(Class<? extends GeoShapeable> type) {
+        String className = type.getSimpleName();
+        String action = className.substring(0, className.length() - 2);  // cut the "2D" from the end of the name
+        ex4.actionPerformed(action);
+    }
+
     @RepeatedTest(TestConsts.TESTS)
-    void testColors() {
+    void testDrawShape() {
+        GUI_Shapeable sh = GUIShapeTest.randGuiShape();
+        sh.setTag(ex4.getShape_Collection().size() + 1);  // this should be the next tag
+        sh.setColor(setRandColor());   // since randGuiShape gives illegal colors as well
+        setFill(sh.isFilled());
+        setShape(sh.getShape().getClass());
+        for (Point2D p : sh.getShape().getPoints()) {
+            moveMouseTo(p);
+            ex4.mouseClicked(p);
+        }
+        assertEquals(sh, ex4.getShape_Collection().get(ex4.getShape_Collection().size() - 1), "Drawn shape is not the last in the colllection");
+    }
+
+    void setColor(Color c) {
+        
+        String cName = colorName(c);
+        ex4.actionPerformed(cName);
+    }
+
+    Color setRandColor() {
         Color[] allowedColors = new Color[] {Color.BLUE, Color.RED, Color.GREEN, Color.WHITE, Color.BLACK, Color.YELLOW};
         
         Color randColor = allowedColors[(int) (Math.random() * allowedColors.length)];
-        String randColorName = colorName(randColor);
-        ex4.actionPerformed(randColorName);
+        setColor(randColor);
+        return randColor;
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testColors() {
+        Color col = setRandColor();
         for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
             GUI_Shapeable sh = ex4.getShape_Collection().get(i);
             if (sh.isSelected()) {
-                assertEquals(randColor, sh.getColor(), "Selected shape not colored");
+                assertEquals(col, sh.getColor(), "Selected shape not colored");
             }
         }
     }
 
-    @RepeatedTest(TestConsts.TESTS)
-    void testFill() {
-        boolean fill = Math.random() < 0.5;
+    void setFill(boolean fill) {
         String randFillCommand = (fill ? "Fill" : "Empty");
         ex4.actionPerformed(randFillCommand);
+    }
+
+    boolean setRandFill() {
+        boolean fill = Math.random() < 0.5;
+        setFill(fill);
+        return fill;
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
+    void testFill() {
+        boolean fill = setRandFill();
         for (int i = 0; i < ex4.getShape_Collection().size(); ++i) {
             GUI_Shapeable sh = ex4.getShape_Collection().get(i);
             if (sh.isSelected()) {

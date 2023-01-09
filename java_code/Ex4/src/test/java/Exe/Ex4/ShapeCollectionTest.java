@@ -5,6 +5,10 @@
 
  package Exe.Ex4;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 
 public class ShapeCollectionTest {
@@ -21,10 +25,19 @@ public class ShapeCollectionTest {
         return ans;
     }
 
-    // @RepeatedTest(TestConsts.TESTS)
+    @BeforeEach
+    void beforeEach() {
+        col = randShapeCollection(true);
+    }
+
+    @RepeatedTest(TestConsts.TESTS)
     void testCopy() {
-        // TODO: implement
-        assert false : "Not implemented";
+        ShapeCollection copy = (ShapeCollection) col.copy();
+        assertNotEquals(System.identityHashCode(col), System.identityHashCode(copy), "ShapeCollection copy is shallow");
+        for (int i = 0; i < copy.size(); ++i) {
+            assertEquals(col.get(i), copy.get(i), "ShapeCollection copy elements should be (logically) equal");
+            assertNotEquals(System.identityHashCode(col.get(i)), System.identityHashCode(copy.get(i)), "ShapeCollection copy element is shallowly copied");
+        }
     }
 
     // @RepeatedTest(TestConsts.TESTS)

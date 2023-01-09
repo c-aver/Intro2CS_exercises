@@ -62,7 +62,9 @@ public class ShapeCollection implements ShapeCollectionable{
 	@Override
 	public ShapeCollectionable copy() {
 		ShapeCollection result = new ShapeCollection();
-		result.addAll(this);
+		for (GUI_Shapeable sh : _shapes) {
+			result.add(sh.copy());
+		}
 		return result;
 	}
 

@@ -89,6 +89,7 @@ public class GUIShape implements GUI_Shapeable {
 			_tag = Integer.parseInt(args[3]);
 		} catch (NumberFormatException e) {
 			System.err.println("ERROR: Got wrongly fomatted string for GUIShape initialize: " + e.getMessage());
+			throw e;
 		}
 		String type = args[4];
 		String[] pointStrings = new String[args.length - 5];

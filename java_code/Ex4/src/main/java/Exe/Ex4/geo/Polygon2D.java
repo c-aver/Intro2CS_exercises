@@ -67,7 +67,7 @@ public class Polygon2D implements GeoShapeable {
 	 * (Each triangle the point meets either "moves it" into or out of the polygon.)
 	 */
 	@Override
-	public boolean contains(Point2D ot) {
+	public boolean contains(Point2D ot) {  // TODO: wrong when point is right on mesh borders
 		int hits = 0;
 		for (Triangle2D tri : getMesh()) {
 			if (tri.contains(ot)) hits += 1;

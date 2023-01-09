@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.util.Comparator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +70,7 @@ public class ShapeCollectionTest {
         for (int i = 0; i < col.size(); ++i) {
             assertEquals(copy.get(i), col.get(i), "Didn't load correct shape");
         }
-
+        new File("Saves/Test_Save").delete();
     }
 
     // This is kinda copied directly from Ex4Test

@@ -85,4 +85,11 @@ public class Segment2D implements GeoShapeable {
 	public Point2D[] getPoints() {
 		return new Point2D[] { new Point2D(_p1), new Point2D(_p2) };
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof Segment2D)) return false;
+		Segment2D os = (Segment2D) o;
+		return os.getPoints()[0].equals(_p1) && os.getPoints()[1].equals(_p2);
+	}
 }

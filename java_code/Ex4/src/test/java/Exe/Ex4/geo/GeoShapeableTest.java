@@ -205,7 +205,7 @@ public class GeoShapeableTest {
     }
 
     public static GeoShapeable randShape(boolean allowRotatedRect) {
-        int type = (int) (Math.random() * 5);
+        int type = (int) (Math.random() * 6);
         switch (type) {
             case 0:
                 return Circle2DTest.randCircle();
@@ -217,6 +217,8 @@ public class GeoShapeableTest {
                 return Rect2DTest.randRect(allowRotatedRect);
             case 4:
                 return Triangle2DTest.randTri();
+            case 5:
+                return Segment2DTest.randSegment();
             default:
                 assert false : "Unreachable";
         }

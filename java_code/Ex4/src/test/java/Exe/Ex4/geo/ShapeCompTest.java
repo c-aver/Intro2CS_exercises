@@ -57,14 +57,14 @@ public class ShapeCompTest {
 
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCompareByPerimeter() {
-        int comp = ShapeComp.CompByPerimter.compare(g1, g2);
+        int comp = ShapeComp.CompByPerimeter.compare(g1, g2);
         if (comp <  0) assertTrue(g1.getShape().perimeter() <  g2.getShape().perimeter());
         if (comp == 0) assertTrue(g1.getShape().perimeter() == g2.getShape().perimeter());
         if (comp >  0) assertTrue(g1.getShape().perimeter() >  g2.getShape().perimeter());
     }
     @RepeatedTest(GeoTestConsts.TESTS)
     void testCompareByAntiPerimeter() {
-        int comp = ShapeComp.CompByAntiPerimter.compare(g1, g2);
+        int comp = ShapeComp.CompByAntiPerimeter.compare(g1, g2);
         if (comp >  0) assertTrue(g1.getShape().perimeter() <  g2.getShape().perimeter());
         if (comp == 0) assertTrue(g1.getShape().perimeter() == g2.getShape().perimeter());
         if (comp <  0) assertTrue(g1.getShape().perimeter() >  g2.getShape().perimeter());

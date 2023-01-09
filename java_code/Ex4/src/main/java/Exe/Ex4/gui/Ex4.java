@@ -186,8 +186,8 @@ public class Ex4 implements Ex4_GUI {
 		// simply sorts the shapes by the relevant comparator
 		if (action.equals("ByArea")) { _shapes.sort(ShapeComp.CompByArea); }
 		if (action.equals("ByAntiArea")) { _shapes.sort(ShapeComp.CompByAntiArea); }
-		if (action.equals("ByPerimeter")) { _shapes.sort(ShapeComp.CompByPerimter); }
-		if (action.equals("ByAntiPerimeter")) { _shapes.sort(ShapeComp.CompByAntiPerimter); }
+		if (action.equals("ByPerimeter")) { _shapes.sort(ShapeComp.CompByPerimeter); }
+		if (action.equals("ByAntiPerimeter")) { _shapes.sort(ShapeComp.CompByAntiPerimeter); }
 		if (action.equals("ByToString")) { _shapes.sort(ShapeComp.CompByToString); }
 		if (action.equals("ByAntiToString")) { _shapes.sort(ShapeComp.CompByAntiToString); }
 		if (action.equals("ByTag")) { _shapes.sort(ShapeComp.CompByTag); }

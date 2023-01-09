@@ -23,8 +23,8 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 	public static final Comparator<GUI_Shapeable> CompByAntiTag = new ShapeComp(Ex4_Const.Sort_By_Anti_Tag);
 	public static final Comparator<GUI_Shapeable> CompByArea = new ShapeComp(Ex4_Const.Sort_By_Area);
 	public static final Comparator<GUI_Shapeable> CompByAntiArea = new ShapeComp(Ex4_Const.Sort_By_Anti_Area);
-	public static final Comparator<GUI_Shapeable> CompByPerimter = new ShapeComp(Ex4_Const.Sort_By_Perimeter);
-	public static final Comparator<GUI_Shapeable> CompByAntiPerimter = new ShapeComp(Ex4_Const.Sort_By_Anti_Perimeter);
+	public static final Comparator<GUI_Shapeable> CompByPerimeter = new ShapeComp(Ex4_Const.Sort_By_Perimeter);
+	public static final Comparator<GUI_Shapeable> CompByAntiPerimeter = new ShapeComp(Ex4_Const.Sort_By_Anti_Perimeter);
 	public static final Comparator<GUI_Shapeable> CompByToString = new ShapeComp(Ex4_Const.Sort_By_toString);
 	public static final Comparator<GUI_Shapeable> CompByAntiToString = new ShapeComp(Ex4_Const.Sort_By_Anti_toString);
 	

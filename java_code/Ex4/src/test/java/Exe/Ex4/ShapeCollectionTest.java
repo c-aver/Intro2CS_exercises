@@ -92,7 +92,7 @@ public class ShapeCollectionTest {
         }
         col.sort(randComp);
         for (int i = 0; i < col.size() - 1; ++i) {
-            assertTrue(randComp.compare(col.get(i), col.get(i + 1)) < 0);
+            assertTrue(randComp.compare(col.get(i), col.get(i + 1)) <= 0);
         }
     }
 

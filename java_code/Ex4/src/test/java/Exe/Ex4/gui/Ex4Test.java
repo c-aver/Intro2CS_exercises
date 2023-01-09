@@ -213,7 +213,7 @@ public class Ex4Test {
             case "ByAntiTag": expectedComp = ShapeComp.CompByAntiTag;             break;
         }
         for (int i = 0; i < col.size() - 1; ++i) {
-            assertTrue(expectedComp.compare(col.get(i), col.get(i + 1)) < 0);
+            assertTrue(expectedComp.compare(col.get(i), col.get(i + 1)) <= 0);
         }
     }
 

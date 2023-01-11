@@ -452,6 +452,7 @@ public class Ex4 implements Ex4_GUI {
 				throw new IllegalArgumentException("UNREACHABLE: Illegal FileDialogMode");
 		}
 		chooser.setVisible(true);    // show the FileDialog
+		if (chooser.getDirectory() == null) return null;
 		return chooser.getDirectory() + chooser.getFile();   // return the absolute path
 	}
 }

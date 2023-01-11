@@ -144,7 +144,6 @@ public class Ex2 {
    * This functions computes the determinant of a nxn matrix
    * This overload is for backwards compatibility
    * @param mat the matrix for which to compute the determinant
-   * @param cofacs the cofactor matrix, if null will be computed from mat
    * @return the determinant of the matrix
    */
   public static double det(double[][] mat) {

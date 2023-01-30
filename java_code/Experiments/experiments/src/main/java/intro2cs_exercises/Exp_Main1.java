@@ -1,6 +1,6 @@
 package intro2cs_exercises;
 
-public class Main1 {
+public class Exp_Main1 {
     public static void main(String[] args) {
         System.out.println("abc".substring(3).length());
         

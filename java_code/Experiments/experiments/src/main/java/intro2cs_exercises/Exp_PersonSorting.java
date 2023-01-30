@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PersonSorting {
+public class Exp_PersonSorting {
     public static void main(String[] args) {
         ArrayList<Person> people = new ArrayList<Person>();
         for (int i = 0; i < 10; ++i) {

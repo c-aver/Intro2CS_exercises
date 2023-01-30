@@ -52,6 +52,12 @@ public class Person implements Comparable<Person> {
 
     public double getHeight() { return _heightInMeters; }
 
+    public boolean setHeight(double heightInMeters) {
+        boolean valid = heightInMeters >= MIN_HEIGHT && heightInMeters <= MAX_HEIGHT;
+        if (valid) _heightInMeters = heightInMeters;
+        return valid;
+    }
+
     public final ArrayList<Person> getChildren() { return _children; }
 
     public boolean addChild(Person child) {

@@ -29,7 +29,7 @@ package Exe.Ex4.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.FileDialog;
+// import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -587,7 +587,7 @@ public final class StdDraw_Ex4 implements ActionListener, MouseListener, MouseMo
 	private static double penRadius;
 
 	// show we draw immediately or wait until next show?
-	private static boolean defer = false;
+	// private static boolean defer = false;
 
 	// boundary of drawing canvas, 0% border
 	// private static final double BORDER = 0.05;
@@ -1699,7 +1699,7 @@ public final class StdDraw_Ex4 implements ActionListener, MouseListener, MouseMo
 	 * to show(). Useful for animations.
 	 */
 	public static void enableDoubleBuffering() {
-		defer = true;
+		// defer = true;
 	}
 
 	/**
@@ -1709,7 +1709,7 @@ public final class StdDraw_Ex4 implements ActionListener, MouseListener, MouseMo
 	 * This is the default.
 	 */
 	public static void disableDoubleBuffering() {
-		defer = false;
+		// defer = false;
 	}
 
 

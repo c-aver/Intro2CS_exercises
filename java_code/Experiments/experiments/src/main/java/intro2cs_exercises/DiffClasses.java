@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Main {
+public class DiffClasses {
     public static void main(String[] args) {
         double d = 5.0;
         int i = 3;

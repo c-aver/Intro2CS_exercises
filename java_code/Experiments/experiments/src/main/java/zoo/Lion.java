@@ -7,5 +7,9 @@ public class Lion extends Animal {
         super(name, weight);
         _mane= mane;
     }
+    public void roar()
+    {
+        System.out.println("Arrrrrrr");
+    }
 
 }

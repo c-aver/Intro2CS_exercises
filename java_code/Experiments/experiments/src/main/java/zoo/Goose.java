@@ -6,4 +6,8 @@ public class Goose extends Animal {
         super(name,weight);
         _land= land;
     }
+    public void roar()
+        {
+System.out.println("Quaq");
+        }
 }

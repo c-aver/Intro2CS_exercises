@@ -1,0 +1,37 @@
+package exercises;
+
+public class Pizza implements GeoShape{
+    String
+    Circle2D _c;
+double _deg1;
+double _deg2;
+public Pizza(Circle2D c, double d1, double d2)
+{
+this._c=c;
+this._deg1= d1;
+this._deg2=d2;
+}
+public boolean contains(Point2D ot)
+{
+    Point2D p0= new Point2D (_c.getPoints[0]);
+    double deg= ot.angle_deg(p0);
+    if (deg<=_deg2 && deg>=_deg1&&_c.contains(ot))
+    {
+        return true;
+    }
+    return false;
+}
+public double area()
+{
+    double difference = _deg2-_deg1;
+    double area= difference/360*_c.area();
+    return area;
+}
+
+public double perimeter()
+{
+    double difference = _deg2-_deg1;
+    double perimeter= difference/360*_c.perimeter()+ _c.getRadius()*2;
+}
+
+}

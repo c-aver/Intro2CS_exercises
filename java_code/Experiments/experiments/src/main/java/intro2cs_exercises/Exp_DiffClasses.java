@@ -22,11 +22,10 @@ public class Exp_DiffClasses {
     }
 
     public static int differentClasses(ArrayList<?> al) {
-        Set<Class<?>> found = new HashSet<Class<?>>();
+        Set<Class<?>> found = new HashSet<Class<?>>(al.stream().map(o -> o.getClass()).toList());
     //  for (Object o : al) {
     //      found.add(o.getClass());
     //  }
-        found.addAll(al.stream().map(o -> o.getClass()).toList());
         found.forEach(c -> System.out.println(c.getSimpleName()));
         return found.size();
     }

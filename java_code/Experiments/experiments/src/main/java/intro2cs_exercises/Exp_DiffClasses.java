@@ -13,13 +13,9 @@ public class Exp_DiffClasses {
         Object o = new Object();
         ArrayList<Object> al = new ArrayList<Object>();
         al.add(d);
-        System.out.println(d);
         al.add(i);
-        System.out.println(i);
         al.add(j);
-        System.out.println(j);
         al.add(s);
-        System.out.println(s);
         al.add(o);
         System.out.println(o);
         System.out.println(differentClasses(al));
@@ -27,9 +23,11 @@ public class Exp_DiffClasses {
 
     public static int differentClasses(ArrayList<?> al) {
         Set<Class<?>> found = new HashSet<Class<?>>();
-        for (Object o : al) {
-            found.add(o.getClass());
-        }
+    //  for (Object o : al) {
+    //      found.add(o.getClass());
+    //  }
+        found.addAll(al.stream().map(o -> o.getClass()).toList());
+        found.forEach(c -> System.out.println(c.getSimpleName()));
         return found.size();
     }
 }

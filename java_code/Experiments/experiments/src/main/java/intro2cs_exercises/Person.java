@@ -2,20 +2,21 @@ package intro2cs_exercises;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import intro2cs_exercises.PersonComparator.PersonCompareType;
 
 public class Person implements Comparable<Person> {
     private int _ID;
     private double _heightInMeters;
-    private ArrayList<Person> _children;
+    private List<Person> _children;
 
     private static int runningID = 0;
 
     public static final double MIN_HEIGHT = 1.0;
     public static final double MAX_HEIGHT = 2.5;
 
-    public static Person randPerson(ArrayList<Person> peopleSoFar) {
+    public static Person randPerson(List<Person> peopleSoFar) {
         Person[] parents;
         int numPeopleSoFar = peopleSoFar.size();
         if (numPeopleSoFar == 0) {
@@ -58,7 +59,7 @@ public class Person implements Comparable<Person> {
         return valid;
     }
 
-    public final ArrayList<Person> getChildren() { return _children; }
+    public final List<Person> getChildren() { return _children; }
 
     public boolean addChild(Person child) {
         return _children.add(child);

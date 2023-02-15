@@ -12,7 +12,9 @@ public class Zoo {
         }
         Turtle batz= new Turtle ("Batz",2,12);
         batz.roar();
+        @SuppressWarnings("unused")
         Turtle sonBatz1= batz.child(animals[0]);
+        @SuppressWarnings("unused")
         Turtle sonBatz2= batz.child(animals[1]);
     }
 }
